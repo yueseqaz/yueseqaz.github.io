@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>c语言两位数相加</title>
+      <link href="/2024/03/30/%E5%BB%BA%E7%AB%99%E8%AE%B0%E5%BD%95/"/>
+      <url>/2024/03/30/%E5%BB%BA%E7%AB%99%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;<span class="type">int</span> a,b,sum;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;请输入两位整数\n&quot;</span>）;</span><br><span class="line">scanf_s(<span class="string">&quot;%d%d&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">sum=a+b;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;结果为%d&quot;</span>,sum);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 编程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
