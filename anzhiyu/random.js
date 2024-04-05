@@ -1,4 +1,4 @@
-var posts=["2024/03/30/建站记录/"];function toRandomPost(){
+var posts=["2024/04/05/html学习笔记/","2024/03/30/建站记录/"];function toRandomPost(){
     pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);
   };var friend_link_list=[{"name":"Hexo","link":"https://hexo.io/zh-tw/","avatar":"https://d33wubrfki0l68.cloudfront.net/6657ba50e702d84afb32fe846bed54fba1a77add/827ae/logo.svg","descr":"快速、简单且强大的网站框架"},{"name":"绘梨衣","link":"https://github.com/yueseqaz","avatar":"https://img.nickyam.com/file/d32afe37b45f887dffb84.jpg","descr":"生活明朗，万物可爱","siteshot":"https://img.nickyam.com/file/b13571419308090c77a6a.png"},{"name":"绘梨衣","link":"https://github.com/yueseqaz","avatar":"https://img.nickyam.com/file/d32afe37b45f887dffb84.jpg","descr":"生活明朗，万物可爱","siteshot":"https://img.nickyam.com/file/b13571419308090c77a6a.png","color":"vip","tag":"技术"},{"name":null,"link":null,"avatar":null,"descr":"生活明朗，万物可爱","recommend":true}];
     var refreshNum = 1;
