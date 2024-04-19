@@ -1,84 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>首页</title>
+    <title>website demo</title>
     <style>
-        * {
+        div {
             margin: 0;
-            padding: 0;
+            padding: auto;
             box-sizing: border-box;
-        }
-        body {
-            background-image: url(https://images.pexels.com/photos/2246476/pexels-photo-2246476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        #footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            color:red;
-            font-size: 25px;
-
+            padding: auto;
+            background-color: rgb(218, 217, 223);
 
         }
-        .welcome-text {
-            width:8ch;
-            margin:0 auto;
-            overflow:hidden;
-            word-break:keep-all;
-            color:pink;
-            border-right:3px solid pink;
-            font:bold 400% monospace;
-            animation:caret 0.5s step-end infinite,text 5s infinite steps(8);
+        h1 {
+            color: pink;
+            font-size: 50px;
         }
-        @keyframes caret {
-	        50% {
-	        border-color:transparent;
+        h2 {
+            color: blueviolet;
+            font-size: 35px;
         }
+        .t1 {
+            background-color: pink;
         }
-        @keyframes text {
-	        from {
-	        width:0;
-        }
-        }
-        .open {
-            width: 130px;
-            height: 30px;
-            position: fixed;
-            bottom: 50%;
-            left: 50%;
-            border: 1px solid pink;
-            border-radius: 20px;
-            text-align: center;
-            
-            
-        } 
-        div a {
-            color:pink;
-            text-decoration: none;
-            font-size: 25px;
-            
-            
-        }
-
-
-
     </style>
 </head>
 <body>
-    <p class="welcome-text">Welcome</p>
-    <div class="open">
-        <a href="https://www.16k.club" target="_blank">立即进入</a>
+    <div>
+    <h1>This is my website demo</h1>
+    <h2>I'm studying html+css+javascript. please wait me . I will design a nice website.please waitting</h2>
+    <audio src="./audio.mp3" controls></audio>
 
+</div>
+    <div class="t1">
+        <img src="./IMG_1849.PNG" alt="nothing">
+        <video src="./video.mp4" controls></video>
     </div>
-    <div id="footer" style="
-    clear:both;
-    text-align:center;"><b>2024 copyright © 绘梨衣</b></div>
-         </div>
 </body>
 </html>
