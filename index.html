@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-image: url(https://images.pexels.com/photos/2246476/pexels-photo-2246476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            color:red;
+            font-size: 25px;
+
+
+        }
+        .welcome-text {
+            width:8ch;
+            margin:0 auto;
+            overflow:hidden;
+            word-break:keep-all;
+            color:pink;
+            border-right:3px solid pink;
+            font:bold 400% monospace;
+            animation:caret 0.5s step-end infinite,text 5s infinite steps(8);
+        }
+        @keyframes caret {
+	        50% {
+	        border-color:transparent;
+        }
+        }
+        @keyframes text {
+	        from {
+	        width:0;
+        }
+        }
+        .open {
+            width: 130px;
+            height: 30px;
+            position: fixed;
+            bottom: 50%;
+            left: 50%;
+            border: 1px solid pink;
+            border-radius: 20px;
+            text-align: center;
+            
+            
+        } 
+        div a {
+            color:pink;
+            text-decoration: none;
+            font-size: 25px;
+            
+            
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <p class="welcome-text">Welcome</p>
+    <div class="open">
+        <a href="https://www.16k.club" target="_blank">立即进入</a>
+
+    </div>
+    <div id="footer" style="
+    clear:both;
+    text-align:center;"><b>2024 copyright © 绘梨衣</b></div>
+         </div>
+</body>
+</html>
