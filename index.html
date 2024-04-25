@@ -1,74 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAKURA</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-image: url(https://images.pexels.com/photos/2246476/pexels-photo-2246476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        #footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            color:pink;
-            font-size: 25px;
-
-
-        }
-        
-        .open {
-            width: 130px;
-            height: 30px;
-            position: fixed;
-            bottom: 40%;
-            left: 50%;
-            border: 1px solid pink;
-            border-radius: 20px;
-            text-align: center;
-            
-            
-        } 
-        div a {
-            color:pink;
-            text-decoration: none;
-            font-size: 25px;
-            
-            
-        }
-        .qwer {
-            top: 50%;
-            left: 50%;
-            position: fixed;
-            text-align: center;
-            color: pink;
-            font-size: 30px;
-            font-weight: 700;
-        }
-
-
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sakura Website</title>
+  <!-- Add Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7eaf5; /* Light pink background */
+    }
+    header {
+      background-color: #ff80ab; /* Pink header background */
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 36px;
+    }
+    nav {
+      background-color: #ff80ab; /* Pink navigation background */
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 20px;
+      font-size: 18px;
+    }
+    main {
+      padding: 40px;
+    }
+    section {
+      background-color: #ffe0f0; /* Light pink section background */
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+    footer {
+      background-color: #ff80ab; /* Pink footer background */
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .contact {
+      text-align: center;
+    }
+    .contact a {
+      display: inline-block;
+      background-color: #ff99cc; /* Light pink button background */
+      color: white;
+      padding: 10px 20px;
+      margin-top: 10px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .contact a i {
+      margin-right: 10px; /* Add space between icon and text */
+    }
+    /* Remove underline from links */
+    a {
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="qwer">WELCOME</div>
-    <div class="open">
-        <a href="./123.html" target="_blank">立即进入</a>
 
+<header>
+  <h1>Welcome to My Personal Website</h1>
+</header>
+
+<nav>
+  <a href="#">Home</a>
+  <a href="#contact">Contact Me</a>
+</nav>
+
+<main>
+  <section id="about">
+    <h2>About Me</h2>
+    <p>Welcome to my personal website. Here you'll find information about me.</p>
+  </section>
+
+  <section id="portfolio">
+    <h2>Portfolio</h2>
+    <p>Here I showcase some of my works.</p>
+    <!-- Replaced "Enjoy Homepage" link with an icon -->
+    <a href="123.html" style="display: inline-block;
+      background-color: #ff99cc; /* Light pink button background */
+      color: white;
+      padding: 10px 20px;
+      margin-top: 10px;
+      text-decoration: none;
+      border-radius: 5px;"><i class="fas fa-images"></i>Homepage</a>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <div class="contact">
+      <a href="https://github.com/yueseqaz"><i class="fab fa-github"></i>GitHub</a>
+      <a href="mailto:yuese2668@gmail.com"><i class="fas fa-envelope"></i>Email</a>
     </div>
-    <div id="footer" style="
-    clear:both;
-    text-align:center;"><b>2024 copyright © <a href="mailto:yuese2668@gmail.com">绘梨衣</a></b></div>
-         </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2024 绘梨衣</p>
+</footer>
+
 </body>
 </html>
