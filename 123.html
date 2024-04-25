@@ -3,10 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>嵌入的网页</title>
+    <title>写真</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            position: relative;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .gallery-item {
+            margin: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            color: pink; /* 设置标题文字颜色为粉色 */
+        }
+
+        .return-home {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* 去除下划线 */
+        }
+
+        .return-home:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>网页</h1>
-    <iframe src="https://www.16k.club" width="800" height="600" frameborder="0"></iframe>
+
+<h1>写真</h1>
+
+<div class="gallery">
+    <div class="gallery-item">
+        <img src="https://images.pexels.com/photos/2775196/pexels-photo-2775196.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="照片1">
+    </div>
+    <div class="gallery-item">
+        <img src="https://images.pexels.com/photos/1485894/pexels-photo-1485894.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="照片2">
+    </div>
+    <div class="gallery-item">
+        <img src="https://images.pexels.com/photos/2647990/pexels-photo-2647990.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="照片3">
+    </div>
+    <!-- 添加更多照片 -->
+</div>
+
+<a href="index.html" class="return-home">返回首页</a>
+
 </body>
 </html>
