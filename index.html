@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+x<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +6,6 @@
   <title>sakura Website</title>
   <!-- Add Font Awesome CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
       background-image: url(https://img.16k.club/mofish/2024-04-21/6c069c534bb569523d5aed67ec651433.webp);
@@ -36,6 +35,7 @@
     }
     main {
       padding: 40px;
+      display: none; /* 初始时隐藏内容 */
     }
     section {
       background-color: rgba(255, 224, 240, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
@@ -70,20 +70,43 @@
     a {
       text-decoration: none;
     }
+    /* 加载动画样式 */
+    .loader-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 5px; /* 设置横条的高度 */
+      width: 100%; /* 设置横条的宽度 */
+      background-color: #fff; /* 设置横条的背景色 */
+    }
+    .loader {
+      height: 100%;
+      width: 0; /* 初始宽度为0 */
+      background-color: #ff80ab; /* 设置横条加载颜色 */
+      animation: progress 2s ease-in-out forwards; /* 设置动画 */
+    }
+    @keyframes progress {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Welcome to Sakura's website </h1>
-</header>
+<div class="loader-container">
+  <div class="loader"></div> <!-- 加载动画 -->
+</div>
 
-<nav>
-  <a href="#">Home</a>
-  <a href="#contact">Contact Me</a>
-</nav>
+<main id="content"> <!-- 添加一个ID，方便通过JavaScript控制显示内容 -->
+  <header>
+    <h1>Welcome to Sakura's website </h1>
+  </header>
 
-<main>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#contact">Contact Me</a>
+  </nav>
+
   <section id="about">
     <h2>About Me</h2>
     <p>Welcome to my personal website. Here you'll find information about me.</p>
@@ -131,11 +154,19 @@
       <a href="mailto:yuese2668@gmail.com"><i class="fas fa-envelope"></i>Email</a>
     </div>
   </section>
+
+  <footer>
+    <p>&copy; 2024 绘梨衣</p>
+  </footer>
 </main>
 
-<footer>
-  <p>&copy; 2024 绘梨衣</p>
-</footer>
+<script>
+  // 使用 setTimeout 模拟加载过程，2秒后显示内容
+  setTimeout(function() {
+    document.getElementById('content').style.display = 'block'; // 显示内容
+    document.querySelector('.loader-container').style.display = 'none'; // 隐藏加载动画
+  }, 2000); // 2秒
+</script>
 
 </body>
 </html>
