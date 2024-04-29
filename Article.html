@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Viewer</title>
+    <!-- Add marked.js for Markdown parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js"></script>
+    <!-- Add Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div id="markdown-content">
+        # Heading 1
+        ## Heading 2
+        ### Heading 3
+
+        This is some **bold** text and *italic* text.
+
+        - List item 1
+        - List item 2
+        - List item 3
+
+        1. Ordered item 1
+        2. Ordered item 2
+        3. Ordered item 3
+
+        [Link to Google](https://www.google.com/)
+
+        \`\`\`javascript
+        // Code block
+        function greet(name) {
+            return 'Hello, ' + name + '!';
+        }
+        console.log(greet('World'));
+        \`\`\`
+
+        > Blockquote
+
+        ![Image](https://img.16k.club/mofish/2024-04-21/510df1662aaafe7bd97ab840672216cb.webp)
+    </div>
+
+    <!-- Add a link to return to the homepage -->
+    <a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #ff80ab; color: white; border: none; border-radius: 50%; padding: 10px; font-size: 20px; text-decoration: none;">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <!-- Add a link to view more -->
+    <a href="#" style="position: fixed; bottom: 90px; right: 20px; background-color: #ff80ab; color: white; border: none; border-radius: 50%; padding: 10px; font-size: 20px; text-decoration: none;">
+        <i class="fas fa-list"></i>
+    </a>
+
+    <script>
+        // Convert Markdown to HTML and display it
+        document.getElementById('markdown-content').innerHTML = marked(document.getElementById('markdown-content').innerText);
+    </script>
+</body>
+</html>
