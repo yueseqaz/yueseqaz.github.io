@@ -3,56 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown Viewer</title>
-    <!-- Add marked.js for Markdown parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js"></script>
-    <!-- Add Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>排班小程序</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            position: relative;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+        input {
+            margin-top: 10px;
+            padding: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 300px;
+            margin: 0 auto;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .return-home-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <div id="markdown-content">
-        # Heading 1
-        ## Heading 2
-        ### Heading 3
+    <div class="container">
+        <h2>排班小程序</h2>
+        <button id="completeButton">已完成</button>
+        <input type="number" id="numberInput" placeholder="请输入1-4之间的编号">
+        <div class="result" id="result"></div>
 
-        This is some **bold** text and *italic* text.
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>刘成军</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>廖世权</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>刘亮</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>刘中金</td>
+            </tr>
+        </table>
 
-        - List item 1
-        - List item 2
-        - List item 3
-
-        1. Ordered item 1
-        2. Ordered item 2
-        3. Ordered item 3
-
-        [Link to Google](https://www.google.com/)
-
-        \`\`\`javascript
-        // Code block
-        function greet(name) {
-            return 'Hello, ' + name + '!';
-        }
-        console.log(greet('World'));
-        \`\`\`
-
-        > Blockquote
-
-        ![Image](https://img.16k.club/mofish/2024-04-21/510df1662aaafe7bd97ab840672216cb.webp)
+        <a class="return-home-button" href="index.html">返回主页</a>
     </div>
 
-    <!-- Add a link to return to the homepage -->
-    <a href="index.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #ff80ab; color: white; border: none; border-radius: 50%; padding: 10px; font-size: 20px; text-decoration: none;">
-        <i class="fas fa-home"></i>
-    </a>
-
-    <!-- Add a link to view more -->
-    <a href="#" style="position: fixed; bottom: 90px; right: 20px; background-color: #ff80ab; color: white; border: none; border-radius: 50%; padding: 10px; font-size: 20px; text-decoration: none;">
-        <i class="fas fa-list"></i>
-    </a>
-
     <script>
-        // Convert Markdown to HTML and display it
-        document.getElementById('markdown-content').innerHTML = marked(document.getElementById('markdown-content').innerText);
+        var names = ['刘成军', '廖世权', '刘亮', '刘中金'];
+        var currentIndex = 0;
+        var previousIndex = null;
+
+        var completeButton = document.getElementById('completeButton');
+        var numberInput = document.getElementById('numberInput');
+        var resultDiv = document.getElementById('result');
+
+        function displayResult() {
+            var nextIndex = (currentIndex + 1) % 4;
+            var previousIndex = currentIndex === 0 ? 3 : currentIndex - 1;
+
+            var nextName = names[nextIndex];
+            var previousName = names[previousIndex];
+            var currentName = names[currentIndex];
+
+            resultDiv.innerHTML = `
+                <p>下一个到谁: ${nextName}</p>
+                <p>上一个是谁: ${previousName}</p>
+                <p>本次值班完成的是谁: ${currentName}</p>
+            `;
+        }
+
+        completeButton.addEventListener('click', function() {
+            var inputNumber = parseInt(numberInput.value);
+
+            if (inputNumber >= 1 && inputNumber <= 4) {
+                currentIndex = inputNumber - 1;
+                displayResult();
+            } else {
+                alert('请输入1-4之间的编号！');
+            }
+        });
+
+        // 初始显示结果
+        displayResult();
     </script>
 </body>
 </html>
