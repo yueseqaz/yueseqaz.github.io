@@ -3,109 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>写真</title>
+    <title>Travel Photo Gallery</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
-            position: relative;
         }
-
-        .gallery {
+        h1 {
+            margin-top: 50px;
+            font-size: 28px;
+        }
+        #passwordForm {
+            margin-top: 20px;
+        }
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+        #submitBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        #submitBtn:hover {
+            background-color: #0056b3;
+        }
+        #gallery {
+            margin-top: 50px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 20px;
         }
-
-        .gallery-item {
+        #gallery img {
+            max-width: 90%;
+            max-height: 300px;
             margin: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
-            overflow: hidden;
-            border-radius: 10px;
+            display: none;
         }
-
-        .gallery-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .gallery-item img {
-            max-width: 100%;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover img {
+        #gallery img:hover {
             transform: scale(1.1);
         }
-
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-            color: pink; /* 设置标题文字颜色为粉色 */
-        }
-
-        .return-home {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 999;
-            background-color: #007bff;
-            color: white;
-            border: none;
+        #backBtn {
+            margin-top: 20px;
+            display: inline-block;
             padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none; /* 去除下划线 */
-        }
-
-        .return-home:hover {
-            background-color: #0056b3;
-        }
-
-        .enjoying-it {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 999;
-            background-color: pink; 
-            color: white;
+            font-size: 16px;
+            background-color: #ccc;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            text-decoration: none;
+            color: #000;
             transition: background-color 0.3s ease;
-            text-decoration: none; 
         }
-
-        .enjoying-it:hover {
-            background-color: pink;
+        #backBtn:hover {
+            background-color: #bbb;
         }
     </style>
 </head>
 <body>
-
-<h1>写真</h1>
-
-<div class="gallery">
-    <div class="gallery-item">
-        <img src="https://images.pexels.com/photos/2775196/pexels-photo-2775196.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="照片1">
+    <h1>Welcome to the Travel Photo Gallery</h1>
+    <div id="passwordForm">
+        <form id="loginForm">
+            <label for="password">Enter the password:</label>
+            <input type="password" id="password" required>
+            <button type="submit" id="submitBtn">Enter</button>
+        </form>
     </div>
-    <div class="gallery-item">
-        <img src="https://images.pexels.com/photos/1485894/pexels-photo-1485894.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="照片2">
-    </div>
-    <div class="gallery-item">
-        <img src="https://images.pexels.com/photos/2647990/pexels-photo-2647990.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="照片3">
-    </div>
-    <img src="https://img.16k.club/mofish/2024-04-19/bc71678c8dd9c48a73520746f05d05c4.webp" ait="img">
-</div>
 
-<a href="https://www.16k.club" class="enjoying-it">ENJOYING IT</a>
-<a href="index.html" class="return-home">返回首页</a>
+    <div id="gallery">
+        <img src="https://img.16k.club/mofish/2024-04-21/6c069c534bb569523d5aed67ec651433.webp" alt="Image 1">
+        <img src="https://img.16k.club/mofish/2024-04-02/926d717ef896bc950200c1119d79c50a.webp" alt="Image 2">
+        <img src="image3.jpg" alt="Image 3">
+        <!-- Add more images as needed -->
+    </div>
 
+    <a id="backBtn" href="index.html">Back to Homepage</a>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            var password = document.getElementById('password').value;
+            if (password === '2024') {
+                document.getElementById('passwordForm').style.display = 'none';
+                var images = document.querySelectorAll('#gallery img');
+                images.forEach(function(img) {
+                    img.style.display = 'block';
+                });
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+        });
+
+        document.getElementById('backBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.location.href = '/';
+        });
+    </script>
 </body>
 </html>
