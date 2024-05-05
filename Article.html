@@ -1,132 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>排班小程序</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-            position: relative;
-        }
-        .container {
-            text-align: center;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-            border: none;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 5px;
-        }
-        input {
-            margin-top: 10px;
-            padding: 5px;
-        }
-        table {
-            border-collapse: collapse;
-            margin-top: 20px;
-            width: 300px;
-            margin: 0 auto;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        .return-home-button {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - 页面建设中！</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .container {
+    text-align: center;
+  }
+  h1 {
+    font-size: 3rem;
+    color: #333;
+  }
+  p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff6f61;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+  .button:hover {
+    background-color: #ff4637;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h2>排班小程序</h2>
-        <button id="completeButton">已完成</button>
-        <input type="number" id="numberInput" placeholder="请输入1-4之间的编号">
-        <div class="result" id="result"></div>
-
-        <table>
-            <tr>
-                <th>序号</th>
-                <th>姓名</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>刘成军</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>廖世权</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>刘亮</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>刘中金</td>
-            </tr>
-        </table>
-
-        <a class="return-home-button" href="index.html">返回主页</a>
-    </div>
-
-    <script>
-        var names = ['刘成军', '廖世权', '刘亮', '刘中金'];
-        var currentIndex = 0;
-        var previousIndex = null;
-
-        var completeButton = document.getElementById('completeButton');
-        var numberInput = document.getElementById('numberInput');
-        var resultDiv = document.getElementById('result');
-
-        function displayResult() {
-            var nextIndex = (currentIndex + 1) % 4;
-            var previousIndex = currentIndex === 0 ? 3 : currentIndex - 1;
-
-            var nextName = names[nextIndex];
-            var previousName = names[previousIndex];
-            var currentName = names[currentIndex];
-
-            resultDiv.innerHTML = `
-                <p>下一个到谁: ${nextName}</p>
-                <p>上一个是谁: ${previousName}</p>
-                <p>本次值班完成的是谁: ${currentName}</p>
-            `;
-        }
-
-        completeButton.addEventListener('click', function() {
-            var inputNumber = parseInt(numberInput.value);
-
-            if (inputNumber >= 1 && inputNumber <= 4) {
-                currentIndex = inputNumber - 1;
-                displayResult();
-            } else {
-                alert('请输入1-4之间的编号！');
-            }
-        });
-
-        // 初始显示结果
-        displayResult();
-    </script>
+<div class="container">
+  <h1>Oops</h1>
+  <p>This page is building.But it's soon coming</p>
+  <a href="index.html" class="button">返回首页</a>
+</div>
 </body>
 </html>
