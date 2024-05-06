@@ -3,110 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>sakura Website</title>
+  <title>Sakura's Website</title>
   <!-- Add Font Awesome CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: rgba(247, 234, 245, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      background-image: url('https://ossk.cc/file/1c1d365077a32ce623f18.jpg'); /* 默认背景图 */
-      background-size: cover; /* 背景图片尺寸调整 */
+      background-color: transparent; /* Set background color to transparent */
+      background-image: url('https://ossk.cc/file/1c1d365077a32ce623f18.jpg');
+      background-size: cover;
+      background-position: center;
+      color: #4a4a4a; /* Dark grey text */
     }
-    /* 使用媒体查询来针对不同屏幕尺寸设置不同的背景图 */
-    @media screen and (max-width: 767px) {
-      body {
-        background-image: url('https://img3.huamaocdn.com/upload/bizhi/images/1000w680h/2023/01/202301281221469884.jpg'); /* 移动端背景图 */
-      }
-    }
-    header {
-      background-color: rgba(255, 224, 240, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
+    header, nav, main, footer {
+      background-color: transparent; /* Set background color to transparent */
       padding: 20px 0;
       text-align: center;
-      font-size: 36px;
     }
-    nav {
-      background-color: rgba(255, 224, 240, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      padding: 10px 0;
-      text-align: center;
+    header h1 {
+      font-size: 36px;
+      margin: 0;
     }
     nav a {
-      color: white;
+      color: #4a4a4a;
       text-decoration: none;
       margin: 0 20px;
       font-size: 18px;
     }
-    main {
-      padding: 40px;
-      display: none; /* 初始时隐藏内容 */
-    }
     section {
-      background-color: rgba(255, 224, 240, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
+      background-color: rgba(255, 224, 240, 0.5); /* Transparent light pink background */
       padding: 30px;
       margin-bottom: 20px;
+      border-radius: 10px;
     }
-    footer {
-      background-color: rgba(255, 224, 240, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      text-align: center;
-      padding: 5px 0;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-    .contact {
-      text-align: center;
+    section h2 {
+      color: #ff80ab; /* Pink heading */
     }
     .contact a {
       display: inline-block;
-      background-color: rgba(255, 153, 204, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
+      background-color: #ff80ab;
       color: white;
       padding: 10px 20px;
       margin-top: 10px;
       text-decoration: none;
       border-radius: 5px;
     }
+    .content a {
+      display: inline-block;
+      background-color: #ff80ab;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 10px;
+      text-decoration: none;
+      border-radius: 5px;
+
+    }
     .contact a i {
       margin-right: 10px; /* Add space between icon and text */
     }
-    /* Remove underline from links */
-    a {
-      text-decoration: none;
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
     }
-    /* 加载动画样式 */
+    footer p {
+      margin: 0;
+      color: #4a4a4a;
+    }
+    /* Loader styles */
     .loader-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 5px; /* 设置横条的高度 */
-      width: 100%; /* 设置横条的宽度 */
-      background-color: #fff; /* 设置横条的背景色 */
+      height: 5px;
+      width: 100%;
+      background-color: #fff;
     }
     .loader {
       height: 100%;
-      width: 0; /* 初始宽度为0 */
-      background-color: #ff80ab; /* 设置横条加载颜色 */
-      animation: progress 0.5s ease-in-out forwards; /* 设置动画 */
+      width: 0;
+      background-color: #ff80ab;
+      animation: progress 0.5s ease-in-out forwards;
     }
     @keyframes progress {
       0% { width: 0; }
       100% { width: 100%; }
+    }
+    /* Media query for smaller screens */
+    @media screen and (max-width: 767px) {
+      body {
+        background-image: url('https://img3.huamaocdn.com/upload/bizhi/images/1000w680h/2023/01/202301281221469884.jpg');
+      }
+      header h1 {
+        font-size: 24px;
+      }
+      nav a {
+        font-size: 16px;
+      }
+      section {
+        padding: 20px;
+      }
+      .contact a {
+        padding: 8px 16px;
+        margin-top: 8px;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="loader-container">
-  <div class="loader"></div> <!-- 加载动画 -->
+  <div class="loader"></div> <!-- Loader animation -->
 </div>
 
-<main id="content"> <!-- 添加一个ID，方便通过JavaScript控制显示内容 -->
+<main id="content"> <!-- Content container -->
   <header>
-    <h1>Welcome to Sakura's website </h1>
+    <h1>Welcome to Sakura's Website</h1>
   </header>
 
   <nav>
@@ -117,69 +131,42 @@
   <section id="about">
     <h2>About Me</h2>
     <p>Welcome to my personal website. Here you'll find information about me.</p>
-    <p>I am learning HTML+CSS+JAVASCRIPT knowledge. Please look forward to my website being improved.</p>
+    <p>I am learning HTML+CSS+JavaScript knowledge. Please look forward to my website being improved.</p>
   </section>
 
   <section id="portfolio">
     <h2>Contents</h2>
     <p>Here I showcase some of my works.</p>
-    <!-- Replaced "Enjoy Homepage" link with an icon -->
-    <a href="123.html" style="display: inline-block;
-      background-color: rgba(255, 153, 204, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;"><i class="fas fa-images"></i>Images</a>
-    <a href="Comment.html" style="display: inline-block;
-      background-color: rgba(255, 153, 204, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;"><i class="fa fa-file-text"></i>Comments</a>
-    <a href="Article.html" style="display: inline-block;
-      background-color: rgba(255, 153, 204, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;"><i class="fa fa-indent"></i>Article</a>
-    <a href="video.html" style="display: inline-block;
-      background-color: rgba(255, 153, 204, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;"><i class="fa fa-video-camera"></i>Video</a>
-      <a href="Schedule.html" style="display: inline-block;
-      background-color: rgba(255, 153, 204, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;"><i class="fa fa-history"></i>Time Schedule</a>
+    <!-- Links to different sections -->
+    <div class="content">
+    <a href="123.html"><i class="fas fa-images"></i> Images</a>
+    <a href="Comment.html"><i class="fa fa-file-text"></i> Comments</a>
+    <a href="Article.html"><i class="fa fa-indent"></i> Article</a>
+    <a href="video.html"><i class="fa fa-video-camera"></i> Video</a>
+    <a href="Schedule.html"><i class="fa fa-history"></i> Time Schedule</a>
+    </div>
   </section>
 
   <section id="contact">
     <h2>Contact Me</h2>
     <div class="contact">
-      <a href="https://github.com/yueseqaz"><i class="fab fa-github"></i>GitHub</a>
-      <a href="mailto:yuese2668@gmail.com"><i class="fas fa-envelope"></i>Email</a>
+      <!-- Links to GitHub and Email -->
+      <a href="https://github.com/yueseqaz"><i class="fab fa-github"></i> GitHub</a>
+      <a href="mailto:yuese2668@gmail.com"><i class="fas fa-envelope"></i> Email</a>
     </div>
   </section>
 </main>
 
 <footer>
-  <p>&copy; 2024 绘梨衣</p>
+  <p>&copy; 2024 Sakura</p>
 </footer>
 
 <script>
-  // 使用 setTimeout 模拟加载过程，0.5秒后显示内容
+  // Simulate content loading
   setTimeout(function() {
-    document.getElementById('content').style.display = 'block'; // 显示内容
-    document.querySelector('.loader-container').style.display = 'none'; // 隐藏加载动画
-  }, 500); // 0.5秒
+    document.getElementById('content').style.display = 'block'; // Display content
+    document.querySelector('.loader-container').style.display = 'none'; // Hide loader
+  }, 500); // 0.5 seconds
 </script>
 
 </body>
