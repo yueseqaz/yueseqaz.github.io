@@ -1,85 +1,52 @@
+x
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Sakura's Website</title>
-  <!-- Add Font Awesome CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #ff80ab, #ffb2dd); /* Gradient background */
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .login-form {
-      background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
-    }
-    .login-form h2 {
-      color: #ff80ab; /* Pink heading */
-    }
-    .login-form input[type="text"], .login-form input[type="password"] {
-      width: calc(100% - 40px);
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-bottom: 2px solid #ff80ab; /* Pink underline */
-      background-color: transparent;
-      transition: border-bottom-color 0.3s;
-    }
-    .login-form input[type="text"]:focus, .login-form input[type="password"]:focus {
-      border-bottom-color: #ffb2dd; /* Light pink underline on focus */
-    }
-    .login-form input[type="submit"] {
-      background: linear-gradient(135deg, #ff80ab, #ffb2dd); /* Gradient background for submit button */
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .login-form input[type="submit"]:hover {
-      background: linear-gradient(135deg, #ff80ab, #ffb2dd); /* Gradient background for submit button on hover */
-      filter: brightness(1.1); /* Brighten the button */
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - 页面建设中！</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .container {
+    text-align: center;
+  }
+  h1 {
+    font-size: 3rem;
+    color: #333;
+  }
+  p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff6f61;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+  .button:hover {
+    background-color: #ff4637;
+  }
+</style>
 </head>
 <body>
-
-<div class="login-form">
-  <h2>Login</h2>
-  <form action="javascript:void(0);" onsubmit="login()">
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <input type="submit" value="Login">
-  </form>
-  <p>Need help? <a href="mailto:yuese2668@gmail.com">Contact Me</a></p>
+<div class="container">
+  <h1>Oops</h1>
+  <p>This page is building.But it's soon coming</p>
+  <a href="homepages.html" class="button">返回首页</a>
 </div>
-
-<script>
-  function login() {
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
-
-    // Check if username and password are correct
-    if (username === 'sakura' && password === '2024') {
-      // Redirect to main page or show content
-      window.location.href = '404.html';
-    } else {
-      alert('Incorrect username or password. Please try again.');
-    }
-  }
-</script>
-
 </body>
 </html>
