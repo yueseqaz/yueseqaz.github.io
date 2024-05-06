@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sakura's Website</title>
+  <title>Login - Sakura's Website</title>
   <!-- Add Font Awesome CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
@@ -11,162 +12,74 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: transparent; /* Set background color to transparent */
-      background-image: url('https://ossk.cc/file/1c1d365077a32ce623f18.jpg');
-      background-size: cover;
-      background-position: center;
-      color: #4a4a4a; /* Dark grey text */
-    }
-    header, nav, main, footer {
-      background-color: transparent; /* Set background color to transparent */
-      padding: 20px 0;
-      text-align: center;
-    }
-    header h1 {
-      font-size: 36px;
-      margin: 0;
-    }
-    nav a {
-      color: #4a4a4a;
-      text-decoration: none;
-      margin: 0 20px;
-      font-size: 18px;
-    }
-    section {
-      background-color: rgba(255, 224, 240, 0.5); /* Transparent light pink background */
-      padding: 30px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-    }
-    section h2 {
-      color: #ff80ab; /* Pink heading */
-    }
-    .contact a {
-      display: inline-block;
-      background-color: #ff80ab;
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .content a {
-      display: inline-block;
-      background-color: #ff80ab;
-      color: white;
-      padding: 10px 20px;
-      margin-top: 10px;
-      text-decoration: none;
-      border-radius: 5px;
-
-    }
-    .contact a i {
-      margin-right: 10px; /* Add space between icon and text */
-    }
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-    footer p {
-      margin: 0;
-      color: #4a4a4a;
-    }
-    /* Loader styles */
-    .loader-container {
+      background: linear-gradient(135deg, #ff80ab, #ffb2dd); /* Gradient background */
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 5px;
-      width: 100%;
-      background-color: #fff;
     }
-    .loader {
-      height: 100%;
-      width: 0;
-      background-color: #ff80ab;
-      animation: progress 0.5s ease-in-out forwards;
+    .login-form {
+      background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
     }
-    @keyframes progress {
-      0% { width: 0; }
-      100% { width: 100%; }
+    .login-form h2 {
+      color: #ff80ab; /* Pink heading */
     }
-    /* Media query for smaller screens */
-    @media screen and (max-width: 767px) {
-      body {
-        background-image: url('https://img3.huamaocdn.com/upload/bizhi/images/1000w680h/2023/01/202301281221469884.jpg');
-      }
-      header h1 {
-        font-size: 24px;
-      }
-      nav a {
-        font-size: 16px;
-      }
-      section {
-        padding: 20px;
-      }
-      .contact a {
-        padding: 8px 16px;
-        margin-top: 8px;
-      }
+    .login-form input[type="text"], .login-form input[type="password"] {
+      width: calc(100% - 40px);
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-bottom: 2px solid #ff80ab; /* Pink underline */
+      background-color: transparent;
+      transition: border-bottom-color 0.3s;
+    }
+    .login-form input[type="text"]:focus, .login-form input[type="password"]:focus {
+      border-bottom-color: #ffb2dd; /* Light pink underline on focus */
+    }
+    .login-form input[type="submit"] {
+      background: linear-gradient(135deg, #ff80ab, #ffb2dd); /* Gradient background for submit button */
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .login-form input[type="submit"]:hover {
+      background: linear-gradient(135deg, #ff80ab, #ffb2dd); /* Gradient background for submit button on hover */
+      filter: brightness(1.1); /* Brighten the button */
     }
   </style>
 </head>
 <body>
 
-<div class="loader-container">
-  <div class="loader"></div> <!-- Loader animation -->
+<div class="login-form">
+  <h2>Login</h2>
+  <form action="javascript:void(0);" onsubmit="login()">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <input type="submit" value="Login">
+  </form>
+  <p>Need help? <a href="mailto:yuese2668@gmail.com">Contact Me</a></p>
 </div>
 
-<main id="content"> <!-- Content container -->
-  <header>
-    <h1>Welcome to Sakura's Website</h1>
-  </header>
-
-  <nav>
-    <a href="#">Home</a>
-    <a href="#contact">Contact Me</a>
-  </nav>
-
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Welcome to my personal website. Here you'll find information about me.</p>
-    <p>I am learning HTML+CSS+JavaScript knowledge. Please look forward to my website being improved.</p>
-  </section>
-
-  <section id="portfolio">
-    <h2>Contents</h2>
-    <p>Here I showcase some of my works.</p>
-    <!-- Links to different sections -->
-    <div class="content">
-    <a href="123.html"><i class="fas fa-images"></i> Images</a>
-    <a href="Comment.html"><i class="fa fa-file-text"></i> Comments</a>
-    <a href="Article.html"><i class="fa fa-indent"></i> Article</a>
-    <a href="video.html"><i class="fa fa-video-camera"></i> Video</a>
-    <a href="Schedule.html"><i class="fa fa-history"></i> Time Schedule</a>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <div class="contact">
-      <!-- Links to GitHub and Email -->
-      <a href="https://github.com/yueseqaz"><i class="fab fa-github"></i> GitHub</a>
-      <a href="mailto:yuese2668@gmail.com"><i class="fas fa-envelope"></i> Email</a>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <p>&copy; 2024 Sakura</p>
-</footer>
-
 <script>
-  // Simulate content loading
-  setTimeout(function() {
-    document.getElementById('content').style.display = 'block'; // Display content
-    document.querySelector('.loader-container').style.display = 'none'; // Hide loader
-  }, 500); // 0.5 seconds
+  function login() {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+
+    // Check if username and password are correct
+    if (username === 'sakura' && password === '2024') {
+      // Redirect to main page or show content
+      window.location.href = 'homepages.html';
+    } else {
+      alert('Incorrect username or password. Please try again.');
+    }
+  }
 </script>
 
 </body>
