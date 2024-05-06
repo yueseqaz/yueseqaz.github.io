@@ -8,17 +8,26 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-image: url('https://pic.imgdb.cn/item/663901ad0ea9cb1403973c86.webp');
-      background-size: cover; /* 背景图铺满整个容器 */
-      background-repeat: no-repeat; /* 防止背景图重复 */
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('https://pic.imgdb.cn/item/663901ad0ea9cb1403973c86.webp');
+  background-size: cover; /* 默认情况下，背景图铺满整个容器 */
+  background-repeat: no-repeat; /* 防止背景图重复 */
+  background-position: center; /* 在容器中居中显示背景图 */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 在手机上，使用contain来确保背景图完全显示 */
+@media only screen and (max-width: 600px) {
+  body {
+    background-size: contain;
+  }
+}
+
     .login-form {
       background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
       padding: 30px;
