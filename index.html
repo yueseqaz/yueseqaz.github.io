@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +8,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body {
-      background-image: url(https://img.16k.club/mofish/2024-04-21/6c069c534bb569523d5aed67ec651433.webp);
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: rgba(247, 234, 245, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
+      background-image: url('https://ossk.cc/file/1c1d365077a32ce623f18.jpg'); /* 默认背景图 */
+      background-size: cover; /* 背景图片尺寸调整 */
+    }
+    /* 使用媒体查询来针对不同屏幕尺寸设置不同的背景图 */
+    @media screen and (max-width: 767px) {
+      body {
+        background-image: url('https://img3.huamaocdn.com/upload/bizhi/images/1000w680h/2023/01/202301281221469884.jpg'); /* 移动端背景图 */
+      }
     }
     header {
       background-color: rgba(255, 224, 240, 0.7); /* 使用 rgba() 函数，设置颜色透明度为 0.7 */
@@ -174,11 +180,6 @@
     document.getElementById('content').style.display = 'block'; // 显示内容
     document.querySelector('.loader-container').style.display = 'none'; // 隐藏加载动画
   }, 500); // 0.5秒
-  if (window.innerWidth < 768) {
-    document.body.style.backgroundImage = "url('https://ossk.cc/file/37b4b0a69f6d17fde8a04.jpg')";
-  } else {
-    document.body.style.backgroundImage = "url('https://ossk.cc/file/1c1d365077a32ce623f18.jpg')";
-  }
 </script>
 
 </body>
