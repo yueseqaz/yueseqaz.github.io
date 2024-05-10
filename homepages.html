@@ -154,7 +154,9 @@
       <!-- Links to GitHub and Email -->
       <a href="https://github.com/yueseqaz"><i class="fab fa-github"></i> GitHub</a>
       <a href="mailto:yuese2668@gmail.com"><i class="fas fa-envelope"></i> Email</a>
-      <button onclick="copyToClipboard('3688607560')">点击复制我的QQ号</button>
+      <a href="http://wpa.qq.com/msgrd?v=3&uin=3688607560&site=qq&menu=yes" target="_blank">
+    <button>点击添加我到QQ</button>
+</a>
 
     </div>
   </section>
@@ -170,14 +172,6 @@
     document.getElementById('content').style.display = 'block'; // Display content
     document.querySelector('.loader-container').style.display = 'none'; // Hide loader
   }, 500); // 0.5 seconds
-  function copyToClipboard(text) {
-  var input = document.createElement('input');
-  input.setAttribute('value', text);
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand('copy');
-  document.body.removeChild(input);
-  alert('QQ号已复制到剪贴板: ' + text);
 </script>
 
 </body>
