@@ -69,8 +69,8 @@
 </head>
 <body>
     <div id="passwordPrompt">
-        <input type="password" id="passwordInput" placeholder="请输入密码">
-        <button id="submitBtn" onclick="checkPassword()">确认</button>
+        <input type="password" id="passwordInput" placeholder="Plz enter password">
+        <button id="submitBtn" onclick="checkPassword()">Submit</button>
     </div>
 
     <div id="container">
@@ -92,7 +92,7 @@
         <!-- <div class="item"><img src="image3.jpg" alt="Image 3"></div> -->
     </div>
 
-    <button id="backBtn" onclick="goBack('homepages.html')">返回主页</button>
+    <button id="backBtn" onclick="goBack('homepages.html')">back</button>
 
     <script>
         var correctPassword = "131477"; // 正确的密码
@@ -107,7 +107,7 @@
                 document.getElementById("passwordPrompt").style.display = "none";
                 document.getElementById("container").style.display = "block";
             } else {
-                alert("密码错误，请重新输入。");
+                alert("incorrect password，Plz check it!");
             }
         }
     </script>
