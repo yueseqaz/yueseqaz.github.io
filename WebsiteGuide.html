@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>网站导航</title>
+<style>
+/* 公共样式 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    min-height: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* 半透明白色背景，以便展示背景图 */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* 电脑背景图 */
+.desktop-bg {
+    background-image: url('https://ossk.cc/file/da7e9d8c8dd9024cc7c2b.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 手机背景图 */
+@media (max-width: 768px) {
+    .mobile-bg {
+        background-image: url('https://ossk.cc/file/96c6ed4797d8e019d77b5.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+}
+
+.category {
+    margin-top: 40px;
+}
+
+.category h2 {
+    margin-bottom: 10px;
+}
+
+.site-list {
+    list-style: none;
+    padding: 0;
+}
+
+.site-list li {
+    margin-bottom: 10px;
+}
+
+.site-list li a {
+    display: block;
+}
+
+.search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 10px;
+    width: 60%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #555;
+}
+
+.back-to-home {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.back-to-home a {
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: pink;
+    color: white;
+    border-radius: 50%;
+}
+</style>
+</head>
+<body class="desktop-bg">
+<div class="container">
+    <h1>网站导航</h1>
+    
+    <!-- 搜索功能 -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="输入关键词搜索">
+        <button id="searchBtn" class="search-btn">搜索</button>
+    </div>
+
+    <!-- 影音类 -->
+    <div class="category">
+        <h2>影音类</h2>
+        <ul class="site-list" id="影音类">
+            <li><a href="https://example.com">网站1</a></li>
+            <li><a href="https://example.com">网站2</a></li>
+            <!-- 在这里添加更多的网站 -->
+        </ul>
+    </div>
+    <!-- 娱乐类 -->
+    <div class="category">
+        <h2>娱乐类</h2>
+        <ul class="site-list" id="娱乐类">
+            <li><a href="https://example.com">网站3</a></li>
+            <li><a href="https://example.com">网站4</a></li>
+            <!-- 在这里添加更多的网站 -->
+        </ul>
+    </div>
+    <!-- 图片类 -->
+    <div class="category">
+        <h2>图片类</h2>
+        <ul class="site-list" id="图片类">
+            <li><a href="https://example.com">网站5</a></li>
+            <li><a href="https://example.com">网站6</a></li>
+            <!-- 在这里添加更多的网站 -->
+        </ul>
+    </div>
+    <!-- NSFW类 -->
+    <div class="category">
+        <h2>NSFW类</h2>
+        <ul class="site-list" id="NSFW类">
+            <li><a href="https://example.com">网站7</a></li>
+            <li><a href="https://example.com">网站8</a></li>
+            <!-- 在这里添加更多的网站 -->
+        </ul>
+    </div>
+    <!-- 工具类 -->
+    <div class="category">
+        <h2>工具类</h2>
+        <ul class="site-list" id="工具类">
+            <li><a href="https://example.com">网站9</a></li>
+            <li><a href="https://example.com">网站10</a></li>
+            <!-- 在这里添加更多的网站 -->
+        </ul>
+    </div>
+    <!-- 返回主页按钮 -->
+    <div class="back-to-home">
+        <a href="homepages.html"><i class="fas fa-home"></i>Back</a> <!-- 使用 Font Awesome 中的房子图标 -->
+    </div>
+</div>
+
+<script>
+// 搜索功能
+document.getElementById('searchBtn').addEventListener('click', function() {
+    var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    var categories = document.querySelectorAll('.category');
+    
+    categories.forEach(function(category) {
+        var sites = category.querySelectorAll('.site-list li');
+        sites.forEach(function(site) {
+            var siteName = site.innerText.toLowerCase();
+            if (siteName.includes(searchTerm)) {
+                site.style.display = 'block';
+            } else {
+                site.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
