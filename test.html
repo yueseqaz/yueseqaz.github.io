@@ -4,90 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown Viewer</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/default.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
             padding: 20px;
         }
-        .container {
+        #markdown-content {
             max-width: 800px;
             margin: 0 auto;
-        }
-        .markdown-body {
-            padding: 20px;
-            background: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        pre {
-            background: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="markdown-body" id="markdown-content">
-            <!-- Markdown content will be rendered here -->
-        </div>
+    <div id="markdown-content">
+        <!-- Markdown content will be inserted here -->
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.12/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const markdownContent = `
-# Welcome to Markdown Viewer
+        // Markdown content
+        var markdownText = `
+# Hello, Markdown Viewer!
 
-This is a simple, beautiful Markdown viewer.
+This is a **demo** of *Markdown* rendering in a web page.
 
-## Features
+## Features:
+- Easy to use
+- Lightweight
+- Customizable
 
-- **Headers**
-- **Bold** and *Italic* text
-- [Links](https://example.com)
-- \`Inline code\`
-- \`\`\`
-  Code blocks
-  \`\`\`
+Enjoy!
+`;
 
-\`\`\`javascript
-// JavaScript code example
-function helloWorld() {
-    console.log("Hello, world!");
-}
-\`\`\`
-
-### Lists
-
-1. Ordered list item
-2. Ordered list item
-
-- Unordered list item
-- Unordered list item
-
-### Blockquotes
-
-> This is a blockquote.
-
-### Tables
-
-| Header 1 | Header 2 |
-| -------- | -------- |
-| Cell 1   | Cell 2   |
-| Cell 3   | Cell 4   |
-
-            `;
-            
-            document.getElementById('markdown-content').innerHTML = marked.parse(markdownContent);
-            document.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
-        });
+        // Render Markdown
+        document.getElementById('markdown-content').innerHTML = marked(markdownText);
     </script>
 </body>
 </html>
