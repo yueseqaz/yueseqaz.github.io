@@ -3,41 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown Viewer</title>
+    <title>Markdown Viewer with Navigation and LaTeX Support</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            display: flex;
+            height: 100vh;
+            margin: 0;
         }
-        #markdown-content {
-            max-width: 800px;
-            margin: 0 auto;
+        #sidebar {
+            width: 20%;
+            background-color: #f4f4f4;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        #content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <div id="markdown-content">
-        <!-- Markdown content will be inserted here -->
+    <div id="sidebar">
+        <h2>目录</h2>
+        <ul id="toc"></ul>
     </div>
+    <div id="content"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
     <script>
+        var md = window.markdownit();
+        var contentDiv = document.getElementById('content');
+        var tocUl = document.getElementById('toc');
+
         // Markdown content
         var markdownText = `
-# Hello, Markdown Viewer!
+# Markdown Viewer with Navigation and LaTeX Support
 
-This is a **demo** of *Markdown* rendering in a web page.
+## Introduction
+This is a demo of Markdown rendering with navigation and LaTeX support.
 
-## Features:
-- Easy to use
-- Lightweight
-- Customizable
+## Features
+- Easy navigation
+- LaTeX support for formulas
 
-Enjoy!
+## Example Formula
+The quadratic formula is given by:
+
+$$
+x = \\frac{{-b \\pm \\sqrt{{b^2 - 4ac}}}}{{2a}}
+$$
 `;
 
         // Render Markdown
-        document.getElementById('markdown-content').innerHTML = marked(markdownText);
+        contentDiv.innerHTML = md.render(markdownText);
+
+        // Generate TOC
+        md.use(require('markdown-it-toc-and-anchor').default, {
+            tocFirstLevel: 1,
+            tocLastLevel: 3,
+            tocClassName: 'toc',
+            tocCallback: function (tocMarkdown, tocArray, tocHtml) {
+                tocUl.innerHTML = tocHtml;
+            }
+        });
     </script>
 </body>
 </html>
