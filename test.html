@@ -5,12 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome Page</title>
 <style>
-  /* Add your CSS styles here */
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('your-background-image.jpg'); /* 修改成你的背景图路径 */
+    background-size: cover;
+    background-position: center;
+  }
+
+  #guideContainer {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8); /* 背景透明度可调整 */
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  #guideText {
+    margin-bottom: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
-<div id="guideText">欢迎来到我们的网站！点击下一步，开始您的旅程。</div>
-<button onclick="nextStep()">下一步</button>
+<div id="guideContainer">
+  <div id="guideText">欢迎来到我们的网站！点击下一步，开始您的旅程。</div>
+  <button onclick="nextStep()">下一步</button>
+</div>
 
 <script>
   const guideTexts = [
