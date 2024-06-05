@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>静态Markdown网页</title>
+    <title>静态HTML网页</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,6 +24,7 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             height: 100vh;
+            position: fixed;
         }
 
         .sidebar ul {
@@ -50,9 +51,11 @@
             flex-grow: 1;
             padding: 20px;
             overflow-y: auto;
+            margin-left: 270px;
+            height: 100vh;
         }
 
-        #rendered-content {
+        #content-area {
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -66,45 +69,39 @@
             <ul id="toc"></ul>
         </div>
         <div class="content">
-            <div id="rendered-content"></div>
+            <div id="content-area">
+                <!-- 用户粘贴的HTML内容放在这里 -->
+                <h1>引言</h1>
+                <p>这是引言的内容。</p>
+
+                <h2>高等数学的发展历史</h2>
+                <p>高等数学的发展历史内容。</p>
+
+                <h2>函数与极限</h2>
+                <h3>单变量函数的极限</h3>
+                <p>单变量函数的极限内容。</p>
+
+                <h3>方向导数</h3>
+                <p>方向导数内容。</p>
+
+                <h3>多元函数的极限</h3>
+                <p>多元函数的极限内容。</p>
+
+                <h2>导数的定义与性质</h2>
+                <p>导数的定义与性质内容。</p>
+
+                <h2>其他</h2>
+                <p>其他内容。</p>
+            </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 预定义的Markdown内容
-            var initialMarkdown = 
-# 引言
-这是引言的内容。
-
-## 高等数学的发展历史
-高等数学的发展历史内容。
-
-## 函数与极限
-### 单变量函数的极限
-单变量函数的极限内容。
-
-### 方向导数
-方向导数内容。
-
-### 多元函数的极限
-多元函数的极限内容。
-
-## 导数的定义与性质
-导数的定义与性质内容。
-
-## 其他
-其他内容。
-            ;
-
-            var renderedContent = document.getElementById('rendered-content');
+            var contentArea = document.getElementById('content-area');
             var toc = document.getElementById('toc');
 
-            // 渲染Markdown内容
-            renderedContent.innerHTML = marked(initialMarkdown);
-
             // 生成目录
-            var headers = renderedContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            var headers = contentArea.querySelectorAll('h1, h2, h3, h4, h5, h6');
             headers.forEach(function(header) {
                 var level = parseInt(header.tagName[1]);
                 var text = header.textContent;
