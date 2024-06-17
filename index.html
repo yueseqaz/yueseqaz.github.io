@@ -82,12 +82,20 @@
             }
         }, 2000);
          function detectDevice() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (isMobile) {
-                alert("为了获得更好的体验,建议使用电脑访问本网站。");
-            }
-        }
-        detectDevice();
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /iphone|ipad|ipod|android|mobile|blackberry|opera mini|iemobile|wpdesktop/.test(userAgent);
+    const isTablet = /ipad|android(?!.*mobile)|tablet/.test(userAgent);
+    
+    if (isMobile && !isTablet) {
+        alert("为了获得更好的体验,建议使用电脑访问本网站。");
+    } else if (isTablet) {
+        alert("您正在使用平板设备。");
+    } else {
+        alert("您正在使用电脑。");
+    }
+}
+
+detectDevice();
     </script>
 </body>
 </html>
