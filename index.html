@@ -81,6 +81,13 @@
                 window.location.href = "homepage.html"; 
             }
         }, 2000);
+         function detectDevice() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                alert("为了获得更好的体验,建议使用电脑访问本网站。");
+            }
+        }
+        detectDevice();
     </script>
 </body>
 </html>
