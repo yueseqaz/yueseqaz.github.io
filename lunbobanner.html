@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            background-image: url(http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202306/65dd83f0f0600aa172c67b4db89b5c8f--2032768543.jpg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+        }
+
+        .swipe {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .swipe .bg {
+            position: absolute;
+            width: 500%;
+            height: 100%;
+            z-index: 1;
+            background-size: cover;
+            background-position: center;
+            filter: blur(140px);
+            transition: background-image 0.5s;
+        }
+
+        .swipe section {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1500px;
+            height: 600px;
+            margin: 0 auto;
+        }
+
+        .swipe .img-box {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swipe .img-box .img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.7s ease-out;
+        }
+
+        .swipe .select {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            bottom: 20px;
+            text-align: center;
+        }
+
+        .swipe .select .item {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            margin: 0 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.5s;
+        }
+
+        .swipe .select .item.checked,
+        .swipe .select .item:hover {
+            background-color: #ff4400;
+        }
+
+        .swipe .btn {
+            width: 40px;
+            height: 100px;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            background-color: rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .swipe .btn.left {
+            left: -60px;
+        }
+
+        .swipe .btn.right {
+            right: -60px;
+        }
+
+        .swipe .btn:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        @media screen and (max-width: 1620px) {
+            .swipe .btn.left {
+                left: 20px;
+            }
+
+            .swipe .btn.right {
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="swipe" id="swipe">
+        <div class="bg" id="swipe_bg"></div>
+        <section>
+            <div class="img-box" id="swipe_img_box">
+                <a href="#" class="link" id="swipe_link">
+                    <img src="" alt="" class="img" id="swipe_img">
+                </a>
+            </div>
+            <div class="select" id="swipe_select"></div>
+            <div class="btn left" id="swipe_btn_left">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </div>
+            <div class="btn right" id="swipe_btn_right">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+        </section>
+    </div>
+    <script>
+        const links = [
+            { image: 'http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202310/743deb46faafa1c15a686a86af09ed61--514498697.jpg', target: '#1' },
+            { image: 'http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202405/71aa2fe1abf11b983b6104a880784b8c--236178200.jpg', target: '#2' },
+            { image: 'http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202403/5479092d431d070ccb5b2c722d6735bc--1838124102.jpg', target: '#3' },
+            { image: 'http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202401/a379d31b1b689dadc478e02f00cea847--2269701695.jpg', target: '#4' },
+            { image: 'http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202311/f5566ae1030b162ce1788468aafb6d3a--3415375928.jpg', target: '#5' },
+            { image: 'http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202310/5b3e2a4c224b45ec426544b8ea227cd4--2433737350.jpg', target: '#6' }
+        ];
+
+        let currentIndex = 0;
+        let swipeTimer = null;
+        const swipe = document.getElementById('swipe');
+        const swipeBg = document.getElementById('swipe_bg');
+        const swipeImgBox = document.getElementById('swipe_img_box');
+        const swipeLink = document.getElementById('swipe_link');
+        const swipeImg = document.getElementById('swipe_img');
+        const swipeSelect = document.getElementById('swipe_select');
+        const swipeBtnLeft = document.getElementById('swipe_btn_left');
+        const swipeBtnRight = document.getElementById('swipe_btn_right');
+
+        const select = (index) => {
+            clearInterval(swipeTimer);
+            if (index >= links.length) {
+                index = 0;
+            }
+            if (index < 0) {
+                index = links.length - 1;
+            }
+            swipeSelect.children[currentIndex].classList.remove('checked');
+            currentIndex = index;
+            const currentLink = links[currentIndex];
+            swipeBg.style.backgroundImage = `url(${currentLink.image})`;
+            swipeImg.style.opacity = 0.2;
+            setTimeout(() => {
+                swipeImg.setAttribute('src', currentLink.image);
+                swipeLink.setAttribute('href', currentLink.target);
+                swipeImg.style.opacity = 1;
+            }, 500);
+            swipeSelect.children[currentIndex].classList.add('checked');
+            swipeTimer = setInterval(nextImage, 3000);
+        };
+
+        const nextImage = () => {
+            select(currentIndex + 1);
+        };
+
+        const prevImage = () => {
+            select(currentIndex - 1);
+        };
+
+        const init = () => {
+            links.forEach((_, index) => {
+                const item = document.createElement('a');
+                item.setAttribute('class', 'item');
+                item.setAttribute('href', '#');
+                item.dataset.index = index;
+                swipeSelect.appendChild(item);
+            });
+            swipeSelect.children[0].classList.add('checked');
+            swipeBtnLeft.addEventListener('click', prevImage);
+            swipeBtnRight.addEventListener('click', nextImage);
+            Array.from(swipeSelect.children).forEach((child) => {
+                child.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    select(Number(e.target.dataset.index));
+                });
+            });
+            swipe.addEventListener('mouseover', () => clearInterval(swipeTimer));
+            swipe.addEventListener('mouseout', () => swipeTimer = setInterval(nextImage, 3000));
+            select(0);
+        };
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+
+</html>
