@@ -16,6 +16,7 @@
             height: 100vh;
             background-image: url(http://cdn-hw-static2.shanhutech.cn/bizhi/staticwp/202402/afa7856c834ddb5111b1c5cb22da873d--118697159.jpg);
             background-size: cover;
+            flex-direction: column;
         }
         h1 {
             color: #333;
@@ -76,10 +77,9 @@
             font-size: 1rem;
             cursor: pointer;
         }
-        .show-overlay-button {
+        .show-overlay-button, .enter-homepage-button {
             position: fixed;
             bottom: 20px;
-            right: 20px;
             padding: 10px 20px;
             background-color: pink;
             border: none;
@@ -88,11 +88,18 @@
             cursor: pointer;
             z-index: 1001;
         }
+        .show-overlay-button {
+            right: 20px;
+        }
+        .enter-homepage-button {
+            left: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>网站重构中</h1> 
     <button class="show-overlay-button" onclick="showOverlay()">关注我</button>
+    <button class="enter-homepage-button" onclick="enterHomepage()">进入主页</button>
     <div class="overlay" id="overlay">
         <div class="overlay-content">
             <p>请扫描二维码关注我的微信公众号</p>
@@ -106,6 +113,9 @@
         }
         function hideOverlay() {
             document.getElementById('overlay').style.display = 'none';
+        }
+        function enterHomepage() {
+            window.location.href = 'show.html'; // Replace with your actual homepage URL
         }
     </script>
 </body>
