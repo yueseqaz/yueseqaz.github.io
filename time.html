@@ -24,15 +24,24 @@
         newItem: '',
         items: []
       },
+      mounted: function() {
+        // 页面加载时从 localStorage 中读取数据
+        this.items = JSON.parse(localStorage.getItem('todoItems') || '[]');
+      },
       methods: {
         addItem: function() {
           if (this.newItem.trim() !== '') {
             this.items.push(this.newItem);
             this.newItem = '';
+            this.saveItems(); // 添加后保存到 localStorage
           }
         },
         removeItem: function(index) {
           this.items.splice(index, 1);
+          this.saveItems(); // 删除后保存到 localStorage
+        },
+        saveItems: function() {
+          localStorage.setItem('todoItems', JSON.stringify(this.items));
         }
       }
     });
