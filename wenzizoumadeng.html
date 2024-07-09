@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>环境音分贝检测</title>
+    <title>创意分贝检测器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,16 +13,47 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            transition: background-color 0.3s;
         }
-        #decibelMeter {
-            font-size: 48px;
+        #container {
             text-align: center;
+        }
+        #meter {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 10px solid #333;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        #needle {
+            width: 4px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            transition: transform 0.1s;
+        }
+        #decibelValue {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="decibelMeter">
+    <div id="container">
+        <h1>创意分贝检测器</h1>
+        <div id="meter">
+            <div id="needle"></div>
+        </div>
         <p>当前环境音分贝: <span id="decibelValue">0</span> dB</p>
         <button id="startButton">开始检测</button>
     </div>
@@ -30,6 +61,8 @@
     <script>
         const startButton = document.getElementById('startButton');
         const decibelValue = document.getElementById('decibelValue');
+        const needle = document.getElementById('needle');
+        const body = document.body;
 
         startButton.addEventListener('click', async () => {
             try {
@@ -41,11 +74,27 @@
                 source.connect(analyser);
 
                 function updateDecibels() {
-                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(dataArray);
-                    const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
-                    const decibels = Math.round(average);
-                    decibelValue.textContent = decibels;
+                    const dataArray = new Float32Array(analyser.frequencyBinCount);
+                    analyser.getFloatTimeDomainData(dataArray);
+                    
+                    let sum = 0;
+                    for (let i = 0; i < dataArray.length; i++) {
+                        sum += dataArray[i] * dataArray[i];
+                    }
+                    const rms = Math.sqrt(sum / dataArray.length);
+                    const decibels = 20 * Math.log10(rms / 0.00002);
+                    const roundedDecibels = Math.max(0, Math.round(decibels));
+
+                    decibelValue.textContent = roundedDecibels;
+                    
+                    // 更新指针位置
+                    const rotation = Math.min(roundedDecibels, 120) * 1.5 - 90; // 最大120分贝，转换为-90到90度
+                    needle.style.transform = `rotate(deg)`;
+
+                    // 更新背景颜色
+                    const hue = Math.max(0, 120 - roundedDecibels);
+                    body.style.backgroundColor = `hsl(, 100%, 50%)`;
+
                     requestAnimationFrame(updateDecibels);
                 }
 
@@ -58,4 +107,3 @@
         });
     </script>
 </body>
-</html>
