@@ -1,1 +1,49 @@
-404
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手电筒控制</title>
+</head>
+<body>
+    <h1>手电筒状态：<span id="flashlight-status">关闭</span></h1>
+    <button id="toggle-flashlight">切换手电筒</button>
+
+    <script>
+        let flashlightOn = false;
+
+        document.getElementById('toggle-flashlight').addEventListener('click', () => {
+            flashlightOn = !flashlightOn;
+            updateFlashlightStatus();
+        });
+
+        function updateFlashlightStatus() {
+            document.getElementById('flashlight-status').innerText = flashlightOn ? '打开' : '关闭';
+            if (flashlightOn) {
+                // 模拟打开手电筒的操作
+                console.log('手电筒已打开');
+            } else {
+                // 模拟关闭手电筒的操作
+                console.log('手电筒已关闭');
+            }
+        }
+
+        if ('AmbientLightSensor' in window) {
+            try {
+                const sensor = new AmbientLightSensor();
+                sensor.addEventListener('reading', () => {
+                    if (flashlightOn && sensor.illuminance < 10) {
+                        flashlightOn = false;
+                        updateFlashlightStatus();
+                    }
+                });
+                sensor.start();
+            } catch (e) {
+                console.error('AmbientLightSensor is not supported by your browser or device.');
+            }
+        } else {
+            console.error('AmbientLightSensor is not supported by your browser.');
+        }
+    </script>
+</body>
+</html>
