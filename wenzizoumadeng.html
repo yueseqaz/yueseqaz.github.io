@@ -3,47 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>手电筒控制</title>
+    <title>官网导航</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 1em;
+            background-color: #f0f0f0;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 0.5em 1em;
+            margin: 0 0.5em;
+        }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 1em;
+            right: 1em;
+            display: none;
+            padding: 0.5em 1em;
+        }
+
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode header {
+            background-color: #444;
+        }
+    </style>
 </head>
 <body>
-    <h1>手电筒状态：<span id="flashlight-status">关闭</span></h1>
-    <button id="toggle-flashlight">切换手电筒</button>
-
+    <header>
+        <button id="toggle-theme">切换黑白模式</button>
+        <button id="toggle-language">English</button>
+    </header>
+    
+    <main>
+        <h1>欢迎使用官网导航</h1>
+        <p>请点击下方链接进入正确的官网：</p>
+        <ul>
+            <li><a href="https://officialsite1.com">官网1</a></li>
+            <li><a href="https://officialsite2.com">官网2</a></li>
+            <!-- 更多链接 -->
+        </ul>
+    </main>
+    
+    <button id="back-to-top">回到顶部</button>
+    
     <script>
-        let flashlightOn = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleThemeButton = document.getElementById('toggle-theme');
+            const toggleLanguageButton = document.getElementById('toggle-language');
+            const backToTopButton = document.getElementById('back-to-top');
 
-        document.getElementById('toggle-flashlight').addEventListener('click', () => {
-            flashlightOn = !flashlightOn;
-            updateFlashlightStatus();
+            // 切换黑白模式
+            toggleThemeButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+
+            // 切换语言
+            toggleLanguageButton.addEventListener('click', () => {
+                const currentLang = document.documentElement.lang;
+                document.documentElement.lang = currentLang === 'en' ? 'zh' : 'en';
+                toggleLanguageButton.textContent = currentLang === 'en' ? '中文' : 'English';
+                
+                // 切换文本内容的逻辑（可以根据实际需要调整）
+                document.querySelector('h1').textContent = currentLang === 'en' ? '欢迎使用官网导航' : 'Welcome to Official Site Navigator';
+                document.querySelector('p').textContent = currentLang === 'en' ? '请点击下方链接进入正确的官网：' : 'Please click the links below to visit the official websites:';
+            });
+
+            // 回到顶部功能
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
-
-        function updateFlashlightStatus() {
-            document.getElementById('flashlight-status').innerText = flashlightOn ? '打开' : '关闭';
-            if (flashlightOn) {
-                // 模拟打开手电筒的操作
-                console.log('手电筒已打开');
-            } else {
-                // 模拟关闭手电筒的操作
-                console.log('手电筒已关闭');
-            }
-        }
-
-        if ('AmbientLightSensor' in window) {
-            try {
-                const sensor = new AmbientLightSensor();
-                sensor.addEventListener('reading', () => {
-                    if (flashlightOn && sensor.illuminance < 10) {
-                        flashlightOn = false;
-                        updateFlashlightStatus();
-                    }
-                });
-                sensor.start();
-            } catch (e) {
-                console.error('AmbientLightSensor is not supported by your browser or device.');
-            }
-        } else {
-            console.error('AmbientLightSensor is not supported by your browser.');
-        }
     </script>
 </body>
 </html>
