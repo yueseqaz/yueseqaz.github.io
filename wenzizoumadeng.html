@@ -60,12 +60,8 @@
             font-size: 1.1rem;
         }
 
-        .button-container {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
+        .buttons {
             display: flex;
-            flex-direction: column;
             gap: 0.5rem;
         }
 
@@ -84,7 +80,16 @@
         }
 
         #back-to-top {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
             display: none;
+            padding: 0.5rem 1rem;
+            background-color: #0071e3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         .dark-mode {
@@ -112,6 +117,10 @@
 <body>
     <header>
         <h1>官网导航</h1>
+        <div class="buttons">
+            <button id="toggle-theme">切换黑白模式</button>
+            <button id="toggle-language">English</button>
+        </div>
     </header>
     
     <main>
@@ -123,11 +132,7 @@
         </ul>
     </main>
     
-    <div class="button-container">
-        <button id="toggle-theme">切换黑白模式</button>
-        <button id="toggle-language">English</button>
-        <button id="back-to-top">回到顶部</button>
-    </div>
+    <button id="back-to-top">回到顶部</button>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
