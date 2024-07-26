@@ -72,13 +72,34 @@
         </div>
     </div>
 
-    <script>
-        fetch('https://v1.hitokoto.cn')
+   <script>
+    function fetchWithTimeout(url, timeout = 5000) {
+        return Promise.race([
+            fetch(url),
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('请求超时')), timeout)
+            )
+        ]);
+    }
+
+    function updateHitokoto() {
+        const hitokotoElement = document.getElementById('hitokoto');
+        fetchWithTimeout('https://v1.hitokoto.cn')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('hitokoto').innerText = data.hitokoto;
+                hitokotoElement.innerText = data.hitokoto;
             })
-            .catch(console.error);
-    </script>
+            .catch(error => {
+                console.error('获取一言失败:', error);
+                hitokotoElement.innerText = '心之所向，素履以往。生如逆旅，一苇以航。';
+            });
+    }
+
+    // 页面加载完成后立即调用
+    updateHitokoto();
+
+    // 每60秒尝试更新一次
+    setInterval(updateHitokoto, 60000);
+</script>
 </body>
 </html>
