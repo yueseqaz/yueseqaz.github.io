@@ -1,54 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>评论页面</title>
+    <title>Sakura</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: url('https://images.mingming.dev/file/853d697f289ecf45a0156.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
             padding: 20px;
         }
-        #comments {
+        .content {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #ff69b4;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
             margin-top: 20px;
         }
-        .comment {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
+        .btn:hover {
+            background-color: #ff1493;
+        }
+        #hitokoto {
+            margin-top: 30px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <h1>评论页面</h1>
-    <form id="comment-form">
-        <textarea id="comment-text" rows="4" cols="50" placeholder="请输入您的评论"></textarea><br>
-        <input type="text" id="user-name" placeholder="您的名字"><br>
-        <button type="submit">提交评论</button>
-    </form>
-    <div id="comments"></div>
+    <div class="container">
+        <div class="content">
+            <h1>welcome</h1>
+            <a href="https://sakura.rf.gd" class="btn">进入主页</a>
+            <p id="hitokoto">正在加载一言...</p>
+        </div>
+    </div>
 
     <script>
-        const form = document.getElementById('comment-form');
-        const commentsDiv = document.getElementById('comments');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const commentText = document.getElementById('comment-text').value;
-            const userName = document.getElementById('user-name').value;
-            
-            if(commentText && userName) {
-                const comment = document.createElement('div');
-                comment.className = 'comment';
-                comment.innerHTML = `<strong>${userName}</strong>: ${commentText}`;
-                commentsDiv.prepend(comment);
-                
-                document.getElementById('comment-text').value = '';
-                document.getElementById('user-name').value = '';
-            }
-        });
+        fetch('https://v1.hitokoto.cn')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('hitokoto').innerText = data.hitokoto;
+            })
+            .catch(console.error);
     </script>
 </body>
 </html>
