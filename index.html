@@ -1,105 +1,62 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sakura</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body, html {
-            height: 100%;
-            font-family: 'Arial', sans-serif;
-        }
-        .container {
-            height: 100%;
+        body {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: url('https://images.mingming.dev/file/853d697f289ecf45a0156.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            text-align: center;
-            padding: 20px;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(270deg, #ff7e5f, #feb47b);
+            background-size: 400% 400%;
+            animation: gradientBackground 10s ease infinite;
         }
-        .content {
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
+        @keyframes gradientBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
-        o {
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .breathing-text {
+            font-size: 50px;
+            color: black;
+            animation: breathing 2s infinite;
         }
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: rgba(255, 105, 180, 0.7);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            backdrop-filter: blur(5px);
-        }
-        .btn:hover {
-            background-color: rgba(255, 20, 147, 0.9);
-            transform: scale(1.05);
-        }
-        #hitokoto {
-            margin-top: 30px;
-            font-style: italic;
-            color: #ff69b4;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 10px;
+        @keyframes breathing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <p>Welcome to my website!click enter homepage.enjoy my gift!<(▰˘◡˘▰)> </p>
-            <a href="https://sakura.rf.gd" class="btn">enter homepage </a>
-            <p id="hitokoto">正在加载一言...</p>
-        </div>
-    </div>
-
-   <script>
-    function fetchWithTimeout(url, timeout = 5000) {
-        return Promise.race([
-            fetch(url),
-            new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('请求超时')), timeout)
-            )
-        ]);
-    }
-
-    function updateHitokoto() {
-        const hitokotoElement = document.getElementById('hitokoto');
-        fetchWithTimeout('https://v1.hitokoto.cn')
-            .then(response => response.json())
-            .then(data => {
-                hitokotoElement.innerText = data.hitokoto;
-            })
-            .catch(error => {
-                console.error('获取一言失败:', error);
-                hitokotoElement.innerText = '樱花下落的速度每秒五厘米！到底要多久才能遇到你呢？';
+    <div class="breathing-text">Okay! I will wait for you</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const text = document.querySelector('.breathing-text');
+            text.addEventListener('click', () => {
+                text.style.color = text.style.color === 'blue' ? 'pink' : 'blue';
             });
-    }
-
-    // 页面加载完成后立即调用
-    updateHitokoto();
-
-    // 每60秒尝试更新一次
-    setInterval(updateHitokoto, 60000);
-</script>
+        });
+    </script>
 </body>
 </html>
