@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>APP</title>
-    <!-- Google Fonts -->
+    <!--Google Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,19 +21,21 @@
         justify-content: center;
       }
       body {
-        width: 100%;
-        height: fit-content;
-        background-image: linear-gradient(270deg, #ca1d5c, #feb47b, #461bab);
-        background-size: 600% 600%;
-        animation: gradientFlow 10s ease infinite;
-        margin: 0;
-        padding: 0;
-      }
-      @keyframes gradientFlow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
+    width: 100%;
+    height: fit-content;
+    background-image: linear-gradient(270deg, #ca1d5c, #feb47b, #461bab);
+    background-size: 600% 600%;
+    animation: gradientFlow 10s ease infinite;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
       .center {
         width: 100%;
         height: fit-content;
@@ -149,44 +151,16 @@
         justify-content: center;
       }
 
-      /* CSS Code for responsiveness */
+      /*CSS Code for responsiveness*/
       @media screen and (max-width: 800px) {
         .left {
           position: relative;
           width: 100vw;
         }
       }
-
-      /* Mobile warning screen */
-      .mobile-warning {
-        display: none;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: white;
-        color: black;
-        font-family: poppins;
-        font-size: 24px;
-        text-align: center;
-        padding: 20px;
-        box-sizing: border-box;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 9999;
-      }
-
-      .mobile-warning.show {
-        display: flex;
-      }
     </style>
   </head>
   <body>
-    <div id="mobile-warning" class="mobile-warning">
-      站点只提供桌面端应用服务，请使用桌面浏览器访问。3秒后自动跳转到指定页面...
-    </div>
     <div class="center">
       <div class="top">还在苦于windows频繁的更新吗 <br>还在苦于繁琐的cmd命令或者频繁的关机点击吗 <br>拥有onekey 解决你的烦恼 就是现在 <br>下滑了解立即上手</div>
       <div class="stack-area">
@@ -222,12 +196,12 @@
         </div>
       </div>
       <div class="bottom">由本人汉化的一款去除windows系统广告的应用 <br>即将上线 敬请期待</div>
+      
     </div>
 
     <script>
       let cards = document.querySelectorAll(".card");
       let stackArea = document.querySelector(".stack-area");
-      let mobileWarning = document.getElementById("mobile-warning");
 
       function rotateCards() {
         let angle = 0;
@@ -261,6 +235,8 @@
         }
       });
 
+      //Code for responsiveness
+
       function adjust() {
         let windowWidth = window.innerWidth;
         let left = document.querySelector(".left");
@@ -273,19 +249,9 @@
       }
       adjust();
 
-      window.addEventListener("resize", adjust);
+      //detect Resize
 
-      // Mobile device detection
-      function detectMobile() {
-        let isMobile = /Mobi|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          mobileWarning.classList.add("show");
-          setTimeout(() => {
-            window.location.href = "https://Sakura.rf.gd";
-          }, 3000);
-        }
-      }
-      detectMobile();
+      window.addEventListener("resize", adjust);
     </script>
   </body>
 </html>
