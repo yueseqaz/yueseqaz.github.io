@@ -22,33 +22,74 @@
             background-size: cover;
             background-position: center;
         }
+
+        #playButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #debugInfo {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            background-color: rgba(0,0,0,0.5);
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
     </style>
 </head>
 <body>
     <div class="full-screen-image"></div>
+    <button id="playButton">播放音乐</button>
+    <div id="debugInfo"></div>
     <audio id="background-music" loop>
         <source src="RPReplay_Final1723556121.m4a" type="audio/mp4">
         Your browser does not support the audio element.
     </audio>
 
     <script>
-        window.onload = function() {
-            var music = document.getElementById("background-music");
-            
-            // 尝试播放音乐
+        var music = document.getElementById("background-music");
+        var playButton = document.getElementById("playButton");
+        var debugInfo = document.getElementById("debugInfo");
+
+        function updateDebugInfo(message) {
+            debugInfo.innerHTML += message + "<br>";
+        }
+
+        function playMusic() {
+            updateDebugInfo("尝试播放音乐...");
             var playPromise = music.play();
 
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
-                    // 自动播放开始
-                    console.log("音乐开始自动播放");
+                    updateDebugInfo("音乐开始播放");
+                    playButton.textContent = "暂停音乐";
                 })
                 .catch(error => {
-                    // 自动播放被阻止
-                    console.log("自动播放被阻止：", error);
-                    // 在这里你可以添加一个按钮让用户手动播放音乐
+                    updateDebugInfo("播放失败：" + error);
                 });
             }
+        }
+
+        playButton.onclick = function() {
+            if (music.paused) {
+                playMusic();
+            } else {
+                music.pause();
+                updateDebugInfo("音乐已暂停");
+                playButton.textContent = "播放音乐";
+            }
+        };
+
+        window.onload = function() {
+            updateDebugInfo("页面已加载");
+            updateDebugInfo("音频文件路径: " + music.currentSrc);
+            playMusic();  // 尝试自动播放
         }
     </script>
 </body>
