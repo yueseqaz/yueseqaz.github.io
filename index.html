@@ -133,9 +133,9 @@
         const volumeSlider = document.getElementById("volume-slider");
 
         const playlist = [
-            {title: "起风了", src: "music.mp3"},
-            {title: "情歌", src: "music1.mp3"},
-            {title: "盗将行", src: "music2.mp3"},
+            {title: "起风了（旧版）", src: "music.mp3"},
+            {title: "情歌-梁静茹", src: "music1.mp3"},
+            {title: "盗将行-花粥", src: "music2.mp3"},
             // 在这里添加更多歌曲
         ];
 
@@ -218,7 +218,7 @@
         };
 
         window.onload = function() {
-            updateDebugInfo("页面已加载");
+            updateDebugInfo("加载缓慢 烦请耐心");
             loadSong(currentSongIndex);
             // 不自动播放，等待用户操作
         };
