@@ -26,5 +26,30 @@
 </head>
 <body>
     <div class="full-screen-image"></div>
+    <audio id="background-music" loop>
+        <source src="RPReplay_Final1723556121.m4a" type="audio/mp4">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        window.onload = function() {
+            var music = document.getElementById("background-music");
+            
+            // 尝试播放音乐
+            var playPromise = music.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // 自动播放开始
+                    console.log("音乐开始自动播放");
+                })
+                .catch(error => {
+                    // 自动播放被阻止
+                    console.log("自动播放被阻止：", error);
+                    // 在这里你可以添加一个按钮让用户手动播放音乐
+                });
+            }
+        }
+    </script>
 </body>
 </html>
