@@ -3,71 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>视频背景网页</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <title>站长学习中</title>
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
             height: 100%;
-            overflow: hidden;
-        }
-        #video-background {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -1;
-            object-fit: cover;
-        }
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
         }
-        h1 {
+        .message {
             font-size: 3em;
-            margin-bottom: 20px;
-            opacity: 0;
+            color: #FF69B4;
+            text-align: center;
+            animation: pulse 2s infinite;
         }
-        p {
-            font-size: 1.5em;
-            max-width: 600px;
-            opacity: 0;
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
     </style>
 </head>
 <body>
-    <video id="video-background" autoplay loop muted playsinline>
-        <source src="https://pomf2.lain.la/f/hcuj1q.mp4" type="video/mp4">
-        您的浏览器不支持视频标签。
-    </video>
-
-    <div class="content">
-        <h1>欢迎来到我的网页</h1>
-        <p>这是一个使用GSAP制作的带有视频背景的网页示例。背景视频现在使用您提供的链接。</p>
+    <div class="message">
+        站长学习中……
     </div>
-
-    <script>
-        gsap.from("h1", {duration: 1, y: 50, opacity: 0, delay: 0.5});
-        gsap.from("p", {duration: 1, y: 50, opacity: 0, delay: 1});
-
-        // 确保视频自动播放
-        document.addEventListener('DOMContentLoaded', function() {
-            var video = document.getElementById('video-background');
-            video.play().catch(function(error) {
-                console.log("自动播放失败：", error);
-                // 在这里可以添加一个播放按钮或其他用户交互元素
-            });
-        });
-    </script>
 </body>
 </html>
