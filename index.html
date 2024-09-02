@@ -3,34 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullpage.js Website</title>
+    <title>6-Page Fullpage.js Website</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
         .section {
             text-align: center;
-            font-family: Arial, sans-serif;
         }
         h1 {
-            font-size: 4em;
+            font-size: 3em;
+            margin-bottom: 20px;
         }
         p {
-            font-size: 1.5em;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .slide {
+            background-size: cover;
+            background-position: center;
+        }
+        .content {
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #fp-nav ul li a span, 
+        .fp-slidesNav ul li a span {
+            background: white;
+        }
+        .fp-watermark {
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <div id="fullpage">
-        <div class="section" style="background-color: #f2f2f2;">
-            <h1>Welcome to My Fullpage Website</h1>
-            <p>Scroll down to explore more!</p>
+        <div class="section" style="background-color: #3498db;">
+            <h1>Welcome to Our Company</h1>
+            <p>Innovating for a better tomorrow</p>
         </div>
-        <div class="section" style="background-color: #e6e6e6;">
-            <h1>Section 2</h1>
-            <p>This is the second full-screen section.</p>
+
+        <div class="section" style="background-color: #2ecc71;">
+            <h1>Our Services</h1>
+            <p>We offer a wide range of services to meet your needs:</p>
+            <ul style="list-style-type: none; padding: 0;">
+                <li>Web Development</li>
+                <li>Mobile App Creation</li>
+                <li>Cloud Solutions</li>
+                <li>Data Analytics</li>
+            </ul>
         </div>
-        <div class="section" style="background-color: #d9d9d9;">
-            <h1>Section 3</h1>
-            <p>Here's the third and final section.</p>
+
+        <div class="section" style="background-color: #e74c3c;">
+            <h1>About Us</h1>
+            <p>Founded in 2010, our company has been at the forefront of technological innovation. We believe in creating solutions that make a difference in people's lives.</p>
+        </div>
+
+        <div class="section" style="background-color: #f39c12;">
+            <h1>Our Team</h1>
+            <p>Meet our diverse team of experts, each bringing unique skills and perspectives to drive our company forward.</p>
+        </div>
+
+        <div class="section" style="background-color: #9b59b6;">
+            <h1>Portfolio</h1>
+            <p>Explore some of our recent projects:</p>
+            <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                <div>Project 1</div>
+                <div>Project 2</div>
+                <div>Project 3</div>
+            </div>
+        </div>
+
+        <div class="section" style="background-color: #34495e;">
+            <h1>Contact Us</h1>
+            <p>Get in touch with us for any inquiries or collaborations.</p>
+            <p>Email: info@ourcompany.com</p>
+            <p>Phone: (123) 456-7890</p>
         </div>
     </div>
 
@@ -38,7 +94,11 @@
     <script>
         new fullpage('#fullpage', {
             autoScrolling: true,
-            scrollHorizontally: true
+            scrollHorizontally: true,
+            navigation: true,
+            navigationPosition: 'right',
+            credits: { enabled: false },
+            licenseKey: 'YOUR_KEY_HERE'
         });
     </script>
 </body>
