@@ -1,41 +1,45 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>站长学习中</title>
+    <title>Fullpage.js Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css">
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
+        .section {
+            text-align: center;
             font-family: Arial, sans-serif;
         }
-        .message {
-            font-size: 3em;
-            color: #FF69B4;
-            text-align: center;
-            animation: pulse 2s infinite;
+        h1 {
+            font-size: 4em;
         }
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
+        p {
+            font-size: 1.5em;
         }
     </style>
 </head>
 <body>
-    <div class="message">
-        站长学习中……
+    <div id="fullpage">
+        <div class="section" style="background-color: #f2f2f2;">
+            <h1>Welcome to My Fullpage Website</h1>
+            <p>Scroll down to explore more!</p>
+        </div>
+        <div class="section" style="background-color: #e6e6e6;">
+            <h1>Section 2</h1>
+            <p>This is the second full-screen section.</p>
+        </div>
+        <div class="section" style="background-color: #d9d9d9;">
+            <h1>Section 3</h1>
+            <p>Here's the third and final section.</p>
+        </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
+    <script>
+        new fullpage('#fullpage', {
+            autoScrolling: true,
+            scrollHorizontally: true
+        });
+    </script>
 </body>
 </html>
