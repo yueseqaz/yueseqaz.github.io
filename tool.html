@@ -3,65 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>精美图片展示</title>
+    <title>全屏图片展示</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f0f0;
+        body, html {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 800px;
-            width: 90%;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 75%; /* 4:3 Aspect Ratio */
+            height: 100%;
             overflow: hidden;
-            border-radius: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .image-wrapper img {
+        .fullscreen-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+        }
+        .fullscreen-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
+            object-fit: contain;
         }
-        .image-wrapper:hover img {
-            transform: scale(1.05);
-        }
-        .caption {
-            margin-top: 15px;
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
             text-align: center;
-            color: #666;
-            font-style: italic;
+            transition: opacity 0.3s ease;
+        }
+        .fullscreen-container:hover .overlay {
+            opacity: 1;
+        }
+        .overlay h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .overlay p {
+            margin: 0;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>图片展示</h1>
-        <div class="image-wrapper">
-            <img src="439696030_18020551391489136_154610390776499775_n.jpeg" alt="展示图片">
+    <div class="fullscreen-container">
+        <img src="439696030_18020551391489136_154610390776499775_n.jpeg" alt="全屏展示图片" class="fullscreen-image">
+        <div class="overlay">
+            <h1>图片展示</h1>
+            <p>这是一张全屏展示的特别图片</p>
         </div>
-        <p class="caption">这是一张特别的图片</p>
     </div>
 </body>
 </html>
