@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>富文本编辑器</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        #editor { border: 1px solid #ccc; min-height: 300px; padding: 10px; margin-bottom: 10px; }
+        #documentList { margin-bottom: 10px; }
+        button { margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div id="documentList"></div>
+    <div id="editor" contenteditable="true"></div>
+    <button onclick="newDocument()">新建</button>
+    <button onclick="saveDocument()">保存</button>
+    <button onclick="deleteDocument()">删除</button>
+
+    <script>
+        let currentDocId = null;
+
+        function loadDocuments() {
+            const documents = JSON.parse(localStorage.getItem('documents')) || {};
+            const documentList = document.getElementById('documentList');
+            documentList.innerHTML = '文档列表：';
+            for (const [id, doc] of Object.entries(documents)) {
+                const button = document.createElement('button');
+                button.textContent = doc.title;
+                button.onclick = () => loadDocument(id);
+                documentList.appendChild(button);
+            }
+        }
+
+        function newDocument() {
+            currentDocId = Date.now().toString();
+            document.getElementById('editor').innerHTML = '';
+        }
+
+        function saveDocument() {
+            if (!currentDocId) {
+                alert('请先新建或选择一个文档');
+                return;
+            }
+            const content = document.getElementById('editor').innerHTML;
+            const documents = JSON.parse(localStorage.getItem('documents')) || {};
+            documents[currentDocId] = {
+                title: content.substring(0, 20) + '...',
+                content: content
+            };
+            localStorage.setItem('documents', JSON.stringify(documents));
+            loadDocuments();
+        }
+
+        function loadDocument(id) {
+            const documents = JSON.parse(localStorage.getItem('documents')) || {};
+            if (documents[id]) {
+                currentDocId = id;
+                document.getElementById('editor').innerHTML = documents[id].content;
+            }
+        }
+
+        function deleteDocument() {
+            if (!currentDocId) {
+                alert('请先选择一个文档');
+                return;
+            }
+            const documents = JSON.parse(localStorage.getItem('documents')) || {};
+            delete documents[currentDocId];
+            localStorage.setItem('documents', JSON.stringify(documents));
+            currentDocId = null;
+            document.getElementById('editor').innerHTML = '';
+            loadDocuments();
+        }
+
+        window.onload = loadDocuments;
+    </script>
+</body>
+</html>
