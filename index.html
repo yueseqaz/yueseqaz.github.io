@@ -182,6 +182,8 @@
 							<h2>碎碎语</h2>
 							本页访问人次:<span id="page_pv"></span>本页访问人数:<span id="page_uv"></span>
 							 <a href="https://info.flagcounter.com/tpyI"></a>
+							<p id="hitokoto">加载中...</p>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 					</div>
 				</section>
@@ -215,6 +217,16 @@
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
 			<script async src="//webviso.yestool.org/js/index.min.js"></script>
+						document.addEventListener('DOMContentLoaded', function() {
+    axios.get('https://v1.hitokoto.cn/')
+        .then(function(response) {
+            const hitokoto = response.data.hitokoto;
+            document.getElementById('hitokoto').innerText = hitokoto;
+        })
+        .catch(function(error) {
+            console.error('加载名言失败:', error);
+        });
+});
 
 	</body>
 </html>
