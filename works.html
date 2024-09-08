@@ -3,9 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shuttle Time Difference</title>
+    <title>Shuttle Time Checker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
     <script>
-        // Shuttle times in hours and minutes (Beijing Time)
         const shuttleTimes = [
             { hour: 7, minute: 20 },
             { hour: 9, minute: 10 },
@@ -15,26 +57,23 @@
         ];
 
         function calculateTimeDifference() {
-            // Get current time in Beijing (China Standard Time, UTC+8)
             const now = new Date();
             const offset = 8 * 60;  // Offset for UTC+8
             const beijingTime = new Date(now.getTime() + (now.getTimezoneOffset() + offset) * 60000);
 
-            // Get current hours and minutes in Beijing time
             const currentHours = beijingTime.getHours();
             const currentMinutes = beijingTime.getMinutes();
 
             let closestShuttleTime = null;
             let minDifference = Number.MAX_SAFE_INTEGER;
 
-            // Iterate through each shuttle time to find the closest one
             shuttleTimes.forEach(time => {
                 const shuttleDate = new Date(beijingTime);
-                shuttleDate.setHours(time.hour, time.minute, 0, 0); // Set shuttle time
+                shuttleDate.setHours(time.hour, time.minute, 0, 0);
 
-                const diff = (shuttleDate - beijingTime) / 60000; // Difference in minutes
+                const diff = (shuttleDate - beijingTime) / 60000;
 
-                if (diff >= 0 && diff < minDifference) { // Ignore past shuttle times
+                if (diff >= 0 && diff < minDifference) {
                     minDifference = diff;
                     closestShuttleTime = time;
                 }
@@ -50,7 +89,10 @@
     </script>
 </head>
 <body onload="calculateTimeDifference()">
-    <h1>Shuttle Time Checker</h1>
-    <p id="result"></p>
+    <div class="container">
+        <h1>Shuttle Time Checker</h1>
+        <p id="result"></p>
+        <div class="footer">Beijing Time</div>
+    </div>
 </body>
 </html>
