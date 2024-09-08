@@ -183,7 +183,7 @@
 							本页访问人次:<span id="page_pv"></span>本页访问人数:<span id="page_uv"></span>
 							 <a href="https://info.flagcounter.com/tpyI"></a>
 							<p id="hitokoto">加载中...</p>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+   
 
 					</div>
 				</section>
@@ -208,6 +208,7 @@
 		</div>
 
 		<!-- Scripts -->
+			 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
 			<script src="assets/js/jquery.dropotron.min.js"></script>
@@ -216,8 +217,8 @@
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
-			<script async src="//webviso.yestool.org/js/index.min.js"></script>
-						document.addEventListener('DOMContentLoaded', function() {
+			<script async src="//webviso.yestool.org/js/index.min.js">
+									document.addEventListener('DOMContentLoaded', function() {
     axios.get('https://v1.hitokoto.cn/')
         .then(function(response) {
             const hitokoto = response.data.hitokoto;
@@ -228,5 +229,6 @@
         });
 });
 
+			</script>
 	</body>
 </html>
