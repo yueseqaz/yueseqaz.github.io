@@ -217,9 +217,10 @@
 			<script src="assets/js/util.js"></script>
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
-			<script async src="//webviso.yestool.org/js/index.min.js">
-									document.addEventListener('DOMContentLoaded', function() {
-    axios.get('https://v1.hitokoto.cn/')
+			<script async src="//webviso.yestool.org/js/index.min.js"></script>
+	<script> 
+		document.addEventListener('DOMContentLoaded', function() {
+  		  axios.get('https://v1.hitokoto.cn/')
         .then(function(response) {
             const hitokoto = response.data.hitokoto;
             document.getElementById('hitokoto').innerText = hitokoto;
