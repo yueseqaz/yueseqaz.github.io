@@ -1,0 +1,218 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="text/css" http-equiv="Content-Style-Type">
+<title>JAVA学习</title>
+</head>
+<body>
+<h1 align="center" class="root">
+<a name="4d33ajoku02jdecqmbn33vi98s">JAVA学习</a>
+</h1>
+<div align="center" class="globalOverview">
+<img src="%E4%B8%AA%E4%BA%BA%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92%E8%A1%A8_files/images/JAVA%E5%AD%A6%E4%B9%A0.jpg"></div>
+<h2 class="topic">
+<a name="0hb77vafdjg2eil98pb1vcs08k">grammar</a>
+</h2>
+<h3 class="topic">
+<a name="3ifdbn4i3qedk9mvp8gb66dd8f">&nbsp;注释</a>
+</h3>
+<h3 class="topic">
+<a name="4u5b9u1ukd2cnhhnm5st2vcn1j">&nbsp;&nbsp;单行注释：//   利用ctrl+/实现对当前行注释</a>
+</h3>
+<h3 class="topic">
+<a name="1p422n9tb7c5nc9iqlghc200jj">&nbsp;&nbsp;多行注释：/*  利用ctrl+shift+/实现对选中的多行进行注释</a>
+</h3>
+<h3 class="topic">
+<a name="61m7jbkhfjap6s5hkgbj3l4p4i">&nbsp;&nbsp;文档注释：/**&#13;
+ * &#13;
+ */</a>
+</h3>
+<h3 class="topic">
+<a name="7ihcl81u9d3nak117kt19d7hvi">&nbsp;&nbsp;注释不会被执行 也不会被编译到class文件中</a>
+</h3>
+<h3 class="topic">
+<a name="3b82ij1t6f04ires5ehiqn9eoq">&nbsp;字面量：数据在程序中的书写格式</a>
+</h3>
+<h3 class="topic">
+<a name="7k3dpremgc2lb3rl49h6ik48q3">&nbsp;&nbsp;字符：单引号'' 不能为空 有且只有一个字符 可以是空格</a>
+</h3>
+<h3 class="topic">
+<a name="1v80e6ftupgm9ra8mlo01g1cvk">&nbsp;&nbsp;字符串：双引号括起来 里面可以是任意内容 包括字符串以及字符以及一个或多个空格</a>
+</h3>
+<h3 class="topic">
+<a name="23cavrdninb1bi0cvbd8ph1cgj">&nbsp;&nbsp;布尔值；true和false</a>
+</h3>
+<h3 class="topic">
+<a name="0tqcc9i1epfg3cvrq3vh0oj28v">&nbsp;&nbsp;其它：/n换行 /t 一个tab键的位置 null 空值</a>
+</h3>
+<h3 class="topic">
+<a name="7b8vdbqqb4rts18l2tc4eanvv5">&nbsp;变量：用来存储一个数据的，本质是内存中的一块区域</a>
+</h3>
+<h3 class="topic">
+<a name="53i0afcko53kc3lcdrtpsn6e0q">&nbsp;&nbsp;变量的优点：使用变量记要处理的数据，是编码更加灵活。管理更加方便</a>
+</h3>
+<h3 class="topic">
+<a name="10d22h5n2r0udbbjjkm3s0nkfp">&nbsp;&nbsp;格式：数据类型 变量名=数字  （数据内心：int整型  double 小数   ）ps：变量里面的数据可被替换</a>
+</h3>
+<h3 class="topic">
+<a name="3tm5kpdchhm9k9kmag1227dg8r">&nbsp;&nbsp;变量的定义结束是从变量以后最近的一个&rdquo;}&ldquo;截止的 就是变量前面的&rdquo;{&lsquo;的另一半，而不是无脑的看变量后面的第一个&rdquo;}&ldquo;，还有变量定义什么类型 就提供对应类型的数据  而且必须先声明 而且定义时可以不赋初值 但是第一次使用的时候必须赋予初值</a>
+</h3>
+<h3 class="topic">
+<a name="1b7gd70eacat9oh3rje0ei3a8q">&nbsp;&nbsp;&nbsp;变量在同一个范围内只能定义一次  有多个变量的话就定义不同的变量名 eg：int a=1；int a=2：在一个范围内就会出现报错</a>
+</h3>
+<h3 class="topic">
+<a name="6pnq9f8lgsssd8bm6acv0vqu4i">&nbsp;关键字  标识符</a>
+</h3>
+<h3 class="topic">
+<a name="5hj6jf7jd78j975689miqs8ifc">&nbsp;&nbsp;关键字java已定义</a>
+</h3>
+<h3 class="topic">
+<a name="63k6m596d855io5i9o2otc16m0">&nbsp;&nbsp;标识符只能由数字 字母 下划线 "_" 以及美元符号&rdquo;$"  不能以数字开头 不能使用关键字 大小写敏感  中文也可以 但不提倡 建议英文 首字母小写 类似studentNumber这种</a>
+</h3>
+<h3 class="topic">
+<a name="5l0k2gjjavg0gc70bvltjso3m1">&nbsp;数据类型</a>
+</h3>
+<h3 class="topic">
+<a name="42v8oelm3h3ns4pfj7nni3u1bq">&nbsp;&nbsp;基本数据类型</a>
+</h3>
+<h3 class="topic">
+<a name="4chgufb31o60bg12niqts29vdd">&nbsp;&nbsp;&nbsp;整型</a>
+</h3>
+<h3 class="topic">
+<a name="67cn4pf1fjon7ah4r5cdklhruk">&nbsp;&nbsp;&nbsp;&nbsp;byte：占用一个字节 八位  范围 -128&mdash;&mdash;&mdash;137</a>
+</h3>
+<h3 class="topic">
+<a name="0u4s1t98ens5d1quutat1nff30">&nbsp;&nbsp;&nbsp;&nbsp;short：占用两个字节  16位</a>
+</h3>
+<h3 class="topic">
+<a name="3b7le4rdtjd1u5nt3qh3p4s9ef">&nbsp;&nbsp;&nbsp;&nbsp;int：占用四个字节  32位</a>
+</h3>
+<h3 class="topic">
+<a name="5mr59obu4u75o0fp6s12kc27do">&nbsp;&nbsp;&nbsp;&nbsp;long：占用八个字节  64位 在赋初始值时 默认是int型 应该在数值后面加L/l</a>
+</h3>
+<h3 class="topic">
+<a name="5mjtko47uvd56oo6r4dkr3jn5e">&nbsp;&nbsp;&nbsp;浮点型</a>
+</h3>
+<h3 class="topic">
+<a name="4n72vqtpjtjgv8ectk8ie7m76e">&nbsp;&nbsp;&nbsp;&nbsp;float 默认是double  需要在数值后面加F/f</a>
+</h3>
+<h3 class="topic">
+<a name="7tpnsuneq175mm8a3tvvhr9oha">&nbsp;&nbsp;&nbsp;&nbsp;double</a>
+</h3>
+<h3 class="topic">
+<a name="28m68p5d7t9lokj79f9oksl10g">&nbsp;&nbsp;&nbsp;字符型</a>
+</h3>
+<h3 class="topic">
+<a name="0pmff51frc42335qfnn7u4j386">&nbsp;&nbsp;&nbsp;&nbsp;char：不能为空 只能一个</a>
+</h3>
+<h3 class="topic">
+<a name="0lts9vc78c4o0lokjqunloqr66">&nbsp;&nbsp;&nbsp;布尔值</a>
+</h3>
+<h3 class="topic">
+<a name="781t37u459falee6sdohde28ep">&nbsp;&nbsp;&nbsp;&nbsp;boolean</a>
+</h3>
+<h3 class="topic">
+<a name="4d9v1t9kkl8mhbciejvqbc2jod">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true和false</a>
+</h3>
+<h3 class="topic">
+<a name="3qchrnqfrlck5unm41f2unn525">&nbsp;&nbsp;引用数据类型</a>
+</h3>
+<h3 class="topic">
+<a name="6bmuqapidp12opifn5q4k8nip1">&nbsp;&nbsp;&nbsp;string：字符串型 后面是字符串</a>
+</h3>
+<h2 class="topic">
+<a name="4gh5vb210b413n0s3n53aick4u">idea的使用</a>
+</h2>
+<h3 class="topic">
+<a name="5id3c36cto9gv4j92cr8qtcf0u">&nbsp;删除当前行利用ctrl+x/y</a>
+</h3>
+<h3 class="topic">
+<a name="3dgb3qgnc60tnbgdj96un4s76t">&nbsp;ctrl+d：复制当前行至下一行</a>
+</h3>
+<h3 class="topic">
+<a name="2hbl5fo0nu6v7h0td1u5fhb6i2">&nbsp;ctrl+alt+l：格式化代码</a>
+</h3>
+<h3 class="topic">
+<a name="64cohs0nbeir4g7ebvijgmqfgo">&nbsp;ctrl+shift+上下方向键移动代码</a>
+</h3>
+<h2 class="topic">
+<a name="16s99jvd8n1qfmfpk79mvvtm2p">java概述</a>
+</h2>
+<h3 class="topic">
+<a name="1m4oq3tsh6ct6jr08evoisj36f">&nbsp;sun公司于1995发布 2009年被甲骨文公司收购</a>
+</h3>
+<h3 class="topic">
+<a name="5kpg3s8simbiket7qss3b6etvo">&nbsp;java之父：詹姆斯.高斯林</a>
+</h3>
+<h3 class="topic">
+<a name="26n2pee7a8556dcfda2lhsi67e">&nbsp;隶属于高级编程语言：介于汇编型语言与解释型语言之间</a>
+</h3>
+<h3 class="topic">
+<a name="4v2gf99dncrd9gdcgcgectifp9">&nbsp;java 体系</a>
+</h3>
+<h3 class="topic">
+<a name="6tmgld0t4cghs4ajgfg4tst4rk">&nbsp;&nbsp;Java se：标准版（java的技术和核心</a>
+</h3>
+<h3 class="topic">
+<a name="1ieg02pka40ku5gqk8b3o0k6em">&nbsp;&nbsp;java ee：企业级：互联网和企业级应用开发(	被认可）</a>
+</h3>
+<h3 class="topic">
+<a name="66fhg5180fvfm86nst4tvd12vr">&nbsp;&nbsp;java me：小型版：移动端 （不被认可）</a>
+</h3>
+<h3 class="topic">
+<a name="6sj2d3cpd78vj4ue0c50s2mmis">&nbsp;jdk</a>
+</h3>
+<h3 class="topic">
+<a name="1ju8hpfo6scguoo67q0eqt9a92">&nbsp;&nbsp;Java运行时环境（JRE）：用于运行Java程序。&#13;
+编译器（javac）：将Java源代码编译成字节码。&#13;
+解释器（java）：运行编译后的Java字节码。&#13;
+标准类库：提供大量预定义的类和接口，用于常见编程任务。&#13;
+开发工具：如文档生成器、调试器等。&#13;
+API文档：提供Java类库的详细使用说明。&#13;
+示例代码：帮助开发者学习如何使用</a>
+</h3>
+<h3 class="topic">
+<a name="5esf7p7qph3v29j8fhpj1foraa">&nbsp;&nbsp;jdk的意思是：java开发工具集成包</a>
+</h3>
+<h2 class="topic">
+<a name="1mo68lv1edrq6u5llck6ciqn5t">创建工程的步骤</a>
+</h2>
+<h3 class="topic">
+<a name="6vn6sa4b8tgcdqkhnq7p9bvjjj">&nbsp;第一步：创建项目(NEW PORJECT)</a>
+</h3>
+<h3 class="topic">
+<a name="29702vct5n8q60kuu5oqcot5jg">&nbsp;第二步：创建模块module（new module）</a>
+</h3>
+<h3 class="topic">
+<a name="67m0udn9vbjrp0ohf0v5but4c0">&nbsp;第三步{创建包（new package）在模块下的src建立</a>
+</h3>
+<h3 class="topic">
+<a name="79gh28nfao8jvc1ljcobdbh4kl">&nbsp;&nbsp;包的命名一般是域名倒写加包名（eg：com.baidu.包名）</a>
+</h3>
+<h3 class="topic">
+<a name="3ggtp07b04ufkvfg0ohkljjdm0">&nbsp;第四步：创建类（new class）</a>
+</h3>
+<h2 class="topic">
+<a name="321mdq7hbtujgg14aqj0g82tjj">path环境变量</a>
+</h2>
+<h3 class="topic">
+<a name="79khmea905j0v5ngttiqfd65vj">&nbsp;作用：使被添加到环境变量中的&middot;这个软件在命令行中任意位置都能够被执行</a>
+</h3>
+<h3 class="topic">
+<a name="3rr6dku0ba7lknn7nvvo3u4b86">&nbsp;添加步骤：右击此电脑 点击属性 点击高级系统设置 点击环境变量 可选择对当前登陆用户生效还是对此计算机的所有用户生效 然后找到添加的软件的路径 一般是bin目录 然后点击生效即可</a>
+</h3>
+<h2 class="topic">
+<a name="02ctqe3ufgqfkat67249n2hqi0">其它</a>
+</h2>
+<h3 class="topic">
+<a name="17rlu1teje1av07s0qgtj9bk3i">&nbsp;1字节由八个二进制位构成 1B=8b 有1TB=1024GB=1024*1024MB=  1024*1024*1024KB=1024*1024*1024*1024B</a>
+</h3>
+<h2 class="topic">
+<a name="41pjtf9v39v674f83vm0eedcrs">2024年9月8日  学习至p24数据类型</a>
+</h2>
+<h3 class="topic">
+<a name="5g47gig99rod34po7pb1ql84l7">&nbsp;课程链接：【Java入门基础视频教程，java零基础自学就选黑马程序员Java入门教程（含Java项目和Java真题）】https://www.bilibili.com/video/BV1Cv411372m?p=16&amp;vd_source=307c6b3c6a8facd55a89ba3cc8cc668a</a>
+</h3>
+</body>
+</html>
