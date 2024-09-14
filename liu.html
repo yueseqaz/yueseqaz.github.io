@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="780.jpg" type="image/jpg"/>
+    <title>百度一下，你就知道</title>
+    </head>
+	<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+		.container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40vh;
+        }
+		.search-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+		.logo {
+            width: 270px;
+            height: 129px;
+            background-image: url('https://www.baidu.com/img/bd_logo1.png');
+            background-size: cover;
+            margin-bottom: 20px;
+        }
+		.search-input {
+            width: 500px;
+            height: 30px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            font-size: 16px;
+        }
+		.search-button {
+            width: 100px;
+            height:39px;
+            background-color: #38f;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+		#u1 {
+            list-style-type: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+		#u1 li {
+            float: left;
+            background-color: antiquewhite;
+            width: 90px;
+            text-align: center;
+        }
+		#u1 li a {
+            background-color: white;
+            width: 100px;
+            display: block;
+            font-weight: 900;
+            color: black;
+            text-decoration: none;
+        }
+		#u1 li a:hover {
+            background-color: green;
+        }
+		#u2 {
+            padding-left: 0px;
+            display: none;
+        }
+		#u1 li:hover #u2 {
+            display: block;
+        }
+		.u3 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap:5px;
+			}
+		.center-content {
+			     display: flex;
+			     justify - content: center;
+			     align - items: center;
+			     width: 100%;
+			 }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="search-box">
+            <div class="logo"></div>
+            <form action="https://www.baidu.com/s" method="get">
+                <input type="text" name="wd" class="search-input" placeholder="请输入搜索内容">
+                <button type="submit" class="search-button">百度一下</button>
+            </form>
+        </div>
+    </div>
+    <ul id="u1">
+        <li><a href="#">新闻</a></li>
+        <li><a href="#">hao123</a></li>
+        <li><a href="#">地图</a></li>
+        <li><a href="#">贴吧</a></li>
+        <li><a href="#">视频</a></li>
+        <li><a href="#">网盘</a></li>
+        <li><a href="#">文库</a></li>
+        <li><a href="#">AI助手</a></li>
+        <li><a href="#">更多</a></li>
+    </ul>
+    </div>
+	 <div class="center - content">
+	<ul class="u3">
+	    <li><a href="#">1 辛巴指出小杨哥售后服务问题</a></li>
+	    <li><a href="#">2 明天上完课就放假了，就是中秋节</a></li>
+	    <li><a href="#">3 连续两天已经输了台球</a></li>
+	    <li><a href="#">4 又是一年两次的四级报名开始了</a></li>
+	    <li><a href="#">5 直到有另一个人能体会我的感觉</a></li>
+		<li><a href="#">6 人民日报广告语：请你努力，为了你自己</a></li>
+	</div>
+</body>
+</html>
