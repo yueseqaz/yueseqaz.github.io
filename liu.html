@@ -3,124 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="780.jpg" type="image/jpg"/>
-    <title>百度一下，你就知道</title>
-    </head>
-	<style>
+    <title>前端代码展示</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-		.container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 40vh;
+            min-height: 100vh;
+            background-color: #f0f0f0;
         }
-		.search-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .code-container {
+            position: relative;
+            background-color: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            color: #f8f8f2;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-		.logo {
-            width: 270px;
-            height: 129px;
-            background-image: url('https://www.baidu.com/img/bd_logo1.png');
-            background-size: cover;
-            margin-bottom: 20px;
+        pre {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
         }
-		.search-input {
-            width: 500px;
-            height: 30px;
-            border: 1px solid #ccc;
-            padding: 5px;
-            font-size: 16px;
-        }
-		.search-button {
-            width: 100px;
-            height:39px;
-            background-color: #38f;
-            color: white;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-		#u1 {
-            list-style-type: none;
+        .copy-btn {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 10px;
+            right: 10px;
+            background-color: #ff79c6;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
         }
-		#u1 li {
-            float: left;
-            background-color: antiquewhite;
-            width: 90px;
-            text-align: center;
+        .copy-btn:hover {
+            background-color: #ff92df;
         }
-		#u1 li a {
-            background-color: white;
-            width: 100px;
-            display: block;
-            font-weight: 900;
-            color: black;
-            text-decoration: none;
-        }
-		#u1 li a:hover {
-            background-color: green;
-        }
-		#u2 {
-            padding-left: 0px;
-            display: none;
-        }
-		#u1 li:hover #u2 {
-            display: block;
-        }
-		.u3 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap:5px;
-			}
-		.center-content {
-			     display: flex;
-			     justify - content: center;
-			     align - items: center;
-			     width: 100%;
-			 }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="search-box">
-            <div class="logo"></div>
-            <form action="https://www.baidu.com/s" method="get">
-                <input type="text" name="wd" class="search-input" placeholder="请输入搜索内容">
-                <button type="submit" class="search-button">百度一下</button>
-            </form>
-        </div>
-    </div>
-    <ul id="u1">
-        <li><a href="#">新闻</a></li>
-        <li><a href="#">hao123</a></li>
-        <li><a href="#">地图</a></li>
-        <li><a href="#">贴吧</a></li>
-        <li><a href="#">视频</a></li>
-        <li><a href="#">网盘</a></li>
-        <li><a href="#">文库</a></li>
-        <li><a href="#">AI助手</a></li>
-        <li><a href="#">更多</a></li>
-    </ul>
-    </div>
-	 <div class="center - content">
-	<ul class="u3">
-	    <li><a href="#">1 辛巴指出小杨哥售后服务问题</a></li>
-	    <li><a href="#">2 明天上完课就放假了，就是中秋节</a></li>
-	    <li><a href="#">3 连续两天已经输了台球</a></li>
-	    <li><a href="#">4 又是一年两次的四级报名开始了</a></li>
-	    <li><a href="#">5 直到有另一个人能体会我的感觉</a></li>
-		<li><a href="#">6 人民日报广告语：请你努力，为了你自己</a></li>
-	</div>
+
+<div class="code-container">
+    <button class="copy-btn" onclick="copyCode()">一键复制</button>
+    <pre><code id="code">
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;780.jpg&quot; type=&quot;image/jpg&quot;/&gt;
+    &lt;title&gt;百度一下，你就知道&lt;/title&gt;
+&lt;/head&gt;
+&lt;style&gt;
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40vh;
+    }
+    .search-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .logo {
+        width: 270px;
+        height: 129px;
+        background-image: url('https://www.baidu.com/img/bd_logo1.png');
+        background-size: cover;
+        margin-bottom: 20px;
+    }
+    .search-input {
+        width: 500px;
+        height: 30px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        font-size: 16px;
+    }
+    .search-button {
+        width: 100px;
+        height:39px;
+        background-color: #38f;
+        color: white;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    #u1 {
+        list-style-type: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #u1 li {
+        float: left;
+        background-color: antiquewhite;
+        width: 90px;
+        text-align: center;
+    }
+    #u1 li a {
+        background-color: white;
+        width: 100px;
+        display: block;
+        font-weight: 900;
+        color: black;
+        text-decoration: none;
+    }
+    #u1 li a:hover {
+        background-color: green;
+    }
+    #u2 {
+        padding-left: 0px;
+        display: none;
+    }
+    #u1 li:hover #u2 {
+        display: block;
+    }
+    .u3 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:5px;
+    }
+    .center-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;search-box&quot;&gt;
+            &lt;div class=&quot;logo&quot;&gt;&lt;/div&gt;
+            &lt;form action=&quot;https://www.baidu.com/s&quot; method=&quot;get&quot;&gt;
+                &lt;input type=&quot;text&quot; name=&quot;wd&quot; class=&quot;search-input&quot; placeholder=&quot;请输入搜索内容&quot;&gt;
+                &lt;button type=&quot;submit&quot; class=&quot;search-button&quot;&gt;百度一下&lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;ul id=&quot;u1&quot;&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;新闻&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;hao123&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;地图&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;贴吧&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;视频&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;网盘&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;文库&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;AI助手&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;更多&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class=&quot;center-content&quot;&gt;
+        &lt;ul class=&quot;u3&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;1 辛巴指出小杨哥售后服务问题&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;2 明天上完课就放假了，就是中秋节&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;3 连续两天已经输了台球&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;4 又是一年两次的四级报名开始了&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;5 直到有另一个人能体会我的感觉&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;#&quot;&gt;6 人民日报广告语：请你努力，为了你自己&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </code></pre>
+</div>
+
+<script>
+    function copyCode() {
+        const code = document.getElementById('code').innerText;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = code + "\n刘亮所有";
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        alert("代码已复制，附加文本: '刘亮所有'");
+    }
+</script>
+
 </body>
 </html>
