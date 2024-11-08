@@ -79,7 +79,7 @@
   
   const config = {
     smallSrc: 'https://bu.dusays.com/2024/09/27/66f6b6b0976e6.png', // 小图链接 尽可能配置小于100k的图片
-    largeSrc: 'https://t.alcy.cc/pc', // 大图链接 最终显示的图片
+    largeSrc: 'https://t.alcy.cc/moez', // 大图链接 最终显示的图片
     mobileSmallSrc: 'https://t.alcy.cc/ysmp', // 手机端小图链接 尽可能配置小于100k的图片
     mobileLargeSrc: 'https://t.alcy.cc/mp', // 手机端大图链接 最终显示的图片
     enableRoutes: ['/'],
