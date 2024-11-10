@@ -81,7 +81,7 @@
     smallSrc: 'https://bu.dusays.com/2024/09/27/66f6b6b0976e6.png', // 小图链接 尽可能配置小于100k的图片
     largeSrc: 'https://cdn.z.wiki/autoupload/20241109/qjZn/1980X1530/tu.png', // 大图链接 最终显示的图片
     mobileSmallSrc: 'https://t.alcy.cc/ysmp', // 手机端小图链接 尽可能配置小于100k的图片
-    mobileLargeSrc: 'https://img.16k.club/mofish/2024-11-02/c6230e2bac86983776962aab4770c4de.webp', // 手机端大图链接 最终显示的图片
+    mobileLargeSrc: 'https://cdn.jsdelivr.net/gh/yueseqaz/Kasumi@main/003.png', // 手机端大图链接 最终显示的图片
     enableRoutes: ['/'],
 
     };
