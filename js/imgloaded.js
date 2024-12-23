@@ -79,7 +79,7 @@
   
   const config = {
     smallSrc: 'https://bu.dusays.com/2024/09/27/66f6b6b0976e6.png', // 小图链接 尽可能配置小于100k的图片
-    largeSrc: 'https://cdn.z.wiki/autoupload/20241109/qjZn/1980X1530/tu.png', // 大图链接 最终显示的图片
+    largeSrc: 'https://hv.z.wiki/autoupload/20241223/EWiF/5840X3893/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%88%B6%E6%9C%8D-%E5%B0%91%E5%A5%B3.png', // 大图链接 最终显示的图片
     mobileSmallSrc: 'https://t.alcy.cc/ysmp', // 手机端小图链接 尽可能配置小于100k的图片
     mobileLargeSrc: 'https://cdn.jsdelivr.net/gh/yueseqaz/Kasumi@main/003.png', // 手机端大图链接 最终显示的图片
     enableRoutes: ['/'],
