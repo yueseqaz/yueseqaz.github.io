@@ -2,27 +2,29 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>视频播放器</title>
+    <title>背景视频</title>
     <style>
-        body {
+        body, html {
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: black;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
         }
-        video {
-            max-width: 100%;
-            max-height: 100%;
+        #bgVideo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1000;
         }
     </style>
 </head>
 <body>
-    <video controls autoplay>
+    <video id="bgVideo" autoplay loop muted>
         <source src="https://hv.z.wiki/autoupload/20250121/oOxc/-4688273664624185710.mp4" type="video/mp4">
-        您的浏览器不支持视频播放。
     </video>
 </body>
 </html>
