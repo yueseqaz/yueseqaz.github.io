@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <title>背景视频</title>
+    <title>fuck</title>
     <style>
-        body, html {
+        body {
             margin: 0;
             padding: 0;
-            height: 100%;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0; /* 设置一个浅灰色背景 */
         }
-        #bgVideo {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -1000;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* 保持图片的纵横比并完全显示在容器内 */
         }
     </style>
 </head>
+
 <body>
-    <video id="bgVideo" autoplay loop muted>
-        <source src="https://hv.z.wiki/autoupload/20250121/oOxc/-4688273664624185710.mp4" type="video/mp4">
-    </video>
+    <img src="https://imgur.com/a/none-DO9PHSE" alt="展示的图片">
 </body>
+
 </html>
