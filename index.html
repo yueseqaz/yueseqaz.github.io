@@ -29,14 +29,28 @@
         window.onload = function () {
             // 页面加载完成后触发礼花特效
             const confettiSettings = {
-                particleCount: 100,
-                spread: 360,
-                origin: { y: 0.6 }
+                particleCount: 300, // 增加礼花粒子数量
+                spread: 360, // 礼花扩散范围
+                startVelocity: 60, // 增加粒子初速度
+                decay: 0.9, // 减慢粒子消失速度
+                gravity: 1, // 重力效果
+                drift: 0, // 水平漂移
+                ticks: 300, // 增加礼花持续时间
+                origin: { y: 0.6 }, // 发射位置
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'], // 多彩礼花
+                shapes: ['circle', 'square'], // 多种形状
+                scalar: 1.2 // 粒子大小
             };
+
             function fire() {
                 confetti(confettiSettings);
             }
+
+            // 多次触发礼花效果
             fire();
+            setTimeout(fire, 500); // 0.5秒后再次触发
+            setTimeout(fire, 1000); // 1秒后再次触发
+            setTimeout(fire, 1500); // 1.5秒后再次触发
         };
     </script>
 </body>
