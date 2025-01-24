@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            cursor: pointer; /* 鼠标指针变为点击样式 */
         }
 
         img {
@@ -46,11 +47,21 @@
                 confetti(confettiSettings);
             }
 
-            // 多次触发礼花效果
+            // 页面加载时触发礼花
             fire();
             setTimeout(fire, 500); // 0.5秒后再次触发
             setTimeout(fire, 1000); // 1秒后再次触发
             setTimeout(fire, 1500); // 1.5秒后再次触发
+
+            // 点击页面任意位置触发礼花
+            document.body.addEventListener('click', function (event) {
+                // 根据点击位置设置礼花发射点
+                const origin = {
+                    x: event.clientX / window.innerWidth,
+                    y: event.clientY / window.innerHeight
+                };
+                confetti({ ...confettiSettings, origin });
+            });
         };
     </script>
 </body>
