@@ -4,49 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>h</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swipejs@1.6.0/src/themes/default/default.css">
+    <title>全屏图片展示</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-
-       .swipe {
-            width: 80%;
-            margin: 50px auto;
-            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-       .swipe img {
-            width: 100%;
-            height: auto;
+        img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
             display: block;
         }
     </style>
 </head>
 
 <body>
-    <div class="swipe">
-        <div class="swipe-wrap">
-            <img src="https://cdn.10086.click/show/2025-01-24/f855160f-ca71-422a-b6e6-40c07d88539b.webp" alt="图片1">
-            <img src="https://cdn.10086.click/show/2025-01-24/80aad69e-c4a1-4b99-b9df-bfa9a7b1e6f0.jpg" alt="图片2">
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/swipejs@1.6.0/src/js/swipe.js"></script>
+    <img id="fullScreenImg" src="https://cdn.10086.click/show/2025-01-24/80aad69e-c4a1-4b99-b9df-bfa9a7b1e6f0.jpg"
+        alt="展示图片">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         window.onload = function () {
-            var mySwipe = Swipe(document.querySelector('.swipe'), {
-                auto: 5000, // 自动切换间隔时间，单位毫秒，这里是5秒
-                continuous: true, // 是否循环播放
-                callback: function (index, element) {
-                    // 切换图片时的回调函数，这里可以添加一些额外的逻辑
-                }
-            });
+            // 页面加载完成后触发礼花特效
+            const confettiSettings = {
+                particleCount: 100,
+                spread: 360,
+                origin: { y: 0.6 }
+            };
+            function fire() {
+                confetti(confettiSettings);
+            }
+            fire();
         };
     </script>
 </body>
