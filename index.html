@@ -1,69 +1,271 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全屏图片展示</title>
+    <title>Sakura图库升级公告 - Cosplay写真即将开启</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            cursor: pointer; /* 鼠标指针变为点击样式 */
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --neon-blue: #00f3ff;
         }
 
-        img {
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            display: block;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #1a1a1a url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎭</text></svg>') fixed;
+            background-size: 8em;
+            font-family: 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+            animation: neonPulse 1.5s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from { text-shadow: 0 0 10px var(--primary-color); }
+            to { text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color); }
+        }
+
+        .timeline {
+            display: grid;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(255, 107, 107, 0.2));
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 75%;
+            animation: progress 2s ease-in-out;
+        }
+
+        @keyframes progress {
+            from { width: 0; }
+            to { width: 75%; }
+        }
+
+        .subscribe-form {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        input[type="email"] {
+            padding: 1rem;
+            width: 300px;
+            border: 2px solid var(--neon-blue);
+            background: transparent;
+            color: white;
+            margin: 1rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            input[type="email"] {
+                width: 80%;
+                margin: 1rem 0;
+            }
         }
     </style>
 </head>
-
 <body>
-    <img id="fullScreenImg" src="https://cdn.10086.click/show/2025-01-24/80aad69e-c4a1-4b99-b9df-bfa9a7b1e6f0.jpg"
-        alt="展示图片">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script>
-        window.onload = function () {
-            // 页面加载完成后触发礼花特效
-            const confettiSettings = {
-                particleCount: 300, // 增加礼花粒子数量
-                spread: 360, // 礼花扩散范围
-                startVelocity: 60, // 增加粒子初速度
-                decay: 0.9, // 减慢粒子消失速度
-                gravity: 1, // 重力效果
-                drift: 0, // 水平漂移
-                ticks: 300, // 增加礼花持续时间
-                origin: { y: 0.6 }, // 发射位置
-                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'], // 多彩礼花
-                shapes: ['circle', 'square'], // 多种形状
-                scalar: 1.2 // 粒子大小
-            };
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🎉 Sakura图库升级公告 🎉</h1>
+            <p style="margin-top: 1rem; color: var(--neon-blue);">预计升级完成度：</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </header>
 
-            function fire() {
-                confetti(confettiSettings);
+        <div class="timeline">
+            <h2>⏰ 升级时间线</h2>
+            <p>📅 当前版本服务截止：2025年1月29日</p>
+            <p>🔧 系统升级期：2024年1月29日 - 2月14日</p>
+            <p>🚀 全新宇宙开启：2024年2月15日 10:00</p>
+        </div>
+
+        <div class="highlights">
+            <div class="highlight-card">
+                <h3>📸 全次元图库</h3>
+                <p>Nsfw、高清Cos作品全放送</p>
+            </div>
+            <div class="highlight-card">
+                <h3>🌟免费 独家 </h3>
+                <p>独家、免费写真图库在线分享</p>
+            </div>
+            <div class="highlight-card">
+                <h3>🧰 分栏 集锦</h3>
+                <p>每套写真根据不同类型 作者进行分类</p>
+            </div>
+            <div class="highlight-card">
+                <h3>🎪 及时</h3>
+                <p>第一时间发布流出套图</p>
+            </div>
+        </div
+
+        <div class="subscribe-form">
+            <h2>📩 订阅开站提醒</h2>
+            <input type="email" placeholder="输入邮箱获取限量电子徽章">
+            <button>立即订阅</button>
+        </div>
+    </div>
+
+    <!-- 粒子动画 -->
+    <canvas id="particles"></canvas>
+
+    <script>
+        // 粒子动画初始化
+        function initParticles() {
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 3 - 1.5;
+                    this.speedY = Math.random() * 3 - 1.5;
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (this.x > canvas.width + 20 || this.x < -20 ||
+                        this.y > canvas.height + 20 || this.y < -20) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.fillStyle = `rgba(78, 205, 196, ${this.size/3})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
 
-            // 页面加载时触发礼花
-            fire();
-            setTimeout(fire, 500); // 0.5秒后再次触发
-            setTimeout(fire, 1000); // 1秒后再次触发
-            setTimeout(fire, 1500); // 1.5秒后再次触发
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                while(particles.length < 100) {
+                    particles.push(new Particle());
+                }
 
-            // 点击页面任意位置触发礼花
-            document.body.addEventListener('click', function (event) {
-                // 根据点击位置设置礼花发射点
-                const origin = {
-                    x: event.clientX / window.innerWidth,
-                    y: event.clientY / window.innerHeight
-                };
-                confetti({ ...confettiSettings, origin });
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             });
+        }
+
+        // 初始化
+        window.onload = () => {
+            initParticles();
+            
+            // 倒计时功能
+            const launchDate = new Date('2024-02-15T10:00:00').getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = launchDate - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                
+                document.querySelector('.progress-bar p').innerHTML = 
+                    `距离新宇宙开启：${days}天${hours}小时`;
+            }, 1000);
         };
     </script>
 </body>
-
 </html>
