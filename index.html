@@ -3,269 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sakura图库升级公告 - Cosplay写真即将开启</title>
+    <title>Cosplay</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <style>
-        :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #4ecdc4;
-            --neon-blue: #00f3ff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            background: #1a1a1a url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎭</text></svg>') fixed;
-            background-size: 8em;
-            font-family: 'Microsoft YaHei', sans-serif;
-            line-height: 1.6;
-            color: #fff;
+            margin: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #fff0f7 0%, #ffd6e7 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
-        }
-
-        .header {
-            text-align: center;
-            margin: 3rem 0;
             position: relative;
         }
-
-        .title {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            text-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
-            animation: neonPulse 1.5s infinite alternate;
+        .container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 1rem;
+            max-width: 680px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(255, 192, 203, 0.2);
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
         }
-
-        @keyframes neonPulse {
-            from { text-shadow: 0 0 10px var(--primary-color); }
-            to { text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color); }
+        h1 {
+            color: #ff69b4;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
         }
-
-        .timeline {
+        .subtitle {
+            color: #ff69b4;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            opacity: 0;
+        }
+        .features {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.5rem;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 2rem 0;
+            margin-bottom: 2.5rem;
         }
-
-        .highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .highlight-card {
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(255, 107, 107, 0.2));
+        .feature {
             padding: 1.5rem;
-            border-radius: 8px;
-            transition: transform 0.3s;
+            background: linear-gradient(135deg, rgba(255,240,247,0.8) 0%, rgba(255,214,231,0.8) 100%);
+            border-radius: 16px;
+            color: #ff69b4;
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
         }
-
-        .highlight-card:hover {
+        .feature:hover {
             transform: translateY(-5px);
         }
-
-        .progress-bar {
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 2rem 0;
+        .feature h3 {
+            margin: 0.5rem 0;
+            font-weight: 400;
+            font-size: 1.2rem;
         }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            width: 75%;
-            animation: progress 2s ease-in-out;
+        .feature p {
+            margin: 0;
+            color: #666;
+            font-size: 0.95rem;
         }
-
-        @keyframes progress {
-            from { width: 0; }
-            to { width: 75%; }
-        }
-
-        .subscribe-form {
-            text-align: center;
-            margin: 3rem 0;
-        }
-
-        input[type="email"] {
-            padding: 1rem;
-            width: 300px;
-            border: 2px solid var(--neon-blue);
-            background: transparent;
+        .join-btn {
+            background: linear-gradient(45deg, #ff69b4, #ff8da1);
             color: white;
-            margin: 1rem;
-        }
-
-        button {
-            padding: 1rem 2rem;
-            background: var(--primary-color);
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 1rem;
             border: none;
-            color: white;
             cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
         }
-
-        button:hover {
-            background: var(--secondary-color);
+        .join-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.3);
         }
-
-        @media (max-width: 768px) {
-            .title {
-                font-size: 1.8rem;
+        .petal {
+            pointer-events: none;
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ffd7e9;
+            border-radius: 100% 0 100% 0;
+            z-index: 2;
+        }
+        .highlight {
+            color: #ff69b4;
+            font-weight: 500;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
             }
-            
-            input[type="email"] {
-                width: 80%;
-                margin: 1rem 0;
+            50% {
+                transform: translateY(-20px);
             }
+        }
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            background: white;
+            border-radius: 50%;
+            z-index: 3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1 class="title">🎉 Sakura图库升级公告 🎉</h1>
-            <p style="margin-top: 1rem; color: var(--neon-blue);">预计升级完成度：</p>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+        <h1>✧ Cosplay-repo ✧</h1>
+        <p class="subtitle">♥ 朦胧美好的曼妙身体写实 ♥</p>
+        <p class="description">
+            这里是展现<span class="highlight">Cosplay魅力</span>的专属空间，
+            汇聚着精美绝伦的<span class="highlight">写真作品</span>，
+            记录每一个动人瞬间，分享每一份美好创作。
+            让我们一起打造这个属于<span class="highlight">少女写真</span>的梦幻世界~
+        </p>
+        <div class="features">
+            <div class="feature">
+                <h3>✧ 精选更新</h3>
+                <p>每日更新精选Cos写真，分享最新动态</p>
             </div>
-        </header>
-
-        <div class="timeline">
-            <h2>⏰ 升级时间线</h2>
-            <p>📅 当前版本服务截止：2025年1月29日</p>
-            <p>🔧 系统升级期：2024年1月29日 - 2月14日</p>
-            <p>🚀 全新宇宙开启：2024年2月15日 10:00</p>
+            <div class="feature">
+                <h3>✧ 纯净环境</h3>
+                <p>无广告打扰的观赏体验</p>
+            </div>
+            <div class="feature">
+                <h3>✧ 互动社区</h3>
+                <p>温暖有爱的写真交流空间</p>
+            </div>
+             <div class="feature">
+                <h3>✧ NSFW</h3>
+                <p>夜深人静时的欲望释放</p>
+            </div>
         </div>
-
-        <div class="highlights">
-            <div class="highlight-card">
-                <h3>📸 全次元图库</h3>
-                <p>Nsfw、高清Cos作品全放送</p>
-            </div>
-            <div class="highlight-card">
-                <h3>🌟免费 独家 </h3>
-                <p>独家、免费写真图库在线分享</p>
-            </div>
-            <div class="highlight-card">
-                <h3>🧰 分栏 集锦</h3>
-                <p>每套写真根据不同类型 作者进行分类</p>
-            </div>
-            <div class="highlight-card">
-                <h3>🎪 及时</h3>
-                <p>第一时间发布流出套图</p>
-            </div>
-        </div
-
-        <div class="subscribe-form">
-            <h2>📩 订阅开站提醒</h2>
-            <input type="email" placeholder="输入邮箱获取限量电子徽章">
-            <button>立即订阅</button>
-        </div>
+        <button class="join-btn" id="joinBtn">
+            立即加入社区
+        </button>
     </div>
 
-    <!-- 粒子动画 -->
-    <canvas id="particles"></canvas>
-
     <script>
-        // 粒子动画初始化
-        function initParticles() {
-            const canvas = document.getElementById('particles');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // 页面加载动画
+        window.addEventListener('DOMContentLoaded', () => {
+            anime({
+                targets: '.container',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 1200,
+                easing: 'easeOutExpo'
+            });
 
-            const particles = [];
-            class Particle {
-                constructor() {
-                    this.reset();
-                }
+            anime({
+                targets: '.subtitle',
+                opacity: [0, 1],
+                translateY: [10, 0],
+                duration: 1000,
+                delay: 300,
+                easing: 'easeOutExpo'
+            });
 
-                reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 2 + 1;
-                    this.speedX = Math.random() * 3 - 1.5;
-                    this.speedY = Math.random() * 3 - 1.5;
-                }
+            anime({
+                targets: '.description',
+                opacity: [0, 1],
+                duration: 1000,
+                delay: 500,
+                easing: 'easeOutExpo'
+            });
 
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
+            anime({
+                targets: '.feature',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                delay: anime.stagger(200, {start: 700}),
+                easing: 'easeOutExpo'
+            });
 
-                    if (this.x > canvas.width + 20 || this.x < -20 ||
-                        this.y > canvas.height + 20 || this.y < -20) {
-                        this.reset();
-                    }
-                }
+            anime({
+                targets: '.join-btn',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                delay: 1200,
+                easing: 'easeOutExpo'
+            });
+        });
 
-                draw() {
-                    ctx.fillStyle = `rgba(78, 205, 196, ${this.size/3})`;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+        // 樱花特效函数
+        function createPetals(x, y) {
+            const petalCount = 20;
+            const petals = [];
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = `${x}px`;
+                petal.style.top = `${y}px`;
+                document.body.appendChild(petal);
+                petals.push(petal);
             }
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                while(particles.length < 100) {
-                    particles.push(new Particle());
+            anime({
+                targets: petals,
+                translateX: () => anime.random(-200, 200),
+                translateY: () => anime.random(-300, -50),
+                rotate: () => anime.random(0, 360),
+                opacity: [1, 0],
+                duration: () => anime.random(1000, 2000),
+                easing: 'easeOutExpo',
+                complete: () => {
+                    petals.forEach(petal => petal.remove());
                 }
-
-                particles.forEach(particle => {
-                    particle.update();
-                    particle.draw();
-                });
-
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
             });
         }
 
-        // 初始化
-        window.onload = () => {
-            initParticles();
-            
-            // 倒计时功能
-            const launchDate = new Date('2024-02-15T10:00:00').getTime();
-            setInterval(() => {
-                const now = new Date().getTime();
-                const distance = launchDate - now;
-                
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                
-                document.querySelector('.progress-bar p').innerHTML = 
-                    `距离新宇宙开启：${days}天${hours}小时`;
-            }, 1000);
-        };
+        // 闪光效果
+        function createSparkles(x, y) {
+            const sparkleCount = 10;
+            const sparkles = [];
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = `${x}px`;
+                sparkle.style.top = `${y}px`;
+                sparkle.style.width = `${anime.random(2, 6)}px`;
+                sparkle.style.height = sparkle.style.width;
+                document.body.appendChild(sparkle);
+                sparkles.push(sparkle);
+            }
+
+            anime({
+                targets: sparkles,
+                translateX: () => anime.random(-100, 100),
+                translateY: () => anime.random(-100, 100),
+                scale: [1, 0],
+                opacity: [1, 0],
+                duration: () => anime.random(600, 1000),
+                easing: 'easeOutExpo',
+                complete: () => {
+                    sparkles.forEach(sparkle => sparkle.remove());
+                }
+            });
+        }
+
+        // 按钮点击事件
+        document.getElementById('joinBtn').addEventListener('click', (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            createPetals(x, y);
+            createSparkles(x, y);
+
+            // 按钮动画
+            anime({
+                targets: e.target,
+                scale: [1, 1.1, 1],
+                duration: 600,
+                easing: 'easeOutExpo'
+            });
+
+            // 延迟跳转
+            setTimeout(() => {
+                window.location.href = 'https://t.me/sakuraCosplayrepo';
+            }, 800);
+        });
     </script>
 </body>
 </html>
