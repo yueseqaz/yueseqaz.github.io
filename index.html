@@ -2,305 +2,124 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosplay</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <title>网站升级公告</title>
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: "Microsoft YaHei", sans-serif;
-            background: linear-gradient(135deg, #fff0f7 0%, #ffd6e7 100%);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: '微软雅黑', sans-serif;
+        }
+
+        body {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            overflow-x: hidden;
-            position: relative;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 3rem;
-            margin: 1rem;
-            max-width: 680px;
+
+        .announcement {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(255, 192, 203, 0.2);
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(20px);
         }
+
         h1 {
-            color: #ff69b4;
-            margin-bottom: 1.5rem;
-            font-size: 2.2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #3498db, #8e44ad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
         }
-        .subtitle {
-            color: #ff69b4;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            font-weight: 300;
-            letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(10px);
+
+        .icon-group {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
         }
-        .description {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 2.5rem;
-            font-size: 1.1rem;
-            opacity: 0;
-        }
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-        .feature {
-            padding: 1.5rem;
-            background: linear-gradient(135deg, rgba(255,240,247,0.8) 0%, rgba(255,214,231,0.8) 100%);
-            border-radius: 16px;
-            color: #ff69b4;
+
+        .icon {
+            width: 60px;
+            height: 60px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
-            opacity: 0;
-            transform: translateY(20px);
         }
-        .feature:hover {
+
+        .icon:hover {
             transform: translateY(-5px);
         }
-        .feature h3 {
-            margin: 0.5rem 0;
-            font-weight: 400;
-            font-size: 1.2rem;
-        }
-        .feature p {
-            margin: 0;
+
+        p {
             color: #666;
-            font-size: 0.95rem;
+            line-height: 1.8;
+            margin: 15px 0;
+            font-size: 1.1em;
         }
-        .join-btn {
-            background: linear-gradient(45deg, #ff69b4, #ff8da1);
-            color: white;
-            padding: 1rem 3rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin-top: 1rem;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        .join-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.3);
-        }
-        .petal {
-            pointer-events: none;
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: #ffd7e9;
-            border-radius: 100% 0 100% 0;
-            z-index: 2;
-        }
+
         .highlight {
-            color: #ff69b4;
-            font-weight: 500;
+            color: #e74c3c;
+            font-weight: bold;
         }
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
+
+        .promise {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 768px) {
+            .announcement {
+                padding: 25px;
             }
-            50% {
-                transform: translateY(-20px);
+            h1 {
+                font-size: 2em;
             }
-        }
-        .floating-element {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0.6;
-            animation: float 6s ease-in-out infinite;
-        }
-        .sparkle {
-            position: absolute;
-            pointer-events: none;
-            background: white;
-            border-radius: 50%;
-            z-index: 3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>✧ Cosplay-repo ✧</h1>
-        <p class="subtitle">♥ 朦胧美好的曼妙身体写实 ♥</p>
-        <p class="description">
-            这里是展现<span class="highlight">Cosplay魅力</span>的专属空间，
-            汇聚着精美绝伦的<span class="highlight">写真作品</span>，
-            记录每一个动人瞬间，分享每一份美好创作。
-            让我们一起打造这个属于<span class="highlight">少女写真</span>的梦幻世界~
-        </p>
-        <div class="features">
-            <div class="feature">
-                <h3>✧ 精选更新</h3>
-                <p>每日更新精选Cos写真，分享最新动态</p>
-            </div>
-            <div class="feature">
-                <h3>✧ 纯净环境</h3>
-                <p>无广告打扰的观赏体验</p>
-            </div>
-            <div class="feature">
-                <h3>✧ 互动社区</h3>
-                <p>温暖有爱的写真交流空间</p>
-            </div>
-             <div class="feature">
-                <h3>✧ NSFW</h3>
-                <p>夜深人静时的欲望释放</p>
-            </div>
+    <div class="announcement">
+        <h1>📚 技术升级公告</h1>
+        
+        <div class="icon-group">
+            <img src="https://img.icons8.com/fluency/96/000000/books.png" class="icon" alt="学习">
+            <img src="https://img.icons8.com/color/96/000000/maintenance.png" class="icon" alt="维护">
+            <img src="https://img.icons8.com/fluency/96/000000/star.png" class="icon" alt="优质内容">
         </div>
-        <button class="join-btn" id="joinBtn">
-            立即加入社区
-        </button>
+
+        <p>亲爱的访客朋友：</p>
+        <p>为了带来更优质的浏览体验，本站目前正在进行全面的<strong class="highlight">技术升级改造</strong>。</p>
+        <p>站长正在潜心钻研前沿技术，系统学习<span class="highlight">全栈开发 | 性能优化 | 交互设计</span>等专业知识。</p>
+
+        <div class="promise">
+            <p>🚀 我们将于近期带着全新面貌回归<br>
+            💎 更流畅的体验 | 更丰富的内容 | 更智能的交互<br>
+            ⏳ 精彩值得等待，期待与您再次相遇！</p>
+        </div>
+
+        <p style="margin-top: 25px; color: #888;">
+            保持关注，获取最新动态<br>
+            <small>技术成长之路，期待与您共同见证</small>
+        </p>
     </div>
-
-    <script>
-        // 页面加载动画
-        window.addEventListener('DOMContentLoaded', () => {
-            anime({
-                targets: '.container',
-                opacity: [0, 1],
-                translateY: [20, 0],
-                duration: 1200,
-                easing: 'easeOutExpo'
-            });
-
-            anime({
-                targets: '.subtitle',
-                opacity: [0, 1],
-                translateY: [10, 0],
-                duration: 1000,
-                delay: 300,
-                easing: 'easeOutExpo'
-            });
-
-            anime({
-                targets: '.description',
-                opacity: [0, 1],
-                duration: 1000,
-                delay: 500,
-                easing: 'easeOutExpo'
-            });
-
-            anime({
-                targets: '.feature',
-                opacity: [0, 1],
-                translateY: [20, 0],
-                duration: 800,
-                delay: anime.stagger(200, {start: 700}),
-                easing: 'easeOutExpo'
-            });
-
-            anime({
-                targets: '.join-btn',
-                opacity: [0, 1],
-                translateY: [20, 0],
-                duration: 800,
-                delay: 1200,
-                easing: 'easeOutExpo'
-            });
-        });
-
-        // 樱花特效函数
-        function createPetals(x, y) {
-            const petalCount = 20;
-            const petals = [];
-
-            for (let i = 0; i < petalCount; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.style.left = `${x}px`;
-                petal.style.top = `${y}px`;
-                document.body.appendChild(petal);
-                petals.push(petal);
-            }
-
-            anime({
-                targets: petals,
-                translateX: () => anime.random(-200, 200),
-                translateY: () => anime.random(-300, -50),
-                rotate: () => anime.random(0, 360),
-                opacity: [1, 0],
-                duration: () => anime.random(1000, 2000),
-                easing: 'easeOutExpo',
-                complete: () => {
-                    petals.forEach(petal => petal.remove());
-                }
-            });
-        }
-
-        // 闪光效果
-        function createSparkles(x, y) {
-            const sparkleCount = 10;
-            const sparkles = [];
-
-            for (let i = 0; i < sparkleCount; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = `${x}px`;
-                sparkle.style.top = `${y}px`;
-                sparkle.style.width = `${anime.random(2, 6)}px`;
-                sparkle.style.height = sparkle.style.width;
-                document.body.appendChild(sparkle);
-                sparkles.push(sparkle);
-            }
-
-            anime({
-                targets: sparkles,
-                translateX: () => anime.random(-100, 100),
-                translateY: () => anime.random(-100, 100),
-                scale: [1, 0],
-                opacity: [1, 0],
-                duration: () => anime.random(600, 1000),
-                easing: 'easeOutExpo',
-                complete: () => {
-                    sparkles.forEach(sparkle => sparkle.remove());
-                }
-            });
-        }
-
-        // 按钮点击事件
-        document.getElementById('joinBtn').addEventListener('click', (e) => {
-            const rect = e.target.getBoundingClientRect();
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
-
-            createPetals(x, y);
-            createSparkles(x, y);
-
-            // 按钮动画
-            anime({
-                targets: e.target,
-                scale: [1, 1.1, 1],
-                duration: 600,
-                easing: 'easeOutExpo'
-            });
-
-            // 延迟跳转
-            setTimeout(() => {
-                window.location.href = 'https://t.me/sakuraCosplayrepo';
-            }, 800);
-        });
-    </script>
 </body>
 </html>
