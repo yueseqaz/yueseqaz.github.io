@@ -11,225 +11,119 @@
             --background-color: #F5F5F7;
             --card-background: #FFFFFF;
             --text-primary: #1D1D1F;
-            --text-secondary: #86868B;
             --border-color: #E5E5E7;
             --button-hover: #0051FF;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--sf-font);
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: 500;
-        }
-
-        .home-btn {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 17px;
-            transition: color 0.2s ease;
-        }
-
-        .home-btn:hover {
-            color: var(--button-hover);
-        }
-
-        .container {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            flex: 1;
-        }
-
-        .card {
-            background: var(--card-background);
-            border-radius: 18px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .table-name {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 17px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            margin-bottom: 24px;
-        }
-
-        .convert-btn {
-            font-size: 15px;
-            padding: 8px 16px;
-            border-radius: 10px;
-            background: var(--primary-color);
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            height: 40px;
-            margin: 20px 0;
-        }
-
-        .convert-btn:hover {
-            background: var(--button-hover);
-        }
-
-        .editable-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .editable-table th,
-        .editable-table td {
-            padding: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .editable-table input {
-            width: 100%;
-            border: none;
-            font-size: 15px;
-            padding: 4px;
-        }
-
-        .preview-card {
-            background: #FAFAFA;
-            border-radius: 18px;
-            padding: 24px;
-            margin-top: 20px;
-        }
-
-        .copy-btn {
-            position: absolute;
-            right: 24px;
-            top: 24px;
-            padding: 8px 16px;
-            border-radius: 10px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .copy-btn:hover {
-            background: var(--button-hover);
-        }
-
-        #markdownContent {
-            font-family: 'SF Mono', monospace;
-            font-size: 14px;
-            white-space: pre-wrap;
-            color: var(--text-primary);
-            margin-top: 40px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-secondary);
-            font-size: 12px;
-            border-top: 1px solid var(--border-color);
-        }
+        body { font-family: var(--sf-font); background: var(--background-color); padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: var(--card-background); padding: 20px; border-radius: 10px; }
+        .editable-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        .editable-table th, .editable-table td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
+        .editable-table input { width: 100%; border: none; text-align: center; font-size: 15px; padding: 4px; }
+        .btn { margin: 5px; padding: 6px 12px; border: none; background: var(--primary-color); color: white; cursor: pointer; border-radius: 6px; }
+        .btn:hover { background: var(--button-hover); }
+        .markdown-output { white-space: pre-wrap; background: #F8F8F8; padding: 15px; border-radius: 8px; font-family: monospace; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <h1>Markdown Table Generator</h1>
-            <a href="#" class="home-btn">← 返回主页</a>
-        </div>
-    </header>
 
-    <main class="container">
-        <div class="card">
-            <input type="text" class="table-name" placeholder="输入表格名称（可选）">
-            
-            <table class="editable-table">
-                <thead id="tableHead"></thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+<div class="container">
+    <h2>Markdown Table Generator</h2>
+    <table class="editable-table">
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
 
-            <button class="convert-btn" onclick="generateMarkdown()">转换为 Markdown</button>
+    <button class="btn" onclick="addRow()">➕ 添加行</button>
+    <button class="btn" onclick="deleteRow()">❌ 删除行</button>
+    <button class="btn" onclick="addColumn()">➕ 添加列</button>
+    <button class="btn" onclick="deleteColumn()">❌ 删除列</button>
+    <button class="btn" onclick="generateMarkdown()">📝 生成 Markdown</button>
 
-            <div class="preview-card">
-                <button class="copy-btn" onclick="copyMarkdown()">📋 复制</button>
-                <div id="markdownContent"></div>
-            </div>
-        </div>
-    </main>
+    <div class="markdown-output" id="markdownContent"></div>
+    <button class="btn" onclick="copyMarkdown()">📋 复制 Markdown</button>
+</div>
 
-    <footer class="footer">
-        Design by Sakura © 2024 All Rights Reserved
-    </footer>
+<script>
+    function initTable(cols = 3, rows = 3) {
+        const thead = document.getElementById('tableHead');
+        const tbody = document.getElementById('tableBody');
 
-    <script>
-        function initTable(cols = 2, rows = 2) {
-            const thead = document.getElementById('tableHead');
-            const tbody = document.getElementById('tableBody');
-            
-            thead.innerHTML = '<tr>' + '<th><input type="text" placeholder="标题"></th>'.repeat(cols) + '</tr>';
-            tbody.innerHTML = Array.from({ length: rows }).map(() => 
-                '<tr>' + '<td><input type="text" placeholder="内容"></td>'.repeat(cols) + '</tr>'
-            ).join('');
+        thead.innerHTML = '<tr>' + '<th><input type="text" placeholder="标题"></th>'.repeat(cols) + '</tr>';
+        tbody.innerHTML = Array.from({ length: rows }).map(() => 
+            '<tr>' + '<td><input type="text" placeholder="内容"></td>'.repeat(cols) + '</tr>'
+        ).join('');
+    }
+
+    function addRow() {
+        const tbody = document.getElementById('tableBody');
+        const cols = document.querySelectorAll('#tableHead th').length;
+        let newRow = document.createElement('tr');
+
+        for (let i = 0; i < cols; i++) {
+            let cell = document.createElement('td');
+            cell.innerHTML = '<input type="text" placeholder="内容">';
+            newRow.appendChild(cell);
         }
 
-        function generateMarkdown() {
-            const tableName = document.querySelector('.table-name').value;
-            const headers = Array.from(document.querySelectorAll('#tableHead input'))
+        tbody.appendChild(newRow);
+    }
+
+    function deleteRow() {
+        const tbody = document.getElementById('tableBody');
+        if (tbody.rows.length > 1) tbody.deleteRow(-1);
+    }
+
+    function addColumn() {
+        const thead = document.getElementById('tableHead').rows[0];
+        let th = document.createElement('th');
+        th.innerHTML = '<input type="text" placeholder="标题">';
+        thead.appendChild(th);
+
+        const tbody = document.getElementById('tableBody').rows;
+        for (let row of tbody) {
+            let td = document.createElement('td');
+            td.innerHTML = '<input type="text" placeholder="内容">';
+            row.appendChild(td);
+        }
+    }
+
+    function deleteColumn() {
+        const thead = document.getElementById('tableHead').rows[0];
+        if (thead.cells.length > 1) thead.deleteCell(-1);
+
+        const tbody = document.getElementById('tableBody').rows;
+        for (let row of tbody) {
+            if (row.cells.length > 1) row.deleteCell(-1);
+        }
+    }
+
+    function generateMarkdown() {
+        const headers = Array.from(document.querySelectorAll('#tableHead input'))
                             .map(input => input.value.trim() || ' ');
 
-            const rows = Array.from(document.querySelectorAll('#tableBody tr')).map(row => 
-                Array.from(row.querySelectorAll('input')).map(input => input.value.trim() || ' ')
-            );
+        const rows = Array.from(document.querySelectorAll('#tableBody tr')).map(row => 
+            Array.from(row.querySelectorAll('input')).map(input => input.value.trim() || ' ')
+        );
 
-            let md = tableName ? `**${tableName}**\n\n` : '';
-            md += '| ' + headers.join(' | ') + ' |\n';
-            md += '|' + headers.map(() => '---').join('|') + '|\n';
-            
-            rows.forEach(row => {
-                md += '| ' + row.join(' | ') + ' |\n';
-            });
+        let md = '| ' + headers.join(' | ') + ' |\n';
+        md += '|' + headers.map(() => '---').join('|') + '|\n';
+        
+        rows.forEach(row => {
+            md += '| ' + row.join(' | ') + ' |\n';
+        });
 
-            document.getElementById('markdownContent').innerText = md;
-        }
+        document.getElementById('markdownContent').innerText = md;
+    }
 
-        function copyMarkdown() {
-            const text = document.getElementById('markdownContent').innerText;
-            navigator.clipboard.writeText(text);
-            alert('Markdown 代码已复制！');
-        }
+    function copyMarkdown() {
+        const text = document.getElementById('markdownContent').innerText;
+        navigator.clipboard.writeText(text);
+        alert('Markdown 代码已复制！');
+    }
 
-        document.addEventListener('DOMContentLoaded', () => initTable());
-    </script>
+    document.addEventListener('DOMContentLoaded', () => initTable());
+</script>
+
 </body>
 </html>
