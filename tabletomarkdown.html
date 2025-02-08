@@ -1,178 +1,260 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown 表格生成器</title>
-    <style>
-        /* 苹果风格 */
-        :root {
-            --sf-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
-            --primary-color: #007AFF;
-            --background-color: #F5F5F7;
-            --card-background: #FFFFFF;
-            --text-primary: #1D1D1F;
-            --text-secondary: #86868B;
-            --border-color: #E5E5E7;
-            --button-bg: #F0F0F5;
-            --button-hover-bg: #E5E5EA;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: var(--sf-font);
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .header {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 { font-size: 22px; font-weight: 600; }
-        .home-btn {
-            font-size: 15px;
-            color: var(--primary-color);
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            background-color: var(--button-bg);
-            transition: background 0.2s ease;
-        }
-        .home-btn:hover { background-color: var(--button-hover-bg); }
-        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; flex: 1; }
-        .card {
-            background: var(--card-background);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-        }
-        .table-wrapper { overflow-x: auto; border-radius: 8px; padding: 8px; }
-        .editable-table { width: 100%; border-collapse: collapse; }
-        .editable-table th, .editable-table td {
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            text-align: left;
-        }
-        .editable-table input { width: 100%; border: none; background: transparent; font-size: 14px; }
-        .editable-table input:focus { outline: none; background: rgba(0, 122, 255, 0.1); }
-        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-        .btn {
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            background-color: var(--button-bg);
-            color: var(--text-primary);
-            transition: background 0.2s ease, transform 0.1s ease;
-        }
-        .btn:hover { background-color: var(--button-hover-bg); }
-        .btn:active { transform: scale(0.96); }
-        .primary-btn { background: var(--primary-color); color: white; }
-        .primary-btn:hover { background: #0051FF; }
-        .preview-card {
-            background: #FAFAFA;
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 16px;
-            position: relative;
-        }
-        .copy-btn {
-            position: absolute; right: 16px; top: 16px;
-            padding: 6px 12px; border-radius: 6px;
-            background: var(--primary-color); color: white;
-            border: none; cursor: pointer; font-size: 14px;
-        }
-        .copy-btn:hover { background: #0051FF; }
-        .footer { text-align: center; padding: 14px; font-size: 12px; color: var(--text-secondary); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 表格生成器</title>
+  <style>
+    /* 苹果风格 */
+    :root {
+      --sf-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      --primary-color: #007AFF;
+      --background-color: #F5F5F7;
+      --card-background: #FFFFFF;
+      --text-primary: #1D1D1F;
+      --text-secondary: #86868B;
+      --border-color: #E5E5E7;
+      --button-bg: #F0F0F5;
+      --button-hover-bg: #E5E5EA;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--sf-font);
+      background-color: var(--background-color);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 { font-size: 22px; font-weight: 600; }
+    .home-btn {
+      font-size: 15px;
+      color: var(--primary-color);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background-color: var(--button-bg);
+      transition: background 0.2s ease;
+    }
+    .home-btn:hover { background-color: var(--button-hover-bg); }
+    .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; flex: 1; }
+    .card {
+      background: var(--card-background);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
+    }
+    .table-wrapper { overflow-x: auto; border-radius: 8px; padding: 8px; }
+    .editable-table { width: 100%; border-collapse: collapse; }
+    .editable-table th, .editable-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+    }
+    .editable-table input { width: 100%; border: none; background: transparent; font-size: 14px; }
+    .editable-table input:focus { outline: none; background: rgba(0, 122, 255, 0.1); }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .btn {
+      padding: 8px 12px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background-color: var(--button-bg);
+      color: var(--text-primary);
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+    .btn:hover { background-color: var(--button-hover-bg); }
+    .btn:active { transform: scale(0.96); }
+    .primary-btn { background: var(--primary-color); color: white; }
+    .primary-btn:hover { background: #0051FF; }
+    .preview-card {
+      background: #FAFAFA;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute; right: 16px; top: 16px;
+      padding: 6px 12px; border-radius: 6px;
+      background: var(--primary-color); color: white;
+      border: none; cursor: pointer; font-size: 14px;
+    }
+    .copy-btn:hover { background: #0051FF; }
+    .footer { text-align: center; padding: 14px; font-size: 12px; color: var(--text-secondary); }
+    
+    /* Confetti 动效 */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background-color: red;
+      z-index: 9999;
+      opacity: 0;
+      animation: confetti-fall 1.5s linear forwards;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+      .container { padding: 20px; }
+      .card { padding: 20px; }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <h1>Markdown 表格生成器</h1>
-        <a href="#" class="home-btn">← 返回主页</a>
-    </header>
+  <header class="header">
+    <h1>Markdown 表格生成器</h1>
+    <a href="#" class="home-btn">← 返回主页</a>
+  </header>
 
-    <main class="container">
-        <div class="card">
-            <input type="text" id="tableName" class="table-name" placeholder="输入表格名称（可选）">
-            <div class="table-wrapper">
-                <table class="editable-table">
-                    <tbody>
-                        <tr><td><input type="text"></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="btn-group">
-                <button class="btn" onclick="addRow()">添加行</button>
-                <button class="btn" onclick="addColumn()">添加列</button>
-                <button class="btn" onclick="deleteRow()">删除行</button>
-                <button class="btn" onclick="deleteColumn()">删除列</button>
-                <button class="primary-btn btn" onclick="generateMarkdown()">生成 Markdown</button>
-            </div>
-        </div>
+  <main class="container">
+    <div class="card">
+      <input type="text" id="tableName" class="table-name" placeholder="输入表格名称（可选）">
+      <div class="table-wrapper">
+        <table class="editable-table">
+          <tbody id="tableBody">
+            <!-- 默认表格将在此处生成 -->
+          </tbody>
+        </table>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="addRow()">添加行</button>
+        <button class="btn" onclick="addColumn()">添加列</button>
+        <button class="btn" onclick="deleteRow()">删除行</button>
+        <button class="btn" onclick="deleteColumn()">删除列</button>
+        <button class="primary-btn btn" onclick="generateMarkdown()">生成 Markdown</button>
+      </div>
+    </div>
 
-        <div class="card preview-card">
-            <button class="copy-btn" onclick="copyMarkdown()">复制</button>
-            <pre id="markdownOutput"></pre>
-        </div>
-    </main>
+    <div class="card preview-card">
+      <button class="copy-btn" onclick="copyMarkdown()">复制</button>
+      <pre id="markdownOutput"></pre>
+    </div>
+  </main>
 
-    <footer class="footer">Design by Sakura</footer>
+  <footer class="footer">Design by Sakura</footer>
 
-    <script>
-        function addRow() {
-            let table = document.querySelector(".editable-table tbody");
-            let newRow = table.rows[0].cloneNode(true);
-            newRow.querySelectorAll("input").forEach(input => input.value = "");
-            table.appendChild(newRow);
+  <script>
+    // 初始化默认表格 2 行 2 列
+    function initTable() {
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+      for (let i = 0; i < 2; i++) {
+        const row = document.createElement("tr");
+        for (let j = 0; j < 2; j++) {
+          const cell = document.createElement("td");
+          const input = document.createElement("input");
+          cell.appendChild(input);
+          row.appendChild(cell);
         }
+        tbody.appendChild(row);
+      }
+    }
 
-        function addColumn() {
-            document.querySelectorAll(".editable-table tr").forEach(row => {
-                let newCell = document.createElement("td");
-                let input = document.createElement("input");
-                newCell.appendChild(input);
-                row.appendChild(newCell);
-            });
-        }
+    function addRow() {
+      const tbody = document.getElementById("tableBody");
+      const cols = tbody.rows[0].cells.length;
+      const newRow = document.createElement("tr");
+      for (let i = 0; i < cols; i++) {
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        cell.appendChild(input);
+        newRow.appendChild(cell);
+      }
+      tbody.appendChild(newRow);
+    }
 
-        function deleteRow() {
-            let table = document.querySelector(".editable-table tbody");
-            if (table.rows.length > 1) table.deleteRow(-1);
-        }
+    function addColumn() {
+      const tbody = document.getElementById("tableBody");
+      for (let row of tbody.rows) {
+        const cell = document.createElement("td");
+        const input = document.createElement("input");
+        cell.appendChild(input);
+        row.appendChild(cell);
+      }
+    }
 
-        function deleteColumn() {
-            document.querySelectorAll(".editable-table tr").forEach(row => {
-                if (row.cells.length > 1) row.deleteCell(-1);
-            });
-        }
+    function deleteRow() {
+      const tbody = document.getElementById("tableBody");
+      if (tbody.rows.length > 1) {
+        tbody.deleteRow(-1);
+      }
+    }
 
-        function generateMarkdown() {
-            let table = document.querySelector(".editable-table");
-            let markdown = "";
-            let rows = Array.from(table.rows).map(row => 
-                "| " + Array.from(row.cells).map(cell => cell.querySelector("input").value || " ").join(" | ") + " |"
-            );
-            if (rows.length > 1) rows.splice(1, 0, "| " + "- |".repeat(rows[0].cells.length));
-            markdown = rows.join("\n");
-            document.getElementById("markdownOutput").textContent = markdown;
+    function deleteColumn() {
+      const tbody = document.getElementById("tableBody");
+      for (let row of tbody.rows) {
+        if (row.cells.length > 1) {
+          row.deleteCell(-1);
         }
+      }
+    }
 
-        function copyMarkdown() {
-            let markdown = document.getElementById("markdownOutput").textContent;
-            navigator.clipboard.writeText(markdown).then(() => alert("复制成功！"));
-        }
-    </script>
+    function generateMarkdown() {
+      const tableName = document.getElementById("tableName").value.trim();
+      const table = document.querySelector(".editable-table");
+      let markdown = "";
+      const rows = Array.from(table.rows).map(row =>
+        "| " + Array.from(row.cells)
+          .map(cell => cell.querySelector("input").value.trim() || " ")
+          .join(" | ") + " |"
+      );
+      if (rows.length > 1) {
+        const headerCellsCount = table.rows[0].cells.length;
+        const separator = "| " + Array(headerCellsCount).fill("---").join(" | ") + " |";
+        rows.splice(1, 0, separator);
+      }
+      markdown = rows.join("\n");
+      if (tableName) {
+        markdown = `**${tableName}**\n\n` + markdown;
+      }
+      document.getElementById("markdownOutput").textContent = markdown;
+    }
+
+    function copyMarkdown() {
+      const markdown = document.getElementById("markdownOutput").textContent;
+      navigator.clipboard.writeText(markdown).then(() => {
+        triggerConfetti();
+        alert("复制成功！");
+      });
+    }
+
+    function triggerConfetti() {
+      const confettiCount = 30;
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.backgroundColor = getRandomColor();
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.animationDuration = 1 + Math.random() * 1.5 + "s";
+        document.body.appendChild(confetti);
+        setTimeout(() => {
+          confetti.remove();
+        }, 3000);
+      }
+    }
+
+    function getRandomColor() {
+      const colors = ["#007AFF", "#FF9500", "#4CD964", "#5856D6", "#FF2D55"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    document.addEventListener("DOMContentLoaded", initTable);
+  </script>
 </body>
 </html>
