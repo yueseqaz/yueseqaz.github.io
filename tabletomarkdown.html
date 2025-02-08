@@ -15,7 +15,7 @@
             --button-hover: #0051FF;
         }
 
-        body { font-family: var(--sf-font); background: var(--background-color); padding: 20px; }
+        body { font-family: var(--sf-font); background: var(--background-color); padding: 20px; text-align: center; }
         .container { max-width: 900px; margin: auto; background: var(--card-background); padding: 20px; border-radius: 10px; }
         .editable-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
         .editable-table th, .editable-table td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
@@ -23,6 +23,7 @@
         .btn { margin: 5px; padding: 6px 12px; border: none; background: var(--primary-color); color: white; cursor: pointer; border-radius: 6px; }
         .btn:hover { background: var(--button-hover); }
         .markdown-output { white-space: pre-wrap; background: #F8F8F8; padding: 15px; border-radius: 8px; font-family: monospace; margin-top: 10px; }
+        .footer { margin-top: 20px; font-size: 14px; color: #666; }
     </style>
 </head>
 <body>
@@ -42,6 +43,11 @@
 
     <div class="markdown-output" id="markdownContent"></div>
     <button class="btn" onclick="copyMarkdown()">📋 复制 Markdown</button>
+
+    <br><br>
+    <button class="btn" onclick="goHome()">🏠 返回主页</button>
+
+    <div class="footer">Design by Sakura ❤️</div>
 </div>
 
 <script>
@@ -120,6 +126,10 @@
         const text = document.getElementById('markdownContent').innerText;
         navigator.clipboard.writeText(text);
         alert('Markdown 代码已复制！');
+    }
+
+    function goHome() {
+        window.location.href = "index.html"; // 修改为你的主页地址
     }
 
     document.addEventListener('DOMContentLoaded', () => initTable());
