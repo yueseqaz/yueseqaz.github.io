@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown 表格生成器</title>
     <style>
-        /* 苹果风格设计 */
+        /* 苹果风格 */
         :root {
             --sf-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
             --primary-color: #007AFF;
@@ -14,7 +14,8 @@
             --text-primary: #1D1D1F;
             --text-secondary: #86868B;
             --border-color: #E5E5E7;
-            --button-hover: #0051FF;
+            --button-bg: #F0F0F5;
+            --button-hover-bg: #E5E5EA;
         }
 
         * {
@@ -32,73 +33,67 @@
             min-height: 100vh;
         }
 
-        /* 头部导航 */
+        /* 头部 */
         .header {
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 16px 20px;
+            padding: 14px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         .home-btn {
-            font-size: 17px;
+            font-size: 15px;
             color: var(--primary-color);
             text-decoration: none;
-            transition: color 0.2s ease;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background-color: var(--button-bg);
+            transition: background 0.2s ease;
         }
 
         .home-btn:hover {
-            color: var(--button-hover);
+            background-color: var(--button-hover-bg);
         }
 
         /* 主内容 */
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 30px 20px;
             flex: 1;
         }
 
         .card {
             background: var(--card-background);
-            border-radius: 18px;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
         }
 
         .table-name {
             width: 100%;
-            padding: 12px;
-            font-size: 17px;
+            padding: 10px;
+            font-size: 16px;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: border-color 0.2s ease;
-        }
-
-        .table-name:focus {
-            border-color: var(--primary-color);
-            outline: none;
+            border-radius: 8px;
+            margin-bottom: 16px;
         }
 
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 10px;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
-            padding: 10px;
+            padding: 8px;
         }
 
         .editable-table {
@@ -109,7 +104,7 @@
         .editable-table th,
         .editable-table td {
             border: 1px solid var(--border-color);
-            padding: 12px;
+            padding: 10px;
             text-align: left;
         }
 
@@ -117,7 +112,7 @@
             width: 100%;
             border: none;
             background: transparent;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .editable-table input:focus {
@@ -125,22 +120,31 @@
             background: rgba(0, 122, 255, 0.1);
         }
 
+        /* 按钮组 */
         .btn-group {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
         }
 
         .btn {
-            padding: 10px 16px;
-            font-size: 15px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
         }
 
         .primary-btn {
@@ -149,20 +153,20 @@
         }
 
         .primary-btn:hover {
-            background: var(--button-hover);
+            background: #0051FF;
         }
 
         .preview-card {
             background: #FAFAFA;
-            border-radius: 18px;
-            padding: 20px;
-            margin-top: 20px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
         }
 
         .footer {
             text-align: center;
-            padding: 20px;
-            font-size: 13px;
+            padding: 14px;
+            font-size: 12px;
             color: var(--text-secondary);
             border-top: 1px solid var(--border-color);
         }
