@@ -18,12 +18,7 @@
             --button-hover-bg: #E5E5EA;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--sf-font);
             background-color: var(--background-color);
@@ -32,8 +27,6 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
-        /* 头部 */
         .header {
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
@@ -44,12 +37,7 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 600;
-        }
-
+        .header h1 { font-size: 22px; font-weight: 600; }
         .home-btn {
             font-size: 15px;
             color: var(--primary-color);
@@ -59,19 +47,8 @@
             background-color: var(--button-bg);
             transition: background 0.2s ease;
         }
-
-        .home-btn:hover {
-            background-color: var(--button-hover-bg);
-        }
-
-        /* 主内容 */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            flex: 1;
-        }
-
+        .home-btn:hover { background-color: var(--button-hover-bg); }
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; flex: 1; }
         .card {
             background: var(--card-background);
             border-radius: 16px;
@@ -79,55 +56,16 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
         }
-
-        .table-name {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            padding: 8px;
-        }
-
-        .editable-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .editable-table th,
-        .editable-table td {
+        .table-wrapper { overflow-x: auto; border-radius: 8px; padding: 8px; }
+        .editable-table { width: 100%; border-collapse: collapse; }
+        .editable-table th, .editable-table td {
             border: 1px solid var(--border-color);
             padding: 10px;
             text-align: left;
         }
-
-        .editable-table input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-size: 14px;
-        }
-
-        .editable-table input:focus {
-            outline: none;
-            background: rgba(0, 122, 255, 0.1);
-        }
-
-        /* 按钮组 */
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
-        }
-
+        .editable-table input { width: 100%; border: none; background: transparent; font-size: 14px; }
+        .editable-table input:focus { outline: none; background: rgba(0, 122, 255, 0.1); }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
         .btn {
             padding: 8px 12px;
             font-size: 14px;
@@ -138,47 +76,25 @@
             color: var(--text-primary);
             transition: background 0.2s ease, transform 0.1s ease;
         }
-
-        .btn:hover {
-            background-color: var(--button-hover-bg);
-        }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        .primary-btn {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .primary-btn:hover {
-            background: #0051FF;
-        }
-
+        .btn:hover { background-color: var(--button-hover-bg); }
+        .btn:active { transform: scale(0.96); }
+        .primary-btn { background: var(--primary-color); color: white; }
+        .primary-btn:hover { background: #0051FF; }
         .preview-card {
             background: #FAFAFA;
             border-radius: 12px;
             padding: 16px;
             margin-top: 16px;
+            position: relative;
         }
-
-        .footer {
-            text-align: center;
-            padding: 14px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--border-color);
+        .copy-btn {
+            position: absolute; right: 16px; top: 16px;
+            padding: 6px 12px; border-radius: 6px;
+            background: var(--primary-color); color: white;
+            border: none; cursor: pointer; font-size: 14px;
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            .card {
-                padding: 20px;
-            }
-        }
+        .copy-btn:hover { background: #0051FF; }
+        .footer { text-align: center; padding: 14px; font-size: 12px; color: var(--text-secondary); }
     </style>
 </head>
 <body>
@@ -189,68 +105,74 @@
 
     <main class="container">
         <div class="card">
-            <input type="text" class="table-name" placeholder="输入表格名称（可选）">
-            
+            <input type="text" id="tableName" class="table-name" placeholder="输入表格名称（可选）">
             <div class="table-wrapper">
                 <table class="editable-table">
-                    <thead id="tableHead"></thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody>
+                        <tr><td><input type="text"></td></tr>
+                    </tbody>
                 </table>
             </div>
-
             <div class="btn-group">
-               
-                <button class="btn" onclick="addRow()">➕ 添加行</button>
-                <button class="btn" onclick="removeLastRow()">➖ 删除行</button>
-                <button class="btn" onclick="addColumn()">➕ 添加列</button>
-                <button class="btn" onclick="removeLastColumn()">➖ 删除列</button>
-                 <button class="btn primary-btn" onclick="generateMarkdown()">转换 Markdown</button>
-                  </div>
-
-            <div class="preview-card">
-                <pre id="markdownContent"></pre>
+                <button class="btn" onclick="addRow()">添加行</button>
+                <button class="btn" onclick="addColumn()">添加列</button>
+                <button class="btn" onclick="deleteRow()">删除行</button>
+                <button class="btn" onclick="deleteColumn()">删除列</button>
+                <button class="primary-btn btn" onclick="generateMarkdown()">生成 Markdown</button>
             </div>
+        </div>
+
+        <div class="card preview-card">
+            <button class="copy-btn" onclick="copyMarkdown()">复制</button>
+            <pre id="markdownOutput"></pre>
         </div>
     </main>
 
-    <footer class="footer">
-        Design by Sakura © 2025 All Rights Reserved
-    </footer>
+    <footer class="footer">Design by Sakura</footer>
 
     <script>
-        function initTable(cols = 2, rows = 2) {
-            for(let i = 0; i < cols; i++) addColumn();
-            for(let i = 0; i < rows; i++) addRow();
-        }
-
         function addRow() {
-            const row = document.createElement('tr');
-            document.querySelectorAll('#tableHead th').forEach(() => row.appendChild(createCell()));
-            document.getElementById('tableBody').appendChild(row);
+            let table = document.querySelector(".editable-table tbody");
+            let newRow = table.rows[0].cloneNode(true);
+            newRow.querySelectorAll("input").forEach(input => input.value = "");
+            table.appendChild(newRow);
         }
 
         function addColumn() {
-            document.getElementById('tableHead').appendChild(createHeaderCell());
-            document.querySelectorAll('#tableBody tr').forEach(row => row.appendChild(createCell()));
+            document.querySelectorAll(".editable-table tr").forEach(row => {
+                let newCell = document.createElement("td");
+                let input = document.createElement("input");
+                newCell.appendChild(input);
+                row.appendChild(newCell);
+            });
         }
 
-        function createCell() {
-            const td = document.createElement('td');
-            td.innerHTML = '<input type="text">';
-            return td;
+        function deleteRow() {
+            let table = document.querySelector(".editable-table tbody");
+            if (table.rows.length > 1) table.deleteRow(-1);
         }
 
-        function createHeaderCell() {
-            const th = document.createElement('th');
-            th.innerHTML = '<input type="text" placeholder="标题">';
-            return th;
+        function deleteColumn() {
+            document.querySelectorAll(".editable-table tr").forEach(row => {
+                if (row.cells.length > 1) row.deleteCell(-1);
+            });
         }
 
         function generateMarkdown() {
-            alert('Markdown 生成中...');
+            let table = document.querySelector(".editable-table");
+            let markdown = "";
+            let rows = Array.from(table.rows).map(row => 
+                "| " + Array.from(row.cells).map(cell => cell.querySelector("input").value || " ").join(" | ") + " |"
+            );
+            if (rows.length > 1) rows.splice(1, 0, "| " + "- |".repeat(rows[0].cells.length));
+            markdown = rows.join("\n");
+            document.getElementById("markdownOutput").textContent = markdown;
         }
 
-        initTable();
+        function copyMarkdown() {
+            let markdown = document.getElementById("markdownOutput").textContent;
+            navigator.clipboard.writeText(markdown).then(() => alert("复制成功！"));
+        }
     </script>
 </body>
 </html>
