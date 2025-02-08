@@ -95,21 +95,30 @@
     .copy-btn:hover { background: #0051FF; }
     .footer { text-align: center; padding: 14px; font-size: 12px; color: var(--text-secondary); }
     
-    /* Confetti 动效 */
-    .confetti {
-      position: fixed;
-      width: 8px;
-      height: 8px;
-      background-color: red;
-      z-index: 9999;
-      opacity: 0;
-      animation: confetti-fall 1.5s linear forwards;
-    }
-    @keyframes confetti-fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
-    
+   /* CSS 部分 */
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.cherry-blossom {
+  position: fixed;
+  top: -50px;
+  pointer-events: none;
+  z-index: 9999;
+  width: 24px;
+  height: 24px;
+  /* 使用内嵌 SVG 生成樱花图案（可根据需要替换为你自己的图片 URL） */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23FFB6C1" d="M256 32C132.3 32 32 132.3 32 256s100.3 224 224 224 224-100.3 224-224S379.7 32 256 32zm0 400c-97 0-176-79-176-176S159 80 256 80s176 79 176 176-79 176-176 176z"/><path fill="%23FF69B4" d="M256 96c-88.2 0-160 71.8-160 160s71.8 160 160 160 160-71.8 160-160S344.2 96 256 96z"/></svg>');
+  background-size: cover;
+  animation: fall linear infinite;
+}
     @media (max-width: 768px) {
       .container { padding: 20px; }
       .card { padding: 20px; }
@@ -234,20 +243,32 @@
       });
     }
 
-    function triggerConfetti() {
-      const confettiCount = 30;
-      for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement("div");
-        confetti.classList.add("confetti");
-        confetti.style.backgroundColor = getRandomColor();
-        confetti.style.left = Math.random() * window.innerWidth + "px";
-        confetti.style.animationDuration = 1 + Math.random() * 1.5 + "s";
-        document.body.appendChild(confetti);
-        setTimeout(() => {
-          confetti.remove();
-        }, 3000);
-      }
-    }
+    function createCherryBlossom() {
+  const blossom = document.createElement("div");
+  blossom.className = "cherry-blossom";
+  // 随机大小（20px ~ 40px）
+  const size = Math.random() * 20 + 20;
+  blossom.style.width = size + "px";
+  blossom.style.height = size + "px";
+  // 随机水平位置
+  blossom.style.left = Math.random() * 100 + "vw";
+  // 随机动画时长（5s ~ 10s）
+  const duration = Math.random() * 5 + 5;
+  blossom.style.animationDuration = duration + "s";
+  blossom.style.animationDelay = Math.random() * 5 + "s";
+  document.body.appendChild(blossom);
+  // 动画结束后移除该元素
+  setTimeout(() => {
+    blossom.remove();
+  }, duration * 1000 + 500);
+}
+
+function startCherryBlossoms() {
+  // 每隔 300ms 生成一个樱花元素
+  setInterval(createCherryBlossom, 300);
+}
+
+document.addEventListener("DOMContentLoaded", startCherryBlossoms);
 
     function getRandomColor() {
       const colors = ["#007AFF", "#FF9500", "#4CD964", "#5856D6", "#FF2D55"];
