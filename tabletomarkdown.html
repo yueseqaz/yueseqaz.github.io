@@ -2,210 +2,216 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>在线Markdown表格生成器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Table Generator</title>
     <style>
         :root {
-            --primary-color: #2196F3;
-            --hover-color: #1976D2;
+            --sf-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            --primary-color: #007AFF;
+            --background-color: #F5F5F7;
+            --card-background: #FFFFFF;
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --border-color: #E5E5E7;
+            --button-hover: #0051FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            font-family: var(--sf-font);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .home-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 17px;
+            transition: color 0.2s ease;
+        }
+
+        .home-btn:hover {
+            color: var(--button-hover);
         }
 
         .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
         }
 
-        .table-controls {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .card {
+            background: var(--card-background);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 30px;
         }
 
-        button {
-            padding: 8px 15px;
+        .table-name {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 17px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 24px;
+        }
+
+        .convert-btn {
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 10px;
             background: var(--primary-color);
             color: white;
-            border: none;
-            border-radius: 4px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.2s ease;
+            height: 40px;
+            margin: 20px 0;
         }
 
-        button:hover {
-            background: var(--hover-color);
+        .convert-btn:hover {
+            background: var(--button-hover);
         }
 
         .editable-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
         }
 
-        .editable-table th, 
+        .editable-table th,
         .editable-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            min-width: 120px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
         }
 
         .editable-table input {
             width: 100%;
             border: none;
-            outline: none;
-            padding: 5px;
-            background: transparent;
+            font-size: 15px;
+            padding: 4px;
         }
 
-        .editable-table input:focus {
-            background: #f0f8ff;
-        }
-
-        .table-name {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .md-preview {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
+        .preview-card {
+            background: #FAFAFA;
+            border-radius: 18px;
+            padding: 24px;
             margin-top: 20px;
-            white-space: pre-wrap;
-            position: relative;
         }
 
         .copy-btn {
             position: absolute;
-            right: 10px;
-            top: 10px;
+            right: 24px;
+            top: 24px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
         }
 
-        .remove-btn {
-            background: #ff4444;
+        .copy-btn:hover {
+            background: var(--button-hover);
         }
 
-        .remove-btn:hover {
-            background: #cc0000;
+        #markdownContent {
+            font-family: 'SF Mono', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            color: var(--text-primary);
+            margin-top: 40px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <input type="text" class="table-name" placeholder="输入表格名称（可选）">
-        
-        <div class="table-controls">
-            <button onclick="addRow()">➕ 添加行</button>
-            <button onclick="addColumn()">➕ 添加列</button>
-            <button onclick="removeLastRow()">➖ 删除行</button>
-            <button onclick="removeLastColumn()">➖ 删除列</button>
+    <header class="header">
+        <div class="header-content">
+            <h1>Markdown Table Generator</h1>
+            <a href="#" class="home-btn">← 返回主页</a>
         </div>
+    </header>
 
-        <table class="editable-table">
-            <thead id="tableHead"></thead>
-            <tbody id="tableBody"></tbody>
-        </table>
+    <main class="container">
+        <div class="card">
+            <input type="text" class="table-name" placeholder="输入表格名称（可选）">
+            
+            <table class="editable-table">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
 
-        <button onclick="generateMarkdown()">🔄 转换为Markdown</button>
-        
-        <div class="md-preview" id="previewArea">
-            <button class="copy-btn" onclick="copyMarkdown()">📋 复制</button>
+            <button class="convert-btn" onclick="generateMarkdown()">转换为 Markdown</button>
+
+            <div class="preview-card">
+                <button class="copy-btn" onclick="copyMarkdown()">📋 复制</button>
+                <div id="markdownContent"></div>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer class="footer">
+        Design by Sakura © 2024 All Rights Reserved
+    </footer>
 
     <script>
-        // 初始化表格
         function initTable(cols = 2, rows = 2) {
             const thead = document.getElementById('tableHead');
             const tbody = document.getElementById('tableBody');
             
-            // 创建表头
-            thead.innerHTML = '<tr></tr>';
-            for(let i = 0; i < cols; i++) {
-                thead.rows[0].appendChild(createHeaderCell());
-            }
-
-            // 创建表格内容
-            tbody.innerHTML = '';
-            for(let i = 0; i < rows; i++) {
-                addRow();
-            }
+            thead.innerHTML = '<tr>' + '<th><input type="text" placeholder="标题"></th>'.repeat(cols) + '</tr>';
+            tbody.innerHTML = Array.from({ length: rows }).map(() => 
+                '<tr>' + '<td><input type="text" placeholder="内容"></td>'.repeat(cols) + '</tr>'
+            ).join('');
         }
 
-        // 创建表头单元格
-        function createHeaderCell() {
-            const th = document.createElement('th');
-            th.innerHTML = '<input type="text" placeholder="标题">';
-            return th;
-        }
-
-        // 创建内容单元格
-        function createCell() {
-            const td = document.createElement('td');
-            td.innerHTML = '<input type="text" placeholder="内容">';
-            return td;
-        }
-
-        // 添加行
-        function addRow() {
-            const tbody = document.getElementById('tableBody');
-            const row = document.createElement('tr');
-            const colCount = document.querySelectorAll('#tableHead th').length;
-            
-            for(let i = 0; i < colCount; i++) {
-                row.appendChild(createCell());
-            }
-            tbody.appendChild(row);
-        }
-
-        // 添加列
-        function addColumn() {
-            document.querySelectorAll('#tableHead tr, #tableBody tr').forEach(row => {
-                row.appendChild(row.parentNode.nodeName === 'THEAD' ? 
-                    createHeaderCell() : createCell());
-            });
-        }
-
-        // 删除最后一行
-        function removeLastRow() {
-            const tbody = document.getElementById('tableBody');
-            if(tbody.rows.length > 1) {
-                tbody.deleteRow(-1);
-            }
-        }
-
-        // 删除最后一列
-        function removeLastColumn() {
-            document.querySelectorAll('#tableHead tr, #tableBody tr').forEach(row => {
-                if(row.cells.length > 1) {
-                    row.deleteCell(-1);
-                }
-            });
-        }
-
-        // 生成Markdown
         function generateMarkdown() {
             const tableName = document.querySelector('.table-name').value;
             const headers = Array.from(document.querySelectorAll('#tableHead input'))
-                            .map(input => input.value || ' ');
-            
+                            .map(input => input.value.trim() || ' ');
+
             const rows = Array.from(document.querySelectorAll('#tableBody tr')).map(row => 
-                Array.from(row.querySelectorAll('input')).map(input => input.value || ' ')
+                Array.from(row.querySelectorAll('input')).map(input => input.value.trim() || ' ')
             );
 
-            // 构建Markdown
             let md = tableName ? `**${tableName}**\n\n` : '';
             md += '| ' + headers.join(' | ') + ' |\n';
             md += '|' + headers.map(() => '---').join('|') + '|\n';
@@ -214,19 +220,16 @@
                 md += '| ' + row.join(' | ') + ' |\n';
             });
 
-            document.getElementById('previewArea').innerText = md;
+            document.getElementById('markdownContent').innerText = md;
         }
 
-        // 复制功能
         function copyMarkdown() {
-            const text = document.getElementById('previewArea').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('已复制到剪贴板！');
-            });
+            const text = document.getElementById('markdownContent').innerText;
+            navigator.clipboard.writeText(text);
+            alert('Markdown 代码已复制！');
         }
 
-        // 初始化2x2表格
-        initTable();
+        document.addEventListener('DOMContentLoaded', () => initTable());
     </script>
 </body>
 </html>
