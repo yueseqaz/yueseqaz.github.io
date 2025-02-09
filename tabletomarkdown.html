@@ -56,13 +56,69 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       margin-bottom: 20px;
     }
-    .table-wrapper { overflow-x: auto; border-radius: 8px; padding: 8px; }
-    .editable-table { width: 100%; border-collapse: collapse; }
-    .editable-table th, .editable-table td {
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      text-align: left;
-    }
+    .table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  background: white;
+}
+
+.editable-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+}
+
+.editable-table th {
+  background: var(--header-bg, #f8f9fa);
+  color: var(--header-color, #2d3436);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color, #e9ecef);
+  padding: 14px 16px;
+  position: sticky;
+  top: 0;
+}
+
+.editable-table td {
+  color: var(--text-color, #495057);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+  transition: background 0.2s ease;
+}
+
+.editable-table tr:not(:last-child) td {
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+}
+
+/* 斑马纹效果 */
+.editable-table tr:nth-child(even) {
+  background: var(--zebra-bg, #fcfcfc);
+}
+
+/* 悬停效果 */
+.editable-table tr:hover td {
+  background: var(--hover-bg, #f1f3f5);
+  cursor: pointer;
+}
+
+/* 首列强调 */
+.editable-table td:first-child {
+  font-weight: 500;
+  color: var(--primary-color, #2b8ff3);
+}
+
+/* 圆角效果 */
+.editable-table th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.editable-table th:last-child {
+  border-top-right-radius: 8px;
+}
     .editable-table input { width: 100%; border: none; background: transparent; font-size: 14px; }
     .editable-table input:focus { outline: none; background: rgba(0, 122, 255, 0.1); }
     .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
