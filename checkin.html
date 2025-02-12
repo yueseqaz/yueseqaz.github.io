@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<!-- Previous head section remains the same -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="每日打卡日历 - 追踪您的日常打卡记录">
+    <meta name="theme-color" content="#2ea44f">
     <title>每日打卡日历</title>
     <style>
-        /* Previous styles remain the same */
         :root {
+            /* 使用CSS变量定义主题颜色 */
+            --primary-color: #2ea44f;
+            --primary-hover: #2c974b;
+            --background-color: #f9fafb;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #d1d5db;
             --color-level0: #ebedf0;
             --color-level1: #9be9a8;
             --color-level2: #40c463;
             --color-level3: #30a14e;
             --color-level4: #216e39;
             --border-radius: 6px;
+            --transition-speed: 0.2s;
+        }
+
+        /* 添加深色模式支持 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1a1a1a;
+                --text-color: #e5e5e5;
+                --text-secondary: #a0a0a0;
+                --border-color: #404040;
+                --color-level0: #2d333b;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -21,19 +46,27 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f9fafb;
-            color: #1f2937;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed);
         }
 
         .header {
             text-align: center;
             margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .streak-info {
             font-size: 1.1rem;
-            color: #4b5563;
+            color: var(--text-secondary);
             margin-top: 0.5rem;
+            transition: color var(--transition-speed);
         }
 
         .month-navigation {
@@ -41,26 +74,37 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
+            gap: 1rem;
         }
 
         .nav-button {
             padding: 8px 16px;
-            background: #fff;
-            border: 1px solid #d1d5db;
+            background: transparent;
+            border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             cursor: pointer;
+            color: var(--text-color);
+            transition: all var(--transition-speed);
+            min-width: 100px;
+        }
+
+        .nav-button:hover {
+            background: var(--border-color);
         }
 
         .current-month {
             font-size: 1.2rem;
             font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
         }
 
         .calendar {
-            background: white;
+            background: var(--background-color);
             padding: 16px;
             border-radius: var(--border-radius);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-speed);
         }
 
         .weekday-labels {
@@ -72,7 +116,7 @@
 
         .weekday-label {
             font-size: 0.875rem;
-            color: #6b7280;
+            color: var(--text-secondary);
             text-align: center;
             padding: 8px 0;
         }
@@ -90,6 +134,11 @@
             background-color: var(--color-level0);
             border-radius: 3px;
             cursor: pointer;
+            transition: transform var(--transition-speed);
+        }
+
+        .day:hover {
+            transform: scale(1.05);
         }
 
         .day-content {
@@ -103,6 +152,7 @@
             align-items: center;
             justify-content: center;
             font-size: 0.875rem;
+            user-select: none;
         }
 
         .holiday {
@@ -110,26 +160,54 @@
         }
 
         .day.today {
-            border: 2px solid #3b82f6;
+            border: 2px solid var(--primary-color);
         }
 
         .check-button {
             display: block;
+            width: 100%;
+            max-width: 300px;
             margin: 20px auto;
             padding: 12px 32px;
-            background: #2ea44f;
+            background: var(--primary-color);
             color: white;
             border: none;
             border-radius: var(--border-radius);
             cursor: pointer;
             font-size: 1rem;
             font-weight: 500;
+            transition: all var(--transition-speed);
+        }
+
+        .check-button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .check-button:active {
+            transform: translateY(1px);
         }
 
         .check-count {
             font-size: 0.75rem;
             margin-top: 4px;
-            color: #6b7280;
+            color: var(--text-secondary);
+        }
+
+        /* 添加响应式设计 */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .month-navigation {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -148,185 +226,292 @@
         <span id="checkButtonText">今日打卡</span>
     </button>
 
-    <script src="https://cdn.jsdelivr.net/npm/chinese-days"></script>
     <script>
-        const STORAGE_KEY = 'checkinData';
-        const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
-        let checkinData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-        let currentDate = new Date();
-
-        // 辅助函数：格式化日期为 YYYY-MM-DD
-        function formatDate(date) {
-            return date.toISOString().split('T')[0];
-        }
-
-        // 辅助函数：比较两个日期是否是连续的
-        function isConsecutiveDay(date1, date2) {
-            const d1 = new Date(date1);
-            const d2 = new Date(date2);
-            const diffTime = Math.abs(d2 - d1);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            return diffDays === 1;
-        }
-
-        function getStreakInfo() {
-            // 获取所有打卡日期并排序
-            const dates = Object.keys(checkinData)
-                .filter(date => checkinData[date] > 0)
-                .sort();
-
-            if (dates.length === 0) return { currentStreak: 0, maxStreak: 0 };
-
-            const today = formatDate(new Date());
-            let currentStreak = 0;
-            let maxStreak = 0;
-            let tempStreak = 1;
-
-            // 计算最长连续天数
-            for (let i = 1; i < dates.length; i++) {
-                if (isConsecutiveDay(dates[i-1], dates[i])) {
-                    tempStreak++;
-                } else {
-                    maxStreak = Math.max(maxStreak, tempStreak);
-                    tempStreak = 1;
+        // 使用立即执行函数表达式(IIFE)避免全局变量污染
+        (() => {
+            const STORAGE_KEY = 'checkinData';
+            const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
+            const MAX_CHECKS_PER_DAY = 10;
+            
+            // 使用 Class 进行重构
+            class CheckinCalendar {
+                constructor() {
+                    this.checkinData = this.loadCheckinData();
+                    this.currentDate = new Date();
+                    this.initializeEventListeners();
+                    this.render();
                 }
-            }
-            maxStreak = Math.max(maxStreak, tempStreak);
 
-            // 计算当前连续天数
-            if (dates.includes(today)) {
-                currentStreak = 1;
-                let checkDate = new Date(today);
-                checkDate.setDate(checkDate.getDate() - 1);
-                
-                while (true) {
-                    const dateStr = formatDate(checkDate);
-                    if (checkinData[dateStr]) {
-                        currentStreak++;
-                        checkDate.setDate(checkDate.getDate() - 1);
-                    } else {
-                        break;
+                loadCheckinData() {
+                    try {
+                        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+                    } catch (error) {
+                        console.error('Failed to load checkin data:', error);
+                        return {};
                     }
                 }
+
+                saveCheckinData() {
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.checkinData));
+                    } catch (error) {
+                        console.error('Failed to save checkin data:', error);
+                        alert('保存打卡数据失败，请确保浏览器有足够的存储空间。');
+                    }
+                }
+
+                formatDate(date) {
+                    return date.toISOString().split('T')[0];
+                }
+
+                isConsecutiveDay(date1, date2) {
+                    const d1 = new Date(date1);
+                    const d2 = new Date(date2);
+                    const diffTime = Math.abs(d2 - d1);
+                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) === 1;
+                }
+
+                getStreakInfo() {
+                    const dates = Object.entries(this.checkinData)
+                        .filter(([_, count]) => count > 0)
+                        .map(([date]) => date)
+                        .sort();
+
+                    if (dates.length === 0) return { currentStreak: 0, maxStreak: 0 };
+
+                    const today = this.formatDate(new Date());
+                    let currentStreak = 0;
+                    let maxStreak = 0;
+                    let tempStreak = 1;
+
+                    // 计算最长连续天数
+                    for (let i = 1; i < dates.length; i++) {
+                        if (this.isConsecutiveDay(dates[i-1], dates[i])) {
+                            tempStreak++;
+                        } else {
+                            maxStreak = Math.max(maxStreak, tempStreak);
+                            tempStreak = 1;
+                        }
+                    }
+                    maxStreak = Math.max(maxStreak, tempStreak);
+
+                    // 计算当前连续天数
+                    if (dates.includes(today)) {
+                        currentStreak = 1;
+                        let checkDate = new Date(today);
+                        checkDate.setDate(checkDate.getDate() - 1);
+                        
+                        while (true) {
+                            const dateStr = this.formatDate(checkDate);
+                            if (this.checkinData[dateStr]) {
+                                currentStreak++;
+                                checkDate.setDate(checkDate.getDate() - 1);
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+
+                    return { currentStreak, maxStreak };
+                }
+
+                updateStreakInfo() {
+                    const { currentStreak, maxStreak } = this.getStreakInfo();
+                    const streakInfo = document.getElementById('streakInfo');
+                    streakInfo.textContent = `当前连续打卡: ${currentStreak}天 | 最长连续打卡: ${maxStreak}天`;
+                }
+
+                getColorLevel(count) {
+                    if (count === 0) return 'var(--color-level0)';
+                    if (count <= 3) return 'var(--color-level1)';
+                    if (count <= 6) return 'var(--color-level2)';
+                    if (count <= 9) return 'var(--color-level3)';
+                    return 'var(--color-level4)';
+                }
+
+                generateCalendar() {
+                    const calendar = document.getElementById('calendar');
+                    calendar.innerHTML = '';
+                    
+                    document.getElementById('currentMonth').textContent = 
+                        `${this.currentDate.getFullYear()}年${this.currentDate.getMonth() + 1}月`;
+                    
+                    const weekdayLabels = document.createElement('div');
+                    weekdayLabels.className = 'weekday-labels';
+                    WEEKDAYS.forEach(day => {
+                        const label = document.createElement('div');
+                        label.className = 'weekday-label';
+                        label.textContent = day;
+                        weekdayLabels.appendChild(label);
+                    });
+                    calendar.appendChild(weekdayLabels);
+                    
+                    const daysContainer = document.createElement('div');
+                    daysContainer.className = 'days';
+                    
+                    const firstDay = new Date(
+                        this.currentDate.getFullYear(), 
+                        this.currentDate.getMonth(), 
+                        1
+                    ).getDay();
+                    
+                    // 添加空白天数
+                    for (let d = 0; d < firstDay; d++) {
+                        daysContainer.appendChild(document.createElement('div'));
+                    }
+                    
+                    const daysInMonth = new Date(
+                        this.currentDate.getFullYear(), 
+                        this.currentDate.getMonth() + 1, 
+                        0
+                    ).getDate();
+                    
+                    const today = new Date();
+                    
+                    // 生成日历天数
+                    for (let d = 1; d <= daysInMonth; d++) {
+                        const dayElement = document.createElement('div');
+                        dayElement.className = 'day';
+                        
+                        const dateObj = new Date(
+                            this.currentDate.getFullYear(), 
+                            this.currentDate.getMonth(), 
+                            d
+                        );
+                        const dateStr = this.formatDate(dateObj);
+                        
+                        if (dateStr === this.formatDate(today)) {
+                            dayElement.classList.add('today');
+                        }
+                        
+                        const dayContent = document.createElement('div');
+                        dayContent.className = 'day-content';
+                        
+                        // 添加节假日标记
+                        if (window.chineseDays && window.chineseDays.isHoliday(dateStr)) {
+                            dayContent.classList.add('holiday');
+                        }
+                        
+                        dayContent.textContent = d;
+                        
+                        const count = this.checkinData[dateStr] || 0;
+                        if (count > 0) {
+                            const countElement = document.createElement('div');
+                            countElement.className = 'check-count';
+                            countElement.textContent = `${count}次`;
+                            dayContent.appendChild(countElement);
+                        }
+                        
+                        dayElement.style.backgroundColor = this.getColorLevel(count);
+                        dayElement.appendChild(dayContent);
+                        daysContainer.appendChild(dayElement);
+                    }
+                    
+                    calendar.appendChild(daysContainer);
+                }
+
+                checkIn() {
+                    const today = this.formatDate(new Date());
+                    const currentCount = this.checkinData[today] || 0;
+                    
+                    if (currentCount >= MAX_CHECKS_PER_DAY) {
+                        alert(`每日最多打卡 ${MAX_CHECKS_PER_DAY} 次`);
+                        return;
+                    }
+                    
+                    this.checkinData[today] = currentCount + 1;
+                    this.saveCheckinData();
+                    
+                    const checkButton = document.getElementById('checkButton');
+                    // 继续 checkIn() 方法
+                    const checkButtonText = document.getElementById('checkButtonText');
+                    checkButtonText.textContent = `今日已打卡 ${this.checkinData[today]} 次`;
+                    
+                    // 添加按钮动画效果
+                    checkButton.classList.add('checking');
+                    setTimeout(() => checkButton.classList.remove('checking'), 200);
+                    
+                    this.generateCalendar();
+                    this.updateStreakInfo();
+                }
+
+                render() {
+                    this.generateCalendar();
+                    this.updateStreakInfo();
+                    this.updateCheckButton();
+                }
+
+                updateCheckButton() {
+                    const today = this.formatDate(new Date());
+                    const count = this.checkinData[today] || 0;
+                    const checkButtonText = document.getElementById('checkButtonText');
+                    checkButtonText.textContent = count > 0 ? `今日已打卡 ${count} 次` : '今日打卡';
+                }
+
+                initializeEventListeners() {
+                    // 使用箭头函数保持 this 上下文
+                    document.getElementById('prevMonth').addEventListener('click', () => {
+                        this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                        this.generateCalendar();
+                    });
+
+                    document.getElementById('nextMonth').addEventListener('click', () => {
+                        this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                        this.generateCalendar();
+                    });
+
+                    document.getElementById('checkButton').addEventListener('click', () => this.checkIn());
+
+                    // 添加键盘快捷键
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowLeft') {
+                            this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                            this.generateCalendar();
+                        } else if (e.key === 'ArrowRight') {
+                            this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                            this.generateCalendar();
+                        } else if (e.key === ' ' || e.key === 'Enter') {
+                            e.preventDefault();
+                            this.checkIn();
+                        }
+                    });
+
+                    // 添加触摸手势支持
+                    let touchStartX = 0;
+                    const calendar = document.getElementById('calendar');
+                    
+                    calendar.addEventListener('touchstart', (e) => {
+                        touchStartX = e.touches[0].clientX;
+                    });
+
+                    calendar.addEventListener('touchend', (e) => {
+                        const touchEndX = e.changedTouches[0].clientX;
+                        const difference = touchStartX - touchEndX;
+                        
+                        if (Math.abs(difference) > 50) { // 最小滑动距离
+                            if (difference > 0) {
+                                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                            } else {
+                                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                            }
+                            this.generateCalendar();
+                        }
+                    });
+                }
             }
 
-            return { currentStreak, maxStreak };
-        }
-
-        function updateStreakInfo() {
-            const { currentStreak, maxStreak } = getStreakInfo();
-            const streakInfo = document.getElementById('streakInfo');
-            streakInfo.textContent = `当前连续打卡: ${currentStreak}天 | 最长连续打卡: ${maxStreak}天`;
-        }
-
-        function generateCalendar() {
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-            
-            document.getElementById('currentMonth').textContent = 
-                `${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月`;
-            
-            const weekdayLabels = document.createElement('div');
-            weekdayLabels.className = 'weekday-labels';
-            WEEKDAYS.forEach(day => {
-                const label = document.createElement('div');
-                label.className = 'weekday-label';
-                label.textContent = day;
-                weekdayLabels.appendChild(label);
+            // 添加错误处理
+            window.addEventListener('error', (e) => {
+                console.error('Application error:', e.error);
+                alert('应用发生错误，请刷新页面重试。');
             });
-            calendar.appendChild(weekdayLabels);
-            
-            const daysContainer = document.createElement('div');
-            daysContainer.className = 'days';
-            
-            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
-            
-            for (let d = 0; d < firstDay; d++) {
-                const emptyDay = document.createElement('div');
-                daysContainer.appendChild(emptyDay);
-            }
-            
-            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-            const today = new Date();
-            
-            for (let d = 1; d <= daysInMonth; d++) {
-                const dayElement = document.createElement('div');
-                dayElement.className = 'day';
-                
-                const dateObj = new Date(currentDate.getFullYear(), currentDate.getMonth(), d);
-                const dateStr = formatDate(dateObj);
-                
-                if (dateStr === formatDate(today)) {
-                    dayElement.classList.add('today');
-                }
-                
-                const dayContent = document.createElement('div');
-                dayContent.className = 'day-content';
-                
-                if (chineseDays && chineseDays.isHoliday(dateStr)) {
-                    dayContent.classList.add('holiday');
-                }
-                
-                dayContent.textContent = d;
-                
-                const count = checkinData[dateStr] || 0;
-                if (count > 0) {
-                    const countElement = document.createElement('div');
-                    countElement.className = 'check-count';
-                    countElement.textContent = `${count}次`;
-                    dayContent.appendChild(countElement);
-                }
-                
-                dayElement.style.backgroundColor = getColorLevel(count);
-                
-                dayElement.appendChild(dayContent);
-                daysContainer.appendChild(dayElement);
-            }
-            
-            calendar.appendChild(daysContainer);
-        }
 
-        function getColorLevel(count) {
-            if (count === 0) return 'var(--color-level0)';
-            if (count <= 3) return 'var(--color-level1)';
-            if (count <= 6) return 'var(--color-level2)';
-            if (count <= 9) return 'var(--color-level3)';
-            return 'var(--color-level4)';
-        }
-
-        function checkIn() {
-            const today = formatDate(new Date());
-            checkinData[today] = (checkinData[today] || 0) + 1;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(checkinData));
-            
-            const count = checkinData[today];
-            document.getElementById('checkButtonText').textContent = `今日已打卡 ${count} 次`;
-            
-            generateCalendar();
-            updateStreakInfo();
-        }
-
-        document.getElementById('prevMonth').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            generateCalendar();
-        });
-
-        document.getElementById('nextMonth').addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            generateCalendar();
-        });
-
-        document.getElementById('checkButton').addEventListener('click', checkIn);
-
-        // 初始化
-        generateCalendar();
-        updateStreakInfo();
-
-        // 初始化按钮文本
-        const today = formatDate(new Date());
-        const count = checkinData[today] || 0;
-        document.getElementById('checkButtonText').textContent = 
-            count > 0 ? `今日已打卡 ${count} 次` : '今日打卡';
+            // 初始化应用
+            document.addEventListener('DOMContentLoaded', () => {
+                new CheckinCalendar();
+            });
+        })();
     </script>
 </body>
 </html>
+                    
