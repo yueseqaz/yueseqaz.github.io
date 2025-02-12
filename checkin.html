@@ -15,8 +15,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            max-width: 1200px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f9fafb;
@@ -28,44 +28,31 @@
             margin-bottom: 2rem;
         }
 
-        .header h1 {
-            color: #111827;
-            font-size: 1.875rem;
-            margin-bottom: 0.5rem;
+        .month-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
 
-        .streak-info {
-            color: #4b5563;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
+        .nav-button {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        .current-month {
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .calendar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .month {
             background: white;
             padding: 16px;
             border-radius: var(--border-radius);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .month-title {
-            margin: 0 0 16px 0;
-            font-size: 1rem;
-            color: #374151;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
         }
 
         .weekday-labels {
@@ -76,9 +63,16 @@
         }
 
         .weekday-label {
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             color: #6b7280;
             text-align: center;
+            padding: 8px 0;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
         }
 
         .day {
@@ -88,11 +82,6 @@
             background-color: var(--color-level0);
             border-radius: 3px;
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .day:hover {
-            transform: scale(1.1);
         }
 
         .day-content {
@@ -102,10 +91,14 @@
             right: 0;
             bottom: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            color: #1f2937;
+            font-size: 0.875rem;
+        }
+
+        .holiday {
+            color: #ef4444;
         }
 
         .day.today {
@@ -123,62 +116,6 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: 500;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .check-button:hover {
-            background: #22863a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .check-button:active {
-            transform: translateY(0);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 24px;
-            padding: 16px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.875rem;
-            color: #4b5563;
-        }
-
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 12px;
-            }
-
-            .calendar {
-                gap: 12px;
-            }
-
-            .month {
-                padding: 12px;
-            }
-
-            .day:hover {
-                transform: none;
-            }
         }
     </style>
 </head>
@@ -187,37 +124,22 @@
         <h1>每日打卡日历</h1>
         <div class="streak-info" id="streakInfo"></div>
     </div>
+    <div class="month-navigation">
+        <button class="nav-button" id="prevMonth">上个月</button>
+        <span class="current-month" id="currentMonth"></span>
+        <button class="nav-button" id="nextMonth">下个月</button>
+    </div>
     <div class="calendar" id="calendar"></div>
     <button class="check-button" id="checkButton">
         <span id="checkButtonText">今日打卡</span>
     </button>
-    <div class="legend">
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: var(--color-level0)"></div>
-            <span>未打卡</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: var(--color-level1)"></div>
-            <span>1-3次</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: var(--color-level2)"></div>
-            <span>4-6次</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: var(--color-level3)"></div>
-            <span>7-9次</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: var(--color-level4)"></div>
-            <span>10次以上</span>
-        </div>
-    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chinese-days"></script>
     <script>
         const STORAGE_KEY = 'checkinData';
         const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
         let checkinData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        let currentDate = new Date();
 
         function getStreakInfo() {
             const today = new Date();
@@ -226,7 +148,7 @@
             let maxStreak = 0;
             let tempStreak = 0;
 
-            // 计算过去90天的打卡情况
+            // 计算连续打卡天数
             for (let i = 0; i < 90; i++) {
                 const date = new Date(today);
                 date.setDate(today.getDate() - i);
@@ -234,7 +156,7 @@
                 
                 if (checkinData[dateStr]) {
                     tempStreak++;
-                    if (i === 0) { // 如果今天有打卡，更新当前连续天数
+                    if (i === 0) {
                         currentStreak = tempStreak;
                     }
                 } else {
@@ -255,79 +177,71 @@
 
         function generateCalendar() {
             const calendar = document.getElementById('calendar');
-            calendar.innerHTML = ''; // 清空现有内容
+            calendar.innerHTML = '';
+            
+            // 更新当前月份显示
+            document.getElementById('currentMonth').textContent = 
+                `${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月`;
+            
+            // 添加星期标签
+            const weekdayLabels = document.createElement('div');
+            weekdayLabels.className = 'weekday-labels';
+            WEEKDAYS.forEach(day => {
+                const label = document.createElement('div');
+                label.className = 'weekday-label';
+                label.textContent = day;
+                weekdayLabels.appendChild(label);
+            });
+            calendar.appendChild(weekdayLabels);
+            
+            const daysContainer = document.createElement('div');
+            daysContainer.className = 'days';
+            
+            // 获取月份第一天是星期几
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+            
+            // 添加空白天数
+            for (let d = 0; d < firstDay; d++) {
+                const emptyDay = document.createElement('div');
+                daysContainer.appendChild(emptyDay);
+            }
+            
+            // 生成当月所有天数
+            const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
             const today = new Date();
             
-            // 生成最近6个月的日历
-            for (let i = 5; i >= 0; i--) {
-                const date = new Date(today);
-                date.setMonth(today.getMonth() - i);
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
                 
-                const monthElement = document.createElement('div');
-                monthElement.className = 'month';
+                const dateObj = new Date(currentDate.getFullYear(), currentDate.getMonth(), d);
+                const dateStr = dateObj.toISOString().split('T')[0];
                 
-                const title = document.createElement('h3');
-                title.className = 'month-title';
-                title.textContent = `${date.getFullYear()}年${date.getMonth() + 1}月`;
-                
-                // 添加星期标签
-                const weekdayLabels = document.createElement('div');
-                weekdayLabels.className = 'weekday-labels';
-                WEEKDAYS.forEach(day => {
-                    const label = document.createElement('div');
-                    label.className = 'weekday-label';
-                    label.textContent = day;
-                    weekdayLabels.appendChild(label);
-                });
-                
-                const daysContainer = document.createElement('div');
-                daysContainer.className = 'days';
-                
-                // 获取月份第一天是星期几
-                const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-                
-                // 添加空白天数
-                for (let d = 0; d < firstDay; d++) {
-                    const emptyDay = document.createElement('div');
-                    daysContainer.appendChild(emptyDay);
+                // 检查是否是今天
+                const isToday = dateStr === today.toISOString().split('T')[0];
+                if (isToday) {
+                    dayElement.classList.add('today');
                 }
                 
-                // 生成当月所有天数
-                const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+                const dayContent = document.createElement('div');
+                dayContent.className = 'day-content';
                 
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'day';
-                    
-                    const dateObj = new Date(date.getFullYear(), date.getMonth(), d);
-                    const dateStr = dateObj.toISOString().split('T')[0];
-                    
-                    // 检查是否是今天
-                    const isToday = dateStr === today.toISOString().split('T')[0];
-                    if (isToday) {
-                        dayElement.classList.add('today');
-                    }
-                    
-                    const dayContent = document.createElement('div');
-                    dayContent.className = 'day-content';
-                    dayContent.textContent = d;
-                    
-                    // 设置打卡次数对应的颜色
-                    const count = checkinData[dateStr] || 0;
-                    dayElement.style.backgroundColor = getColorLevel(count);
-                    
-                    // 添加提示信息
-                    dayElement.title = `${dateStr} 打卡${count}次`;
-                    
-                    dayElement.appendChild(dayContent);
-                    daysContainer.appendChild(dayElement);
+                // 检查是否是节假日
+                if (chineseDays && chineseDays.isHoliday(dateStr)) {
+                    dayContent.classList.add('holiday');
                 }
                 
-                monthElement.appendChild(title);
-                monthElement.appendChild(weekdayLabels);
-                monthElement.appendChild(daysContainer);
-                calendar.appendChild(monthElement);
+                dayContent.textContent = d;
+                
+                // 设置打卡次数对应的颜色
+                const count = checkinData[dateStr] || 0;
+                dayElement.style.backgroundColor = getColorLevel(count);
+                
+                dayElement.appendChild(dayContent);
+                daysContainer.appendChild(dayElement);
             }
+            
+            calendar.appendChild(daysContainer);
         }
 
         function getColorLevel(count) {
@@ -344,7 +258,6 @@
             checkinData[dateStr] = (checkinData[dateStr] || 0) + 1;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(checkinData));
             
-            // 更新按钮文本显示打卡次数
             const count = checkinData[dateStr];
             document.getElementById('checkButtonText').textContent = `今日已打卡 ${count} 次`;
             
@@ -352,15 +265,29 @@
             updateStreakInfo();
         }
 
+        // 月份导航
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        });
+
         document.getElementById('checkButton').addEventListener('click', checkIn);
+
+        // 初始化
         generateCalendar();
         updateStreakInfo();
 
-        // 初始化时更新按钮文本
+        // 初始化按钮文本
         const today = new Date();
         const dateStr = today.toISOString().split('T')[0];
         const count = checkinData[dateStr] || 0;
-        document.getElementById('checkButtonText').textContent = count > 0 ? `今日已打卡 ${count} 次` : '今日打卡';
+        document.getElementById('checkButtonText').textContent = 
+            count > 0 ? `今日已打卡 ${count} 次` : '今日打卡';
     </script>
 </body>
 </html>
