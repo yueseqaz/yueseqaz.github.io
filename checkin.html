@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日打卡日历</title>
+    <style>
+        :root {
+            --color-level0: #ebedf0;
+            --color-level1: #9be9a8;
+            --color-level2: #40c463;
+            --color-level3: #30a14e;
+            --color-level4: #216e39;
+            --border-radius: 6px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #111827;
+            font-size: 1.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .streak-info {
+            color: #4b5563;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .month {
+            background: white;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .month-title {
+            margin: 0 0 16px 0;
+            font-size: 1rem;
+            color: #374151;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .weekday-labels {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .weekday-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .day {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            background-color: var(--color-level0);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day:hover {
+            transform: scale(1.1);
+        }
+
+        .day-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #1f2937;
+        }
+
+        .day.today {
+            border: 2px solid #3b82f6;
+        }
+
+        .check-button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 32px;
+            background: #2ea44f;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-button:hover {
+            background: #22863a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-button:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+            padding: 16px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .calendar {
+                gap: 12px;
+            }
+
+            .month {
+                padding: 12px;
+            }
+
+            .day:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>每日打卡日历</h1>
+        <div class="streak-info" id="streakInfo"></div>
+    </div>
+    <div class="calendar" id="calendar"></div>
+    <button class="check-button" id="checkButton">
+        <span id="checkButtonText">今日打卡</span>
+    </button>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--color-level0)"></div>
+            <span>未打卡</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--color-level1)"></div>
+            <span>1-3次</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--color-level2)"></div>
+            <span>4-6次</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--color-level3)"></div>
+            <span>7-9次</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--color-level4)"></div>
+            <span>10次以上</span>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'checkinData';
+        const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
+        let checkinData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+        function getStreakInfo() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let currentStreak = 0;
+            let maxStreak = 0;
+            let tempStreak = 0;
+
+            // 计算过去90天的打卡情况
+            for (let i = 0; i < 90; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                if (checkinData[dateStr]) {
+                    tempStreak++;
+                    if (i === 0) { // 如果今天有打卡，更新当前连续天数
+                        currentStreak = tempStreak;
+                    }
+                } else {
+                    maxStreak = Math.max(maxStreak, tempStreak);
+                    tempStreak = 0;
+                }
+            }
+            maxStreak = Math.max(maxStreak, tempStreak);
+
+            return { currentStreak, maxStreak };
+        }
+
+        function updateStreakInfo() {
+            const { currentStreak, maxStreak } = getStreakInfo();
+            const streakInfo = document.getElementById('streakInfo');
+            streakInfo.textContent = `当前连续打卡: ${currentStreak}天 | 最长连续打卡: ${maxStreak}天`;
+        }
+
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = ''; // 清空现有内容
+            const today = new Date();
+            
+            // 生成最近6个月的日历
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(today);
+                date.setMonth(today.getMonth() - i);
+                
+                const monthElement = document.createElement('div');
+                monthElement.className = 'month';
+                
+                const title = document.createElement('h3');
+                title.className = 'month-title';
+                title.textContent = `${date.getFullYear()}年${date.getMonth() + 1}月`;
+                
+                // 添加星期标签
+                const weekdayLabels = document.createElement('div');
+                weekdayLabels.className = 'weekday-labels';
+                WEEKDAYS.forEach(day => {
+                    const label = document.createElement('div');
+                    label.className = 'weekday-label';
+                    label.textContent = day;
+                    weekdayLabels.appendChild(label);
+                });
+                
+                const daysContainer = document.createElement('div');
+                daysContainer.className = 'days';
+                
+                // 获取月份第一天是星期几
+                const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+                
+                // 添加空白天数
+                for (let d = 0; d < firstDay; d++) {
+                    const emptyDay = document.createElement('div');
+                    daysContainer.appendChild(emptyDay);
+                }
+                
+                // 生成当月所有天数
+                const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+                
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'day';
+                    
+                    const dateObj = new Date(date.getFullYear(), date.getMonth(), d);
+                    const dateStr = dateObj.toISOString().split('T')[0];
+                    
+                    // 检查是否是今天
+                    const isToday = dateStr === today.toISOString().split('T')[0];
+                    if (isToday) {
+                        dayElement.classList.add('today');
+                    }
+                    
+                    const dayContent = document.createElement('div');
+                    dayContent.className = 'day-content';
+                    dayContent.textContent = d;
+                    
+                    // 设置打卡次数对应的颜色
+                    const count = checkinData[dateStr] || 0;
+                    dayElement.style.backgroundColor = getColorLevel(count);
+                    
+                    // 添加提示信息
+                    dayElement.title = `${dateStr} 打卡${count}次`;
+                    
+                    dayElement.appendChild(dayContent);
+                    daysContainer.appendChild(dayElement);
+                }
+                
+                monthElement.appendChild(title);
+                monthElement.appendChild(weekdayLabels);
+                monthElement.appendChild(daysContainer);
+                calendar.appendChild(monthElement);
+            }
+        }
+
+        function getColorLevel(count) {
+            if (count === 0) return 'var(--color-level0)';
+            if (count <= 3) return 'var(--color-level1)';
+            if (count <= 6) return 'var(--color-level2)';
+            if (count <= 9) return 'var(--color-level3)';
+            return 'var(--color-level4)';
+        }
+
+        function checkIn() {
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            checkinData[dateStr] = (checkinData[dateStr] || 0) + 1;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(checkinData));
+            
+            // 更新按钮文本显示打卡次数
+            const count = checkinData[dateStr];
+            document.getElementById('checkButtonText').textContent = `今日已打卡 ${count} 次`;
+            
+            generateCalendar();
+            updateStreakInfo();
+        }
+
+        document.getElementById('checkButton').addEventListener('click', checkIn);
+        generateCalendar();
+        updateStreakInfo();
+
+        // 初始化时更新按钮文本
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0];
+        const count = checkinData[dateStr] || 0;
+        document.getElementById('checkButtonText').textContent = count > 0 ? `今日已打卡 ${count} 次` : '今日打卡';
+    </script>
+</body>
+</html>
