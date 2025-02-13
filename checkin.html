@@ -511,11 +511,15 @@
                 });
                 
                 document.getElementById('checkButton').addEventListener('click', () => {
-                    const today = this.formatDate(new Date());
-                    this.checkinData[today] = (this.checkinData[today] || 0) + 1;
-                    this.saveCheckinData();
-                    this.render();
-                });
+    const today = this.formatDate(new Date());
+    if (!this.checkinData[today]) {
+        this.checkinData[today] = 1;
+        this.saveCheckinData();
+        this.render();
+    } else {
+        alert('今天已经打卡过了！');
+    }
+});
                 
                 document.getElementById('clearButton').addEventListener('click', () => {
                     this.clearData();
