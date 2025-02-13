@@ -1,125 +1,181 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>网站升级公告</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: '微软雅黑', sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-        }
-
-        .announcement {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 800px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 25px;
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #3498db, #8e44ad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient 3s ease infinite;
-        }
-
-        .icon-group {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .icon {
-            width: 60px;
-            height: 60px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .icon:hover {
-            transform: translateY(-5px);
-        }
-
-        p {
-            color: #666;
-            line-height: 1.8;
-            margin: 15px 0;
-            font-size: 1.1em;
-        }
-
-        .highlight {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        .promise {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border-left: 5px solid #3498db;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @media (max-width: 768px) {
-            .announcement {
-                padding: 25px;
-            }
-            h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>绘梨衣的项目</title>
+  <!-- 引入 anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <style>
+    /* 重置样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f0f2f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #333;
+      padding: 30px;
+    }
+    /* 顶部标题 */
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    header h1 {
+      font-size: 2.8em;
+      color: #222;
+      margin-bottom: 10px;
+      opacity: 0; /* 初始隐藏，后续通过动画显示 */
+    }
+    header p {
+      font-size: 1.1em;
+      color: #666;
+    }
+    /* 瀑布流布局容器 */
+    .container {
+      column-count: 3;
+      column-gap: 20px;
+    }
+    /* 单个项目卡片 */
+    .project {
+      position: relative;
+      margin-bottom: 20px;
+      break-inside: avoid;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .project:hover {
+      transform: translateY(-8px);
+    }
+    /* 将整个项目卡片设置为可点击 */
+    .project a {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+    /* 项目图片 */
+    .project img {
+      width: 100%;
+      display: block;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    /* 图片下方项目名称 */
+    .project-name {
+      padding: 15px;
+      font-size: 1.1em;
+      text-align: center;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+    }
+    /* 遮罩层：初始隐藏，鼠标悬停时通过 anime.js 动画显示 */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* 响应式：小屏幕时改为单列显示 */
+    @media (max-width: 768px) {
+      .container {
+        column-count: 1;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="announcement">
-        <h1>📚 技术升级公告</h1>
-        
-        <div class="icon-group">
-            <img src="https://img.icons8.com/fluency/96/000000/books.png" class="icon" alt="学习">
-            <img src="https://img.icons8.com/color/96/000000/maintenance.png" class="icon" alt="维护">
-            <img src="https://img.icons8.com/fluency/96/000000/star.png" class="icon" alt="优质内容">
+  <header>
+    <h1>绘梨衣的项目</h1>
+    <p>精选项目展示，追求极致简洁美学</p>
+  </header>
+
+  <div class="container">
+    <!-- 项目卡片 1 -->
+    <div class="project">
+      <a href="tabletomarkdown.html">
+        <img src="https://haowallpaper.com/link/common/file/previewFileImg/16251585154829696" alt="项目1">
+        <div class="overlay">
+          <p>markdown表格制作工具</p>
         </div>
-
-        <p>亲爱的访客朋友：</p>
-        <p>为了带来更优质的浏览体验，本站目前正在进行全面的<strong class="highlight">技术升级改造</strong>。</p>
-        <p>站长正在潜心钻研前沿技术，系统学习<span class="highlight">全栈开发 | 性能优化 | 交互设计</span>等专业知识。</p>
-
-        <div class="promise">
-            <p>🚀 我们将于近期带着全新面貌回归<br>
-            💎 更流畅的体验 | 更丰富的内容 | 更智能的交互<br>
-            ⏳ 精彩值得等待，期待与您再次相遇！</p>
-        </div>
-
-        <p style="margin-top: 25px; color: #888;">
-            保持关注，获取最新动态<br>
-            <small>技术成长之路，期待与您共同见证</small>
-        </p>
+        <div class="project-name">table-to-markdown</div>
+      </a>
     </div>
+    <!-- 项目卡片 2 -->
+    <div class="project">
+      <a href="checkin.html">
+        <img src="https://haowallpaper.com/link/common/file/previewFileImg/15737875401838912" alt="项目2">
+        <div class="overlay">
+          <p>打卡工具</p>
+        </div>
+        <div class="project-name">打卡</div>
+      </a>
+    </div>
+    <!-- 项目卡片 3 -->
+    <div class="project">
+      <a href="ai.html">
+        <img src="https://haowallpaper.com/link/common/file/previewFileImg/15493002280014144" alt="项目3">
+        <div class="overlay">
+          <p>ai网站集锦</p>
+        </div>
+        <div class="project-name">AiHub</div>
+      </a>
+    </div>
+    <!-- 根据需要可继续添加更多项目 -->
+    <div class="project">
+        <a href="https://t.me/sakuraCosplayrepo">
+          <img src="https://img.16k.club/mofish/2025-02-03/3c83fd162ba38ee41fae3f67a9e17f99.webp" alt="项目3">
+          <div class="overlay">
+            <p>cosplay写真仓库</p>
+          </div>
+          <div class="project-name">写真合集</div>
+        </a>
+      </div>
+  </div>
+
+  <script>
+    // 动画显示页面标题
+    anime({
+      targets: 'header h1',
+      opacity: [0, 1],
+      duration: 1000,
+      easing: 'easeOutQuad'
+    });
+    
+    // 为每个项目卡片添加鼠标悬停动画，利用 anime.js 控制 overlay 的显示和隐藏
+    document.querySelectorAll('.project').forEach(function(project) {
+      project.addEventListener('mouseenter', function() {
+        anime({
+          targets: this.querySelector('.overlay'),
+          opacity: [0, 1],
+          duration: 500,
+          easing: 'easeOutQuad'
+        });
+      });
+      project.addEventListener('mouseleave', function() {
+        anime({
+          targets: this.querySelector('.overlay'),
+          opacity: [1, 0],
+          duration: 500,
+          easing: 'easeOutQuad'
+        });
+      });
+    });
+  </script>
 </body>
 </html>
