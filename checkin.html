@@ -392,7 +392,7 @@
             }
 
             exportData() {
-                const rows = [['日期', '打卡状态']];
+                const rows = [['日期(请将该栏设为日期格式)', '打卡状态']];
                 Object.entries(this.checkinData)
                     .sort((a, b) => a[0].localeCompare(b[0]))
                     .forEach(([date, count]) => {
