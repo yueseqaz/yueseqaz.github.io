@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Navigation Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .hover-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .hover-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .hover-card {
+            background-color: #2d3748;
+            color: #cbd5e0;
+        }
+        .dark-mode .hover-card:hover {
+            box-shadow: 0 10px 15px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800" id="body">
+    <header class="bg-white shadow-md p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">AI Navigation Hub</h1>
+        <div class="flex items-center gap-4">
+            <button id="darkModeToggle" class="px-4 py-2 bg-gray-800 text-white rounded-md shadow-md">Toggle Dark Mode</button>
+            <a href="https://github.com/yueseqaz" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-800 hover:text-gray-500 dark:text-gray-200 dark:hover:text-gray-400 transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.793-.26.793-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.744.083-.729.083-.729 1.204.084 1.837 1.236 1.837 1.236 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.466-1.333-5.466-5.932 0-1.31.465-2.383 1.235-3.222-.123-.305-.535-1.532.117-3.194 0 0 1.008-.322 3.3 1.23a11.47 11.47 0 013.003-.403c1.018.005 2.045.138 3.003.403 2.292-1.552 3.3-1.23 3.3-1.23.652 1.662.24 2.889.117 3.194.77.839 1.235 1.912 1.235 3.222 0 4.61-2.803 5.624-5.473 5.922.429.37.823 1.102.823 2.222 0 1.606-.015 2.9-.015 3.293 0 .32.192.694.798.576C20.565 21.795 24 17.298 24 12 24 5.373 18.63 0 12 0z"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <main class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Example Link Card -->
+            <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">ChatGPT</h2>
+              <p class="text-sm mb-4">AI conversational assistant by OpenAI.</p>
+              <a href="https://chatgpt.com/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Claude</h2>
+              <p class="text-sm mb-4">AI-powered conversational platform by Anthropic.</p>
+              <a href="https://claude.ai" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Google Gemini</h2>
+              <p class="text-sm mb-4">Generative AI tool by Google.</p>
+              <a href="https://gemini.google.com/app" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Google AI Studio</h2>
+              <p class="text-sm mb-4">Google's platform for AI experimentation.</p>
+              <a href="https://aistudio.google.com/prompts/new_chat" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Deepseek</h2>
+              <p class="text-sm mb-4">Innovative AI-powered search engine.</p>
+              <a href="https://www.deepseek.com/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Kimi</h2>
+              <p class="text-sm mb-4">AI assistant by Moonshot.</p>
+              <a href="https://kimi.moonshot.cn/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Doubao</h2>
+              <p class="text-sm mb-4">Chinese conversational AI platform.</p>
+              <a href="https://www.doubao.com/chat/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Tongyi</h2>
+              <p class="text-sm mb-4">AI platform by Alibaba Cloud.</p>
+              <a href="https://tongyi.aliyun.com/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Zhipu</h2>
+              <p class="text-sm mb-4">Chinese conversational AI by Zhipu.</p>
+              <a href="https://chatglm.cn/?lang=zh" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Copilot</h2>
+              <p class="text-sm mb-4">AI assistant by Microsoft.</p>
+              <a href="https://copilot.microsoft.com/chats/rt9Q2WBgw6ENkp444Un5z" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Xunfei Xinghuo</h2>
+              <p class="text-sm mb-4">AI platform by iFlytek.</p>
+              <a href="https://xinghuo.xfyun.cn/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">WenXin Yiyan</h2>
+              <p class="text-sm mb-4">Baidu's conversational AI platform.</p>
+              <a href="https://yiyan.baidu.com/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Tencent AI</h2>
+              <p class="text-sm mb-4">AI assistant by Tencent.</p>
+              <a href="https://yuanbao.tencent.com/chat/naQivTmsDa" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Hailuo</h2>
+              <p class="text-sm mb-4">AI assistant platform.</p>
+              <a href="https://hailuoai.com/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Shangtang</h2>
+              <p class="text-sm mb-4">Conversational AI by SenseTime.</p>
+              <a href="https://chat.sensetime.com/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Quark AI</h2>
+              <p class="text-sm mb-4">AI platform by Quark.</p>
+              <a href="https://cueme.cn/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Grok</h2>
+              <p class="text-sm mb-4">Conversational AI by X.ai.</p>
+              <a href="https://x.ai/grok" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Hugging Face</h2>
+              <p class="text-sm mb-4">AI and NLP platform.</p>
+              <a href="https://huggingface.co/chat/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Perplexity</h2>
+              <p class="text-sm mb-4">Advanced AI-powered search engine.</p>
+              <a href="https://www.perplexity.ai/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          <div class="hover-card bg-white p-4 rounded-lg shadow-md" id="card">
+              <h2 class="text-lg font-semibold mb-2">Mita Search</h2>
+              <p class="text-sm mb-4">AI-powered search platform.</p>
+              <a href="https://metaso.cn/" target="_blank" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Visit</a>
+          </div>
+          
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-200 p-4 text-center">
+        <p>&copy; 2025 AI Navigation Hub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.getElementById('body');
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
