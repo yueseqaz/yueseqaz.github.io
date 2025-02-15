@@ -210,7 +210,7 @@
     <div class="chapter-list" id="chapterList">
         <button id="closeChapters" class="btn" style="width: 100%; margin-bottom: 10px;">收纳</button>
     </div>
-    <button class="toggle-chapters-btn" id="toggleChapters">目录（m键收纳）</button>
+    <button class="toggle-chapters-btn" id="toggleChapters">design by Sakura</button>
 
     <div class="controls-container" id="controls">
         <button class="toggle-controls" id="toggleControls">⇄</button>
@@ -222,6 +222,7 @@
             <div class="btn-group">
                 <button id="fullscreenBtn" class="btn">退出全屏</button>
                 <button id="generateChapters" class="btn red">更新目录</button>
+                <button id="collapseChapters" class="btn">收纳目录</button>
             </div>
         </div>
     </div>
@@ -230,7 +231,7 @@
         <p style="font-size: 24px; color: #555; margin-bottom: 10px;">这是一个简单的 TXT 文件阅读器</p>
         <p style="font-size: 24px; color: #555; margin-bottom: 10px;">支持全屏模式、翻页、章节目录等功能</p>
         <p style="font-size: 24px; color: #555; margin-bottom: 10px;">欢迎使用!</p>
-        <p style="font-size: 24px; color: #555; margin-bottom: 10px;">使用方法：上传TXT文件，以及图片文件，点击“更新目录”按钮即可</p>
+        <p style="font-size: 24px; color: #555; margin-bottom: 10px;">使用方法：上传TXT文件，以及图片文件，点击“更新目录”按钮即可，M键收纳目录</p>
     </div>
 
     <style>
@@ -278,7 +279,7 @@
         document.getElementById('closeChapters').addEventListener('click', function() {
             document.getElementById('chapterList').classList.remove('show');
         });
-
+        
         // 文件上传处理
         document.getElementById('fileInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
@@ -436,19 +437,25 @@
         });
 
         // 键盘快捷键
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft') {
-                document.getElementById('prevPage').click();
-            } else if (e.key === 'ArrowRight') {
-                document.getElementById('nextPage').click();
-            } else if (e.key === 'f') {
-                document.getElementById('fullscreenBtn').click();
-            } else if (e.key === 'h') {
-                document.getElementById('toggleControls').click();
-            } else if (e.key === 'm') {
-                document.getElementById('toggleChapters').click();
-            }
-        });
+        document.getElementById('collapseChapters').addEventListener('click', function() {
+        document.getElementById('chapterList').classList.toggle('show');
+    });
+
+    // 键盘快捷键
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+            document.getElementById('prevPage').click();
+        } else if (e.key === 'ArrowRight') {
+            document.getElementById('nextPage').click();
+        } else if (e.key === 'f') {
+            document.getElementById('fullscreenBtn').click();
+        } else if (e.key === 'h') {
+            document.getElementById('toggleControls').click();
+        } else if (e.key === 'm') {
+            // "m" 键收纳/展开目录
+            document.getElementById('chapterList').classList.toggle('show');
+        }
+    });
 
         // 初始化：折叠控制面板
         document.getElementById('toggleControls').click();
