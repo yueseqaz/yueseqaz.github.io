@@ -80,12 +80,18 @@
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
             max-width: 90vw;
+            width: 320px;
         }
 
         .controls-container.collapsed {
             transform: translateX(calc(100% - 40px));
+            width: auto;
+        }
+
+        .controls-container.collapsed .controls-content {
+            display: none;
         }
 
         .toggle-controls {
@@ -101,6 +107,7 @@
             border-radius: 5px 0 0 5px;
             cursor: pointer;
             font-size: 16px;
+            z-index: 1;
         }
 
         .controls-content {
@@ -110,15 +117,38 @@
             margin-left: 24px;
         }
 
-        .file-input {
-            font-size: clamp(14px, 2vw, 16px);
+        .file-input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: inline-block;
             padding: 10px;
-            background-color: #fff;
-            border: 2px solid #ddd;
+            background-color: #007aff;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
-            max-width: 300px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .file-input-label:hover {
+            background-color: #0056b3;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        .file-name {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
         }
 
         .content-container {
@@ -169,6 +199,7 @@
             transition: background-color 0.3s ease;
             min-width: 100px;
             font-size: clamp(14px, 2vw, 16px);
+            text-align: center;
         }
 
         .btn:hover {
@@ -202,10 +233,24 @@
             flex-wrap: wrap;
         }
 
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 3000;
+        }
+
         @media (max-width: 768px) {
             .controls-container {
                 top: 10px;
                 right: 10px;
+                width: calc(100% - 20px);
+                max-width: none;
             }
 
             .btn-group {
@@ -222,32 +267,31 @@
             }
         }
 
-        @media (max-width: 480px) {
-            .controls-content {
-                gap: 8px;
-            }
-
-            .pagination {
-                gap: 10px;
-            }
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(.98);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
         .welcome-text {
             font-size: clamp(18px, 3vw, 24px);
             color: #555;
             margin-bottom: 15px;
             text-align: center;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 3000;
+            animation: fadeInOut 3s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
         }
     </style>
 </head>
@@ -259,10 +303,18 @@
     <div class="controls-container" id="controls">
         <button class="toggle-controls" id="toggleControls">⇄</button>
         <div class="controls-content">
-            <label for="fileInput">TXT文件:</label>
-            <input type="file" id="fileInput" class="file-input" accept=".txt">
-            <label for="bgImageInput">背景图片:</label>
-            <input type="file" id="bgImageInput" class="file-input" accept="image/*">
+            <div class="file-input-container">
+                <label for="fileInput" class="file-input-label">选择TXT文件</label>
+                <input type="file" id="fileInput" class="file-input" accept=".txt">
+                <div id="txtFileName" class="file-name"></div>
+            </div>
+
+            <div class="file-input-container">
+                <label for="bgImageInput" class="file-input-label">选择背景图片</label>
+                <input type="file" id="bgImageInput" class="file-input" accept="image/*">
+                <div id="imageFileName" class="file-name"></div>
+            </div>
+
             <div class="btn-group">
                 <button id="fullscreenBtn" class="btn">退出全屏</button>
                 <button id="generateChapters" class="btn red">更新目录</button>
@@ -288,41 +340,71 @@
     </div>
 
     <script>
-        const linesPerPage = Math.floor(window.innerHeight / 30);
+        const linesPerPage = Math.floor((window.innerHeight - 200) / 30);
         let fileContent = '';
         let currentPage = 0;
         let fileLines = [];
         let chapters = [];
         let isFullscreen = true;
         let currentChapter = 0;
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function showLoading() {
+            const loading = document.createElement('div');
+            loading.className = 'loading';
+            loading.textContent = '加载中...';
+            loading.id = 'loadingIndicator';
+            document.body.appendChild(loading);
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loadingIndicator');
+            if (loading) loading.remove();
+        }
         
-        // 从localStorage加载上次阅读位置和背景图片
+        // 从localStorage加载状态
         function loadSavedState() {
-            const savedPage = localStorage.getItem('currentPage');
-            const savedBgImage = localStorage.getItem('backgroundImage');
-            
-            if (savedPage !== null) {
-                currentPage = parseInt(savedPage, 10);
-            }
-            
-            if (savedBgImage) {
-                document.body.style.backgroundImage = savedBgImage;
+            try {
+                const savedPage = localStorage.getItem('currentPage');
+                const savedBgImage = localStorage.getItem('backgroundImage');
+                
+                if (savedPage !== null) {
+                    currentPage = parseInt(savedPage, 10);
+                }
+                
+                if (savedBgImage) {
+                    document.body.style.backgroundImage = savedBgImage;
+                }
+            } catch (error) {
+                console.error('Error loading saved state:', error);
             }
         }
 
-        // 保存当前状态
+        // 保存状态
         function saveCurrentState() {
-            localStorage.setItem('currentPage', currentPage);
-            localStorage.setItem('backgroundImage', document.body.style.backgroundImage);
+            try {
+                localStorage.setItem('currentPage', currentPage);
+                localStorage.setItem('backgroundImage', document.body.style.backgroundImage);
+            } catch (error) {
+                console.error('Error saving state:', error);
+            }
         }
 
-        // 控制面板折叠/展开
+        // 控制面板
         document.getElementById('toggleControls').addEventListener('click', function() {
-            document.getElementById('controls').classList.toggle('collapsed');
-            this.textContent = document.getElementById('controls').classList.contains('collapsed') ? '⇢' : '⇄';
+            const controls = document.getElementById('controls');
+            controls.classList.toggle('collapsed');
+            this.textContent = controls.classList.contains('collapsed') ? '⇢' : '⇄';
         });
 
-        // 章节目录相关
+        // 章节目录
         document.getElementById('closeChapters').addEventListener('click', function() {
             document.getElementById('chapterList').classList.remove('show');
         });
@@ -334,36 +416,72 @@
         // 文件上传处理
         document.getElementById('fileInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
+            if (!file) return;
             
-            if (file && file.type === 'text/plain') {
+            if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                showLoading();
+                const fileName = document.getElementById('txtFileName');
+                fileName.textContent = file.name;
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    fileContent = e.target.result;
-                    fileLines = fileContent.split('\n');
-                    chapters = [];
-                    currentPage = 0;
-                    renderPage();
-                    updatePageInfo();
-                    document.getElementById('generateChapters').style.display = 'inline-block';
-                    saveCurrentState();
+                    try {
+                        fileContent = e.target.result;
+                        fileLines = fileContent.split('\n');
+                        chapters = [];
+                        currentPage = 0;
+                        renderPage();
+                        updatePageInfo();
+                        document.getElementById('generateChapters').style.display = 'inline-block';
+                        saveCurrentState();
+                        showNotification('文件加载成功！');
+                    } catch (error) {
+                        showNotification('文件处理出错，请重试');
+                        console.error('Error processing file:', error);
+                    }
+                    hideLoading();
                 };
+
+                reader.onerror = function() {
+                    hideLoading();
+                    showNotification('文件读取失败，请重试');
+                };
+
                 reader.readAsText(file, 'UTF-8');
             } else {
-                alert('请上传有效的TXT文件');
+                showNotification('请上传TXT文件');
             }
         });
 
-        // 背景图片上传处理
+        // 背景图片上传
+        document.getElementById('bgImageInput').addEventListener('change', function(event) {
         document.getElementById('bgImageInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
+            if (!file) return;
             
-            if (file && file.type.startsWith('image/')) {
+            if (file.type.startsWith('image/')) {
+                const fileName = document.getElementById('imageFileName');
+                fileName.textContent = file.name;
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.body.style.backgroundImage = `url(${e.target.result})`;
-                    saveCurrentState();
+                    try {
+                        document.body.style.backgroundImage = `url(${e.target.result})`;
+                        saveCurrentState();
+                        showNotification('背景图片设置成功！');
+                    } catch (error) {
+                        showNotification('图片处理出错，请重试');
+                        console.error('Error processing image:', error);
+                    }
                 };
+
+                reader.onerror = function() {
+                    showNotification('图片读取失败，请重试');
+                };
+
                 reader.readAsDataURL(file);
+            } else {
+                showNotification('请上传有效的图片文件');
             }
         });
 
@@ -372,6 +490,10 @@
             const totalPages = Math.ceil(fileLines.length / linesPerPage);
             document.getElementById('currentPageNum').textContent = currentPage + 1;
             document.getElementById('totalPages').textContent = totalPages;
+            
+            // 更新按钮状态
+            document.getElementById('prevPage').disabled = currentPage === 0;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages - 1;
         }
 
         // 全屏模式切换
@@ -392,42 +514,216 @@
 
         // 生成章节目录
         document.getElementById('generateChapters').addEventListener('click', function() {
-            chapters = [];
-            let chapterStart = 0;
-            
-            fileLines.forEach((line, index) => {
-                if (line.trim().match(/^第[零一二三四五六七八九十百千万\d]+章[^《》()]*$/)) {
-                    if (chapterStart < index) {
+            if (fileLines.length === 0) {
+                showNotification('请先上传TXT文件');
+                return;
+            }
+
+            showLoading();
+            setTimeout(() => {
+                try {
+                    chapters = [];
+                    let chapterStart = 0;
+                    
+                    fileLines.forEach((line, index) => {
+                        if (line.trim().match(/^第[零一二三四五六七八九十百千万\d]+章[^《》()]*$/)) {
+                            if (chapterStart < index) {
+                                chapters.push({
+                                    title: fileLines[chapterStart].trim(),
+                                    content: fileLines.slice(chapterStart, index).join('\n'),
+                                    startLine: chapterStart
+                                });
+                            }
+                            chapterStart = index;
+                        }
+                    });
+                    
+                    if (chapterStart < fileLines.length) {
                         chapters.push({
                             title: fileLines[chapterStart].trim(),
-                            content: fileLines.slice(chapterStart, index).join('\n'),
+                            content: fileLines.slice(chapterStart).join('\n'),
                             startLine: chapterStart
                         });
                     }
-                    chapterStart = index;
-                }
-            });
-            
-            if (chapterStart < fileLines.length) {
-                chapters.push({
-                    title: fileLines[chapterStart].trim(),
-                    content: fileLines.slice(chapterStart).join('\n'),
-                    startLine: chapterStart
-                });
-            }
 
-            renderChapterList();
-            document.getElementById('chapterList').classList.add('show');
+                    renderChapterList();
+                    document.getElementById('chapterList').classList.add('show');
+                    
+                    if (chapters.length === 0) {
+                        showNotification('未检测到章节，请检查文件格式');
+                    } else {
+                        showNotification(`已生成 ${chapters.length} 个章节`);
+                    }
+                } catch (error) {
+                    console.error('Error generating chapters:', error);
+                    showNotification('生成目录时出错，请重试');
+                }
+                hideLoading();
+            }, 100);
         });
 
         // 渲染章节目录
         function renderChapterList() {
             const chapterList = document.getElementById('chapterList');
-            chapterList.innerHTML = '<button id="closeChapters" class="btn" style="width: calc(100% - 40px); margin: 0 20px 20px 20px;">收纳</button>';
+            chapterList.innerHTML = `
+                <button id="closeChapters" class="btn" style="width: calc(100% - 40px); margin: 0 20px 20px 20px;">收纳</button>
+                <div style="padding: 0 20px; margin-bottom: 10px;">
+                    <h2>目录 (${chapters.length}章)</h2>
+                </div>
+            `;
             
             chapters.forEach((chapter, index) => {
                 const chapterDiv = document.createElement('div');
                 chapterDiv.className = 'chapter-item';
                 chapterDiv.textContent = chapter.title;
                 chapterDiv.addEventListener('click', () => {
-                    currentPage = Math.floor(chapter.startLine / lines</antArtifact>
+                    currentPage = Math.floor(chapter.startLine / linesPerPage);
+                    renderPage();
+                    updateActiveChapter(index);
+                    document.getElementById('chapterList').classList.remove('show');
+                });
+                chapterList.appendChild(chapterDiv);
+            });
+
+            // 重新绑定收纳按钮事件
+            document.getElementById('closeChapters').addEventListener('click', function() {
+                document.getElementById('chapterList').classList.remove('show');
+            });
+        }
+
+        // 更新当前章节高亮
+        function updateActiveChapter(index) {
+            const items = document.querySelectorAll('.chapter-item');
+            items.forEach(item => item.classList.remove('active'));
+            if (items[index]) {
+                items[index].classList.add('active');
+                items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // 渲染页面内容
+        function renderPage() {
+            if (fileLines.length === 0) return;
+
+            const startLine = currentPage * linesPerPage;
+            const endLine = Math.min(startLine + linesPerPage, fileLines.length);
+            const pageLines = fileLines.slice(startLine, endLine);
+            
+            const contentContainer = document.getElementById('fileContent');
+            contentContainer.textContent = pageLines.join('\n');
+            contentContainer.scrollTop = 0;
+            
+            updatePageInfo();
+            saveCurrentState();
+
+            // 更新当前章节
+            if (chapters.length > 0) {
+                const currentLine = startLine;
+                const currentChapterIndex = chapters.findIndex((chapter, index) => {
+                    const nextChapter = chapters[index + 1];
+                    return chapter.startLine <= currentLine && 
+                           (!nextChapter || nextChapter.startLine > currentLine);
+                });
+                if (currentChapterIndex !== -1) {
+                    updateActiveChapter(currentChapterIndex);
+                }
+            }
+        }
+
+        // 翻页处理
+        document.getElementById('prevPage').addEventListener('click', function() {
+            if (currentPage > 0) {
+                currentPage--;
+                renderPage();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function() {
+            if ((currentPage + 1) * linesPerPage < fileLines.length) {
+                currentPage++;
+                renderPage();
+            }
+        });
+
+        // 键盘事件处理
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return; // 忽略输入框中的键盘事件
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    document.getElementById('prevPage').click();
+                    break;
+                case 'ArrowRight':
+                    document.getElementById('nextPage').click();
+                    break;
+                case 'f':
+                case 'F':
+                    document.getElementById('fullscreenBtn').click();
+                    break;
+                case 'h':
+                case 'H':
+                    document.getElementById('toggleControls').click();
+                    break;
+                case 'm':
+                case 'M':
+                    document.getElementById('chapterList').classList.toggle('show');
+                    break;
+            }
+        });
+
+        // 触摸事件处理
+        let touchStartX = null;
+        let touchStartY = null;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, false);
+
+        document.addEventListener('touchmove', function(e) {
+            if (!touchStartX || !touchStartY) return;
+
+            const touchEndX = e.touches[0].clientX;
+            const touchEndY = e.touches[0].clientY;
+            
+            const xDiff = touchStartX - touchEndX;
+            const yDiff = touchStartY - touchEndY;
+
+            // 确保横向滑动大于纵向滑动
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (Math.abs(xDiff) > 50) { // 添加最小滑动距离阈值
+                    if (xDiff > 0) {
+                        // 向左滑动
+                        document.getElementById('nextPage').click();
+                    } else {
+                        // 向右滑动
+                        document.getElementById('prevPage').click();
+                    }
+                    touchStartX = null;
+                    touchStartY = null;
+                }
+            }
+        }, false);
+
+        document.addEventListener('touchend', function() {
+            touchStartX = null;
+            touchStartY = null;
+        }, false);
+
+        // 窗口大小改变时更新每页行数
+        window.addEventListener('resize', function() {
+            const oldLinesPerPage = linesPerPage;
+            linesPerPage = Math.floor((window.innerHeight - 200) / 30);
+            
+            if (oldLinesPerPage !== linesPerPage && fileLines.length > 0) {
+                currentPage = Math.floor((currentPage * oldLinesPerPage) / linesPerPage);
+                renderPage();
+            }
+        });
+
+        // 初始化
+        loadSavedState();
+        document.getElementById('toggleControls').click(); // 默认折叠控制面板
+    </script>
+</body>
+</html>
