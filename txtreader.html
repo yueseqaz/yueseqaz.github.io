@@ -337,8 +337,6 @@
             第 <span id="currentPageNum">0</span> / <span id="totalPages">0</span> 页
         </div>
         <button id="nextPage" class="btn" disabled>下一页</button>
-    </div>
-
     <script>
         const linesPerPage = Math.floor((window.innerHeight - 200) / 30);
         let fileContent = '';
@@ -564,4 +562,165 @@
         // 渲染章节目录
         function renderChapterList() {
             const chapterList = document.getElementById('chapterList');
-            chapterList.innerHTML
+            chapterList.innerHTML = `
+                <button id="closeChapters" class="btn" style="width: calc(100% - 40px); margin: 0 20px 20px 20px;">收纳</button>
+                <div style="padding: 0 20px; margin-bottom: 10px;">
+                    <h2>目录 (${chapters.length}章)</h2>
+                </div>
+            `;
+            
+            chapters.forEach((chapter, index) => {
+                const chapterDiv = document.createElement('div');
+                chapterDiv.className = 'chapter-item';
+                chapterDiv.textContent = chapter.title;
+                chapterDiv.addEventListener('click', () => {
+                    currentPage = Math.floor(chapter.startLine / linesPerPage);
+                    renderPage();
+                    updateActiveChapter(index);
+                    document.getElementById('chapterList').classList.remove('show');
+                });
+                chapterList.appendChild(chapterDiv);
+            });
+
+            // 重新绑定收纳按钮事件
+            document.getElementById('closeChapters').addEventListener('click', function() {
+                document.getElementById('chapterList').classList.remove('show');
+            });
+        }
+
+        // 更新当前章节高亮
+        function updateActiveChapter(index) {
+            const items = document.querySelectorAll('.chapter-item');
+            items.forEach(item => item.classList.remove('active'));
+            if (items[index]) {
+                items[index].classList.add('active');
+                items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // 渲染页面内容
+        function renderPage() {
+            if (fileLines.length === 0) return;
+
+            const startLine = currentPage * linesPerPage;
+            const endLine = Math.min(startLine + linesPerPage, fileLines.length);
+            const pageLines = fileLines.slice(startLine, endLine);
+            
+            const contentContainer = document.getElementById('fileContent');
+            contentContainer.textContent = pageLines.join('\n');
+            contentContainer.scrollTop = 0;
+            
+            updatePageInfo();
+            saveCurrentState();
+
+            // 更新当前章节
+            if (chapters.length > 0) {
+                const currentLine = startLine;
+                const currentChapterIndex = chapters.findIndex((chapter, index) => {
+                    const nextChapter = chapters[index + 1];
+                    return chapter.startLine <= currentLine && 
+                           (!nextChapter || nextChapter.startLine > currentLine);
+                });
+                if (currentChapterIndex !== -1) {
+                    updateActiveChapter(currentChapterIndex);
+                }
+            }
+        }
+
+        // 翻页处理
+        document.getElementById('prevPage').addEventListener('click', function() {
+            if (currentPage > 0) {
+                currentPage--;
+                renderPage();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function() {
+            if ((currentPage + 1) * linesPerPage < fileLines.length) {
+                currentPage++;
+                renderPage();
+            }
+        });
+
+        // 键盘事件处理
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return; // 忽略输入框中的键盘事件
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    document.getElementById('prevPage').click();
+                    break;
+                case 'ArrowRight':
+                    document.getElementById('nextPage').click();
+                    break;
+                case 'f':
+                case 'F':
+                    document.getElementById('fullscreenBtn').click();
+                    break;
+                case 'h':
+                case 'H':
+                    document.getElementById('toggleControls').click();
+                    break;
+                case 'm':
+                case 'M':
+                    document.getElementById('chapterList').classList.toggle('show');
+                    break;
+            }
+        });
+
+        // 触摸事件处理
+        let touchStartX = null;
+        let touchStartY = null;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, false);
+
+        document.addEventListener('touchmove', function(e) {
+            if (!touchStartX || !touchStartY) return;
+
+            const touchEndX = e.touches[0].clientX;
+            const touchEndY = e.touches[0].clientY;
+            
+            const xDiff = touchStartX - touchEndX;
+            const yDiff = touchStartY - touchEndY;
+
+            // 确保横向滑动大于纵向滑动
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                if (Math.abs(xDiff) > 50) { // 添加最小滑动距离阈值
+                    if (xDiff > 0) {
+                        // 向左滑动
+                        document.getElementById('nextPage').click();
+                    } else {
+                        // 向右滑动
+                        document.getElementById('prevPage').click();
+                    }
+                    touchStartX = null;
+                    touchStartY = null;
+                }
+            }
+        }, false);
+
+        document.addEventListener('touchend', function() {
+            touchStartX = null;
+            touchStartY = null;
+        }, false);
+
+        // 窗口大小改变时更新每页行数
+        window.addEventListener('resize', function() {
+            const oldLinesPerPage = linesPerPage;
+            linesPerPage = Math.floor((window.innerHeight - 200) / 30);
+            
+            if (oldLinesPerPage !== linesPerPage && fileLines.length > 0) {
+                currentPage = Math.floor((currentPage * oldLinesPerPage) / linesPerPage);
+                renderPage();
+            }
+        });
+
+        // 初始化
+        loadSavedState();
+        document.getElementById('toggleControls').click(); // 默认折叠控制面板
+    </script>
+</body>
+</html>
