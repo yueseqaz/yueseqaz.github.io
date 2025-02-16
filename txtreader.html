@@ -498,6 +498,26 @@ function handleTouchMove(evt) {
     xDown = null;
     yDown = null;
 }
+// Save the current page in localStorage
+function saveCurrentPage() {
+    localStorage.setItem('currentPage', currentPage);
+}
+
+// Load the current page from localStorage
+function loadCurrentPage() {
+    const savedPage = localStorage.getItem('currentPage');
+    if (savedPage !== null) {
+        currentPage = parseInt(savedPage, 10);
+        renderPage();
+    }
+}
+
+// Call saveCurrentPage when page changes
+document.getElementById('prevPage').addEventListener('click', saveCurrentPage);
+document.getElementById('nextPage').addEventListener('click', saveCurrentPage);
+
+// Load the saved page on load
+window.addEventListener('load', loadCurrentPage);
     </script>
 </body>
 </html>
