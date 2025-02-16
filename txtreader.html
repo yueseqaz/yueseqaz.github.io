@@ -398,28 +398,32 @@
 
         // 渲染页面内容
         function renderPage() {
-            const startLine = currentPage * linesPerPage;
-            const endLine = startLine + linesPerPage;
-            const pageLines = fileLines.slice(startLine, endLine);
-            
-            document.getElementById('fileContent').textContent = pageLines.join('\n');
-            document.getElementById('prevPage').disabled = currentPage === 0;
-            document.getElementById('nextPage').disabled = currentPage * linesPerPage >= fileLines.length;
-            updatePageInfo();
+    const startLine = currentPage * linesPerPage;
+    const endLine = startLine + linesPerPage;
+    const pageLines = fileLines.slice(startLine, endLine);
+    
+    const contentContainer = document.getElementById('fileContent');
+    contentContainer.textContent = pageLines.join('\n');
+    document.getElementById('prevPage').disabled = currentPage === 0;
+    document.getElementById('nextPage').disabled = currentPage * linesPerPage >= fileLines.length;
+    updatePageInfo();
 
-            // 更新当前章节
-            if (chapters.length > 0) {
-                const currentLine = startLine;
-                const currentChapterIndex = chapters.findIndex((chapter, index) => {
-                    const nextChapter = chapters[index + 1];
-                    return chapter.startLine <= currentLine && 
-                           (!nextChapter || nextChapter.startLine > currentLine);
-                });
-                if (currentChapterIndex !== -1) {
-                    updateActiveChapter(currentChapterIndex);
-                }
-            }
+    // Scroll to the top of the content container
+    contentContainer.scrollTop = 0;
+
+    // Update current chapter
+    if (chapters.length > 0) {
+        const currentLine = startLine;
+        const currentChapterIndex = chapters.findIndex((chapter, index) => {
+            const nextChapter = chapters[index + 1];
+            return chapter.startLine <= currentLine && 
+                   (!nextChapter || nextChapter.startLine > currentLine);
+        });
+        if (currentChapterIndex !== -1) {
+            updateActiveChapter(currentChapterIndex);
         }
+    }
+}
 
         // 翻页处理
         document.getElementById('prevPage').addEventListener('click', function() {
