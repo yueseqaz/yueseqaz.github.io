@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>图片瀑布流展示</title>
+  <!-- 引入 anime.js 动画库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <style>
+    /* 全局基础样式 */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    /* 更大、更居中的上传区域 */
+    .upload-container {
+      background: linear-gradient(135deg, #007aff, #00d1ff);
+      padding: 60px 30px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 60px auto;
+      border-radius: 10px;
+      max-width: 800px;
+      color: #fff;
+      transition: opacity 0.3s ease;
+    }
+
+    .upload-label {
+      display: inline-block;
+      padding: 16px 36px;
+      background-color: rgba(255, 255, 255, 0.3);
+      border: 2px solid #fff;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      margin: 0 8px;
+    }
+    .upload-label:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .upload-instructions {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #f0f0f0;
+    }
+
+    /* 隐藏原生文件输入 */
+    .hidden-input {
+      display: none;
+    }
+
+    /* 瀑布流容器 */
+    .gallery {
+      column-count: 3;
+      column-gap: 15px;
+      padding: 0 20px;
+    }
+
+    /* 单个图片项 */
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 15px;
+      overflow: hidden;
+      border-radius: 10px;
+      position: relative;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    /* 全屏预览覆盖层 */
+    .fullscreen-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+    }
+    .fullscreen-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    /* 上传完成后的网页内弹窗（模态框） */
+    .popup-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+    }
+    .popup-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 40px 30px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .popup-content h2 {
+      margin: 0 0 20px;
+      font-size: 24px;
+      color: #333;
+    }
+    .popup-content p {
+      margin: 0 0 30px;
+      font-size: 16px;
+      color: #666;
+    }
+    .popup-content button {
+      padding: 10px 20px;
+      background-color: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    .popup-content button:hover {
+      background-color: #005bb5;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .gallery {
+        column-count: 2;
+      }
+      .upload-container {
+        max-width: 90%;
+      }
+    }
+    @media (max-width: 480px) {
+      .gallery {
+        column-count: 1;
+      }
+      .upload-label {
+        font-size: 16px;
+        padding: 14px 24px;
+      }
+      .upload-instructions {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 上传区域 -->
+  <div class="upload-container" id="upload-container">
+    <div>
+      <label for="image-upload-files" class="upload-label">选择图片文件上传</label>
+      <label for="image-upload-folder" class="upload-label">选择图片文件夹上传</label>
+    </div>
+    <p class="upload-instructions">
+      点击上方按钮选择单个图片文件或者整个图片文件夹上传。上传完成后，点击任意图片即可全屏预览。
+    </p>
+    <!-- 用于上传单个或多张图片文件 -->
+    <input type="file" id="image-upload-files" accept="image/*" multiple class="hidden-input" />
+    <!-- 用于上传整个文件夹（部分浏览器支持） -->
+    <input type="file" id="image-upload-folder" accept="image/*" multiple webkitdirectory class="hidden-input" />
+  </div>
+
+  <!-- 瀑布流展示区域 -->
+  <div id="gallery" class="gallery"></div>
+
+  <!-- 全屏预览覆盖层 -->
+  <div id="fullscreen-overlay" class="fullscreen-overlay"></div>
+
+  <!-- 上传后弹出的模态框 -->
+  <div id="popup-modal" class="popup-modal">
+    <div class="popup-content">
+      <h2>上传成功</h2>
+      <p id="modal-message">共上传了 0 张图片</p>
+      <button id="close-modal">我知道了</button>
+    </div>
+  </div>
+
+  <script>
+    const gallery = document.getElementById("gallery");
+    const overlay = document.getElementById("fullscreen-overlay");
+    const uploadContainer = document.getElementById("upload-container");
+
+    // 模态框相关
+    const popupModal = document.getElementById("popup-modal");
+    const modalMessage = document.getElementById("modal-message");
+    const closeModalBtn = document.getElementById("close-modal");
+
+    // 获取两个文件输入控件
+    const imageInputFiles = document.getElementById("image-upload-files");
+    const imageInputFolder = document.getElementById("image-upload-folder");
+
+    // 打开全屏预览
+    function openFullscreen(src) {
+      overlay.innerHTML = ""; // 清空之前内容
+      const fullImg = document.createElement("img");
+      fullImg.src = src;
+      overlay.appendChild(fullImg);
+      overlay.style.display = "flex";
+      anime({
+        targets: overlay,
+        opacity: [0, 1],
+        duration: 300,
+        easing: "easeOutQuad",
+      });
+    }
+
+    // 关闭全屏预览
+    function closeFullscreen() {
+      anime({
+        targets: overlay,
+        opacity: [1, 0],
+        duration: 300,
+        easing: "easeOutQuad",
+        complete: () => {
+          overlay.style.display = "none";
+        },
+      });
+    }
+
+    // 点击覆盖层或按 Esc 键退出全屏预览
+    overlay.addEventListener("click", closeFullscreen);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.style.display === "flex") {
+        closeFullscreen();
+      }
+    });
+
+    // 通用的文件处理函数
+    function processFiles(files) {
+      if (!files || files.length === 0) return;
+      gallery.innerHTML = ""; // 清空原有图片
+
+      let count = 0; // 统计成功上传的图片数量
+
+      Array.from(files).forEach((file) => {
+        // 仅处理图片文件
+        if (!file.type.startsWith("image/")) return;
+        count++;
+
+        // 使用 URL.createObjectURL 加快加载速度
+        const imageUrl = URL.createObjectURL(file);
+        const div = document.createElement("div");
+        div.classList.add("gallery-item");
+
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.loading = "lazy";
+
+        div.appendChild(img);
+        gallery.appendChild(div);
+
+        // 点击图片进入全屏预览
+        div.addEventListener("click", () => openFullscreen(imageUrl));
+
+        // 图片项淡入动画
+        anime({
+          targets: div,
+          opacity: [0, 1],
+          translateY: [20, 0],
+          easing: "easeOutQuad",
+          duration: 500,
+        });
+      });
+
+      // 隐藏上传区域
+      anime({
+        targets: uploadContainer,
+        opacity: [1, 0],
+        duration: 500,
+        easing: "easeOutQuad",
+        complete: () => {
+          uploadContainer.style.display = "none";
+
+          // 显示上传完成提示弹窗
+          if (count > 0) {
+            modalMessage.textContent = `共上传了 ${count} 张图片`;
+            popupModal.style.display = "flex";
+            anime({
+              targets: popupModal,
+              opacity: [0, 1],
+              duration: 300,
+              easing: "easeOutQuad",
+            });
+          }
+        },
+      });
+    }
+
+    // 为两个输入控件监听 change 事件
+    imageInputFiles.addEventListener("change", (e) => {
+      processFiles(e.target.files);
+    });
+    imageInputFolder.addEventListener("change", (e) => {
+      processFiles(e.target.files);
+    });
+
+    // 关闭弹窗
+    closeModalBtn.addEventListener("click", () => {
+      anime({
+        targets: popupModal,
+        opacity: [1, 0],
+        duration: 300,
+        easing: "easeOutQuad",
+        complete: () => {
+          popupModal.style.display = "none";
+        },
+      });
+    });
+  </script>
+</body>
+</html>
