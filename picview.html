@@ -1,447 +1,132 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+###  效果图：
+`<!DOCTYPE html>
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>写真分享 - 绘梨衣</title>
-    <style>
-        :root {
-            --primary-color: #f08080; /* 柔和的粉红色 */
-            --secondary-color: #db7093; /* 古典玫瑰红 */
-            --accent-color: #ff69b4; /* 热粉红 */
-            --text-color: #2b2d42;
-            --light-text: #8d99ae;
-            --bg-color: #ffffff;
-            --light-bg: #fef5f7; /* 淡粉色背景 */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Slider</title>
+  <script src="https://cdn.jsdelivr.net/npm/siema@1.5.1/dist/siema.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            line-height: 1.6;
-        }
+    h1 {
+      font-size: 2rem;
+      color: #4a90e2;
+      margin-bottom: 1rem;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .slider-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 2rem auto;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-        /* Header Styles */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
+    .siema img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
-        .header-content {
-            padding: 2rem 0;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
+    .hint {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #4a90e2;
+      opacity: 0.7;
+    }
+    .vertical-section {
+      margin-top: 2rem;
+    }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+    .vertical-section button {
+      background: #e94e77;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
 
-        header p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
-        }
+    .vertical-section button:hover {
+      background: #d63763;
+      transform: translateY(-2px);
+    }
 
-        /* Navigation Styles */
-        nav {
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    .vertical-section button:active {
+      transform: translateY(0);
+    }
+    @media (max-width: 768px) {
+      .slider-container {
+        max-width: 100%;
+      }
 
-        nav ul {
-            list-style-type: none;
-            display: flex;
-            justify-content: center;
-        }
+      button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
 
-        nav ul li a {
-            display: block;
-            color: var(--text-color);
-            text-align: center;
-            padding: 1.2rem 1.5rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-        }
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
 
-        nav ul li a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Language Switcher */
-        .language-switcher {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            z-index: 1001;
-            display: flex;
-            gap: 10px;
-        }
-
-        .language-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .language-btn:hover, .language-btn.active {
-            background: white;
-            color: var(--primary-color);
-        }
-
-        /* Main Content Styles */
-        main {
-            padding: 2rem 0;
-        }
-
-        section {
-            margin-bottom: 2rem;
-            padding: 2rem;
-            border-radius: 10px;
-            background-color: var(--light-bg);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        section h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-            position: relative;
-            display: inline-block;
-        }
-
-        section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-        }
-
-        section p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-        }
-
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .photo-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .photo-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .photo-img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            background-color: var(--light-bg);
-        }
-
-        .photo-content {
-            padding: 1.5rem;
-        }
-
-        .photo-content h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: var(--primary-color);
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Footer Styles */
-        footer {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 3rem 0;
-            text-align: center;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .social-icon i {
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .social-icon:hover i {
-            color: var(--accent-color);
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-            }
-
-            .language-switcher {
-                position: relative;
-                top: 0;
-                right: 0;
-                justify-content: center;
-                margin-bottom: 10px;
-            }
-
-            header h1 {
-                font-size: 2rem;
-            }
-
-            section h2 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+      h1 {
+        font-size: 1.5rem;
+      }
+      .hint {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="language-switcher">
-            <button class="language-btn active" onclick="changeLanguage('zh')">中文</button>
-            <button class="language-btn" onclick="changeLanguage('en')">English</button>
-        </div>
-        <div class="header-content">
-            <h1 class="zh">写真分享</h1>
-            <h1 class="en" style="display:none;">Photo Sharing</h1>
-            <p class="zh">提供高质量的写真分享服务，精选各类写真内容，满足您对优质视觉资源的需求</p>
-            <p class="en" style="display:none;">Providing high-quality photo sharing services, carefully selected photo content to meet your needs for premium visual resources</p>
-        </div>
-    </header>
+  <h1>Sakura's JK Collection </h1>
+  <div class="hint">
+    <p>Swiping the picture to switch</p>
+  </div>
+  <div class="slider-container">
+    <div class="siema">
+      <img src="https://hv.z.wiki/autoupload/20241223/EWiF/5840X3893/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%88%B6%E6%9C%8D-%E5%B0%91%E5%A5%B3.png" alt="I">
+      <img src="https://hv.z.wiki/autoupload/20241223/EWiF/5840X3893/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%88%B6%E6%9C%8D-%E5%B0%91%E5%A5%B3.png" alt="l">
+         <img src="https://cdn.10086.click/show/2024-12-26/4e317ede-b55c-4d11-a4a6-5799e10eea10.jpg" alt="i">
+      <img src="https://cdn.10086.click/show/2024-12-26/346492a0-c6f1-4052-be62-250fe96f08fe.jpg" alt="k">
+      <img src="https://cdn.10086.click/show/2024-12-26/835505e5-e3f1-4503-8f68-ec740fe8a432.jpg" alt="e">
+      <img src="https://cdn.10086.click/show/2024-12-26/a97a559e-c5d2-404a-9273-11bbb453bf6c.jpg" alt="H">
+    </div>
+  </div>
+  <div class="vertical-section">
+    <button onclick="window.location.href='https://t.me/sakurarepo';">See more</button>
+  </div>
 
-    <nav>
-        <ul>
-            <li><a href="index.html" class="zh">返回首页</a><a href="index.html" class="en" style="display:none;">Back to Home</a></li>
-            <li><a href="#gallery" class="zh">写真欣赏</a><a href="#gallery" class="en" style="display:none;">Photo Gallery</a></li>
-            <li><a href="#features" class="zh">服务特色</a><a href="#features" class="en" style="display:none;">Features</a></li>
-            <li><a href="#contact" class="zh">联系我们</a><a href="#contact" class="en" style="display:none;">Contact Us</a></li>
-        </ul>
-    </nav>
-
-    <main>
-        <div class="container">
-            <section id="gallery">
-                <h2 class="zh">写真欣赏</h2>
-                <h2 class="en" style="display:none;">Photo Gallery</h2>
-                <p class="zh">我们精选了各类高质量写真内容，涵盖自然风光、人物摄影、艺术创作等多种类别，为您带来视觉盛宴。</p>
-                <p class="en" style="display:none;">We have curated a variety of high-quality photo content, including natural landscapes, portrait photography, and artistic creations, bringing you a visual feast.</p>
-                <div class="photo-grid">
-                    <div class="photo-card">
-                        <img src="https://via.placeholder.com/300x250" alt="Photo 1" class="photo-img">
-                        <div class="photo-content">
-                            <h3 class="zh">自然风光</h3>
-                            <h3 class="en" style="display:none;">Natural Landscape</h3>
-                            <p class="zh">捕捉大自然的美丽瞬间。</p>
-                            <p class="en" style="display:none;">Capturing the beautiful moments of nature.</p>
-                            <a href="#" class="btn zh">查看更多</a>
-                            <a href="#" class="btn en" style="display:none;">View More</a>
-                        </div>
-                    </div>
-                    <div class="photo-card">
-                        <img src="https://via.placeholder.com/300x250" alt="Photo 2" class="photo-img">
-                        <div class="photo-content">
-                            <h3 class="zh">人物写真</h3>
-                            <h3 class="en" style="display:none;">Portrait Photography</h3>
-                            <p class="zh">展现人物的独特魅力。</p>
-                            <p class="en" style="display:none;">Showcasing the unique charm of individuals.</p>
-                            <a href="#" class="btn zh">查看更多</a>
-                            <a href="#" class="btn en" style="display:none;">View More</a>
-                        </div>
-                    </div>
-                    <div class="photo-card">
-                        <img src="https://via.placeholder.com/300x250" alt="Photo 3" class="photo-img">
-                        <div class="photo-content">
-                            <h3 class="zh">艺术创作</h3>
-                            <h3 class="en" style="display:none;">Artistic Creations</h3>
-                            <p class="zh">创意与美学的完美结合。</p>
-                            <p class="en" style="display:none;">A perfect blend of creativity and aesthetics.</p>
-                            <a href="#" class="btn zh">查看更多</a>
-                            <a href="#" class="btn en" style="display:none;">View More</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="features">
-                <h2 class="zh">服务特色</h2>
-                <h2 class="en" style="display:none;">Our Features</h2>
-                <p class="zh">我们的写真分享服务不仅提供高质量内容，还注重用户体验与个性化需求。</p>
-                <p class="en" style="display:none;">Our photo sharing service not only provides high-quality content but also focuses on user experience and personalized needs.</p>
-                <div class="photo-grid">
-                    <div class="photo-card">
-                        <div class="photo-content">
-                            <h3 class="zh">精选内容</h3>
-                            <h3 class="en" style="display:none;">Curated Content</h3>
-                            <p class="zh">每张写真都经过专业筛选，确保品质卓越。</p>
-                            <p class="en" style="display:none;">Every photo is professionally selected to ensure outstanding quality.</p>
-                        </div>
-                    </div>
-                    <div class="photo-card">
-                        <div class="photo-content">
-                            <h3 class="zh">多样化选择</h3>
-                            <h3 class="en" style="display:none;">Diverse Selection</h3>
-                            <p class="zh">涵盖多种风格与主题，满足不同喜好。</p>
-                            <p class="en" style="display:none;">Covering various styles and themes to suit different preferences.</p>
-                        </div>
-                    </div>
-                    <div class="photo-card">
-                        <div class="photo-content">
-                            <h3 class="zh">定制服务</h3>
-                            <h3 class="en" style="display:none;">Custom Services</h3>
-                            <p class="zh">根据需求提供专属写真定制。</p>
-                            <p class="en" style="display:none;">Offering exclusive photo customization based on your needs.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="contact">
-                <h2 class="zh">联系我们</h2>
-                <h2 class="en" style="display:none;">Contact Us</h2>
-                <p class="zh">如果您对我们的写真分享服务有任何疑问或定制需求，请随时联系我们。</p>
-                <p class="en" style="display:none;">If you have any questions or customization needs regarding our photo sharing service, feel free to contact us.</p>
-                <p class="zh">邮箱：<a href="mailto:yuese2668@gmail.com" style="color: var(--secondary-color);">yuese2668@gmail.com</a></p>
-                <p class="en" style="display:none;">Email: <a href="mailto:yuese2668@gmail.com" style="color: var(--secondary-color);">yuese2668@gmail.com</a></p>
-            </section>
-        </div>
-    </main>
-
-    <footer>
-        <div class="container">
-            <h2 class="zh">绘梨衣</h2>
-            <h2 class="en" style="display:none;">Sakura</h2>
-            <p class="zh">© 2025 绘梨衣. All Rights Reserved.</p>
-            <p class="en" style="display:none;">© 2025 Sakura. All Rights Reserved.</p>
-            <div class="social-icons">
-                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-telegram-plane"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <script>
-        // 语言切换功能
-        function changeLanguage(lang) {
-            const zhElements = document.querySelectorAll('.zh');
-            const enElements = document.querySelectorAll('.en');
-            const zhBtn = document.querySelector('.language-btn:first-child');
-            const enBtn = document.querySelector('.language-btn:last-child');
-
-            if (lang === 'zh') {
-                zhElements.forEach(el => el.style.display = 'block');
-                enElements.forEach(el => el.style.display = 'none');
-                zhBtn.classList.add('active');
-                enBtn.classList.remove('active');
-            } else {
-                zhElements.forEach(el => el.style.display = 'none');
-                enElements.forEach(el => el.style.display = 'block');
-                zhBtn.classList.remove('active');
-                enBtn.classList.add('active');
-            }
-        }
-
-        // 动画效果
-        gsap.from("header", { duration: 1.2, y: -100, opacity: 0, ease: "power3.out" });
-        gsap.from("nav", { duration: 1, y: -50, opacity: 0, ease: "power2.out", delay: 0.8 });
-
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.utils.toArray("section").forEach((section, i) => {
-            gsap.from(section, {
-                scrollTrigger: {
-                    trigger: section,
-                    start: "top 80%",
-                    toggleActions: "play none none none"
-                },
-                duration: 1,
-                y: 50,
-                opacity: 0,
-                ease: "power2.out"
-            });
-        });
-
-        gsap.utils.toArray(".photo-card").forEach((card, i) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                duration: 0.8,
-                y: 30,
-                opacity: 0,
-                delay: i * 0.2,
-                ease: "power2.out"
-            });
-        });
-    </script>
+  <script>
+    const mySiema = new Siema({
+      duration: 200,
+      easing: 'ease-out',
+      perPage: 1,
+      startIndex: 0,
+      draggable: true,
+      threshold: 20,
+      loop: true,
+    });
+  </script>
 </body>
-</html>
+</html>`
