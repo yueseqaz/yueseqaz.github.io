@@ -13,12 +13,12 @@
     <audio id="audioPlayer" controls style="display: none;"></audio>
     <a id="downloadLink" style="display: none;">下载音频</a>
 
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6"></script>
-    <script>
-        async function convertToAudio() {
-            const { createFFmpeg, fetchFile } = FFmpeg;
-            const ffmpeg = createFFmpeg({ log: true });
+    <script type="module">
+        import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/+esm';
 
+        const ffmpeg = createFFmpeg({ log: true });
+
+        async function convertToAudio() {
             let fileInput = document.getElementById("videoInput");
             let statusText = document.getElementById("status");
             let audioPlayer = document.getElementById("audioPlayer");
@@ -32,6 +32,7 @@
             let file = fileInput.files[0];
             statusText.innerText = "加载 ffmpeg.js ...";
 
+            // 加载 FFmpeg，如果已加载则跳过
             if (!ffmpeg.isLoaded()) {
                 await ffmpeg.load();
             }
