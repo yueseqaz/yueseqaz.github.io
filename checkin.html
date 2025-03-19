@@ -1,555 +1,71 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="每日打卡日历 - 追踪您的日常打卡记录">
-    <meta name="theme-color" content="#2ea44f">
-    <title>每日打卡日历</title>
-    <style>
-        :root {
-            --primary-color: #2ea44f;
-            --primary-hover: #2c974b;
-            --background-color: #f9fafb;
-            --text-color: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: #d1d5db;
-            --color-level0: #ebedf0;
-            --color-level1: #9be9a8;
-            --color-level2: #40c463;
-            --color-level3: #30a14e;
-            --color-level4: #216e39;
-            --border-radius: 6px;
-            --transition-speed: 0.2s;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background-color: #1a1a1a;
-                --text-color: #e5e5e5;
-                --text-secondary: #a0a0a0;
-                --border-color: #404040;
-                --color-level0: #2d333b;
-            }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            transition: background-color var(--transition-speed);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .streak-info {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            transition: color var(--transition-speed);
-        }
-
-        .month-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            gap: 1rem;
-        }
-
-        .nav-button {
-            padding: 8px 16px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            color: var(--text-color);
-            transition: all var(--transition-speed);
-            min-width: 100px;
-        }
-
-        .nav-button:hover {
-            background: var(--border-color);
-        }
-
-        .current-month {
-            font-size: 1.2rem;
-            font-weight: 600;
-            flex-grow: 1;
-            text-align: center;
-        }
-
-        .calendar {
-            background: var(--background-color);
-            padding: 16px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all var(--transition-speed);
-        }
-
-        .weekday-labels {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            margin-bottom: 8px;
-        }
-
-        .weekday-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            text-align: center;
-            padding: 8px 0;
-        }
-
-        .days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-
-        .day {
-            position: relative;
-            width: 100%;
-            padding-top: 100%;
-            background-color: var(--color-level0);
-            border-radius: 3px;
-            cursor: pointer;
-            transition: transform var(--transition-speed);
-        }
-
-        .day:hover {
-            transform: scale(1.05);
-        }
-
-        .day-content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            user-select: none;
-        }
-
-        .holiday {
-            color: #ef4444;
-        }
-
-        .day.today {
-            border: 2px solid var(--primary-color);
-        }
-
-        .check-button {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 20px auto;
-            padding: 12px 32px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all var(--transition-speed);
-        }
-
-        .check-button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .check-button:active {
-            transform: translateY(1px);
-        }
-
-        .check-count {
-            font-size: 0.75rem;
-            margin-top: 4px;
-            color: var(--text-secondary);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px auto;
-            max-width: 600px;
-        }
-
-        .secondary-button {
-            padding: 12px 24px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            color: var(--text-color);
-            transition: all var(--transition-speed);
-            flex: 1;
-        }
-
-        .secondary-button:hover {
-            background: var(--border-color);
-        }
-
-        .danger-button {
-            background: #dc2626;
-            color: white;
-        }
-
-        .danger-button:hover {
-            background: #b91c1c;
-        }
-
-        .weekend {
-            color: #4a5568;
-            background-color: #e5e7eb !important;
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .month-navigation {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .nav-button {
-                width: 100%;
-            }
-        }
-    </style>
+    <title>视频转音频</title>
 </head>
 <body>
-    <div class="header">
-        <h1>每日打卡日历</h1>
-        <div class="streak-info" id="streakInfo"></div>
-    </div>
-    <div class="month-navigation">
-        <button class="nav-button" id="prevMonth">上个月</button>
-        <span class="current-month" id="currentMonth"></span>
-        <button class="nav-button" id="nextMonth">下个月</button>
-    </div>
-    <div class="calendar" id="calendar"></div>
-    <button class="check-button" id="checkButton">
-        <span id="checkButtonText">今日打卡</span>
-    </button>
-    <div class="button-group">
-        <button class="secondary-button" id="exportButton">导出数据</button>
-        <button class="secondary-button danger-button" id="clearButton">清除数据</button>
-    </div>
+    <h2>上传视频文件并提取音频</h2>
+    <input type="file" id="videoInput" accept="video/*">
+    <button onclick="convertToAudio()">提取音频</button>
+    <p id="status"></p>
+    <audio id="audioPlayer" controls style="display: none;"></audio>
+    <a id="downloadLink" style="display: none;">下载音频</a>
 
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6"></script>
     <script>
-        const HOLIDAYS_2025 = {
-            '2025-01-01': '元旦',
-            '2025-01-29': '春节',
-            '2025-01-30': '春节',
-            '2025-01-31': '春节',
-            '2025-02-01': '春节',
-            '2025-02-02': '春节',
-            '2025-02-03': '春节',
-            '2025-02-04': '春节',
-            '2025-04-04': '清明节',
-            '2025-04-05': '清明节',
-            '2025-04-06': '清明节',
-            '2025-05-01': '劳动节',
-            '2025-05-02': '劳动节',
-            '2025-05-03': '劳动节',
-            '2025-05-04': '劳动节',
-            '2025-05-05': '劳动节',
-            '2025-05-31': '端午节',
-            '2025-06-01': '端午节',
-            '2025-06-02': '端午节',
-            '2025-10-01': '国庆节',
-            '2025-10-02': '国庆节',
-            '2025-10-03': '国庆节',
-            '2025-10-04': '国庆节',
-            '2025-10-05': '国庆节',
-            '2025-10-06': '国庆节',
-            '2025-10-07': '国庆节',
-            '2025-10-04': '中秋节',
-            '2025-10-05': '中秋节',
-            '2025-10-06': '中秋节'
-        };
+        async function convertToAudio() {
+            const { createFFmpeg, fetchFile } = FFmpeg;
+            const ffmpeg = createFFmpeg({ log: true });
 
-        class CheckinCalendar {
-            constructor() {
-                this.checkinData = this.loadCheckinData();
-                this.currentDate = new Date();
-                this.initializeEventListeners();
-                this.render();
+            let fileInput = document.getElementById("videoInput");
+            let statusText = document.getElementById("status");
+            let audioPlayer = document.getElementById("audioPlayer");
+            let downloadLink = document.getElementById("downloadLink");
+
+            if (!fileInput.files.length) {
+                alert("请选择一个视频文件");
+                return;
             }
 
-            loadCheckinData() {
-                try {
-                    return JSON.parse(localStorage.getItem('checkinData')) || {};
-                } catch (error) {
-                    console.error('Failed to load checkin data:', error);
-                    return {};
-                }
+            let file = fileInput.files[0];
+            statusText.innerText = "加载 ffmpeg.js ...";
+
+            if (!ffmpeg.isLoaded()) {
+                await ffmpeg.load();
             }
 
-            saveCheckinData() {
-                try {
-                    localStorage.setItem('checkinData', JSON.stringify(this.checkinData));
-                } catch (error) {
-                    console.error('Failed to save checkin data:', error);
-                    alert('保存打卡数据失败，请确保浏览器有足够的存储空间。');
-                }
-            }
+            statusText.innerText = "正在提取音频...";
 
-            formatDate(date) {
-                return date.toISOString().split('T')[0];
-            }
+            let inputName = "input.mp4";
+            let outputName = "output.mp3";
 
-            isConsecutiveDay(date1, date2) {
-                const d1 = new Date(date1);
-                const d2 = new Date(date2);
-                const diffTime = Math.abs(d2 - d1);
-                return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) === 1;
-            }
+            // 读取用户上传的视频文件
+            ffmpeg.FS("writeFile", inputName, await fetchFile(file));
 
-            getStreakInfo() {
-                const dates = Object.entries(this.checkinData)
-                    .filter(([_, count]) => count > 0)
-                    .map(([date]) => date)
-                    .sort();
+            // 执行 ffmpeg 命令转换音频
+            await ffmpeg.run("-i", inputName, "-q:a", "0", "-map", "a", outputName);
 
-                if (dates.length === 0) return { currentStreak: 0, maxStreak: 0 };
+            // 获取转换后音频文件
+            let audioData = ffmpeg.FS("readFile", outputName);
 
-                const today = this.formatDate(new Date());
-                let currentStreak = 0;
-                let maxStreak = 0;
-                let tempStreak = 1;
+            // 转换为 Blob 并生成 URL
+            let audioBlob = new Blob([audioData.buffer], { type: "audio/mp3" });
+            let audioUrl = URL.createObjectURL(audioBlob);
 
-                for (let i = 1; i < dates.length; i++) {
-                    if (this.isConsecutiveDay(dates[i-1], dates[i])) {
-                        tempStreak++;
-                    } else {
-                        maxStreak = Math.max(maxStreak, tempStreak);
-                        tempStreak = 1;
-                    }
-                }
-                maxStreak = Math.max(maxStreak, tempStreak);
+            // 播放音频
+            audioPlayer.src = audioUrl;
+            audioPlayer.style.display = "block";
 
-                if (dates.includes(today)) {
-                    currentStreak = 1;
-                    let checkDate = new Date(today);
-                    checkDate.setDate(checkDate.getDate() - 1);
-                    
-                    while (true) {
-                        const dateStr = this.formatDate(checkDate);
-                        if (this.checkinData[dateStr]) {
-                            currentStreak++;
-                            checkDate.setDate(checkDate.getDate() - 1);
-                        } else {
-                            break;
-                        }
-                    }
-                }
+            // 提供下载链接
+            downloadLink.href = audioUrl;
+            downloadLink.download = "extracted_audio.mp3";
+            downloadLink.innerText = "下载音频";
+            downloadLink.style.display = "block";
 
-                return { currentStreak, maxStreak };
-            }
-
-            updateStreakInfo() {
-                const { currentStreak, maxStreak } = this.getStreakInfo();
-                const streakInfo = document.getElementById('streakInfo');
-                streakInfo.textContent = `当前连续打卡: ${currentStreak}天 | 最长连续打卡: ${maxStreak}天`;
-            }
-
-            clearData() {
-                if (confirm('确定要清除所有打卡数据吗？此操作不可恢复。')) {
-                    this.checkinData = {};
-                    this.saveCheckinData();
-                    this.render();
-                    alert('打卡数据已清除');
-                }
-            }
-
-            exportData() {
-                const rows = [['日期(请将该栏设为日期格式)', '打卡状态']];
-                Object.entries(this.checkinData)
-                    .sort((a, b) => a[0].localeCompare(b[0]))
-                    .forEach(([date, count]) => {
-                        rows.push([date, count ? '已打卡' : '未打卡']);
-                    });
-
-                const csvContent = rows
-                    .map(row => row.join(','))
-                    .join('\n');
-
-                const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = '打卡记录.csv';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            }
-
-            isHoliday(dateStr) {
-                return HOLIDAYS_2025[dateStr] !== undefined;
-            }
-
-            isWeekend(date) {
-                return date.getDay() === 0 || date.getDay() === 6;
-            }
-
-            generateCalendar() {
-                const calendar = document.getElementById('calendar');
-                calendar.innerHTML = '';
-                
-                document.getElementById('currentMonth').textContent = 
-                    `${this.currentDate.getFullYear()}年${this.currentDate.getMonth() + 1}月`;
-                
-                const weekdayLabels = document.createElement('div');
-                weekdayLabels.className = 'weekday-labels';
-                ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
-                    const label = document.createElement('div');
-                    label.className = 'weekday-label';
-                    label.textContent = day;
-                    weekdayLabels.appendChild(label);
-                });
-                calendar.appendChild(weekdayLabels);
-                
-                const daysContainer = document.createElement('div');
-                daysContainer.className = 'days';
-                
-                const year = this.currentDate.getFullYear();
-                const month = this.currentDate.getMonth();
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                
-                // Add empty cells for days before first day of month
-                for (let i = 0; i < firstDay.getDay(); i++) {
-                    const emptyDay = document.createElement('div');
-                    emptyDay.className = 'day';
-                    daysContainer.appendChild(emptyDay);
-                }
-                
-                // Add days of month
-                for (let date = 1; date <= lastDay.getDate(); date++) {
-                    const dayElement = document.createElement('div');
-                    const currentDate = new Date(year, month, date);
-                    const dateString = this.formatDate(currentDate);
-                    
-                    dayElement.className = 'day';
-                    if (this.isWeekend(currentDate)) {
-                        dayElement.className += ' weekend';
-                    }
-                    
-                    const dayContent = document.createElement('div');
-                    dayContent.className = 'day-content';
-                    
-                    // Add date number
-                    const dateNumber = document.createElement('div');
-                    dateNumber.textContent = date;
-                    if (this.isHoliday(dateString)) {
-                        dateNumber.className = 'holiday';
-                        dateNumber.title = HOLIDAYS_2025[dateString];
-                    }
-                    dayContent.appendChild(dateNumber);
-                    
-                    // Add check count if exists
-                    if (this.checkinData[dateString]) {
-                        const checkCount = document.createElement('div');
-                        checkCount.className = 'check-count';
-                        checkCount.textContent = `${this.checkinData[dateString]}次`;
-                        dayContent.appendChild(checkCount);
-                    }
-                    
-                    // Highlight today
-                    const today = this.formatDate(new Date());
-                    if (dateString === today) {
-                        dayElement.className += ' today';
-                    }
-                    
-                    dayElement.appendChild(dayContent);
-                    daysContainer.appendChild(dayElement);
-                }
-                
-                calendar.appendChild(daysContainer);
-                this.updateStreakInfo();
-            }
-
-            initializeEventListeners() {
-                document.getElementById('prevMonth').addEventListener('click', () => {
-                    this.currentDate.setMonth(this.currentDate.getMonth() - 1);
-                    this.render();
-                });
-                
-                document.getElementById('nextMonth').addEventListener('click', () => {
-                    this.currentDate.setMonth(this.currentDate.getMonth() + 1);
-                    this.render();
-                });
-                
-                document.getElementById('checkButton').addEventListener('click', () => {
-    const today = this.formatDate(new Date());
-    if (!this.checkinData[today]) {
-        this.checkinData[today] = 1;
-        this.saveCheckinData();
-        this.render();
-    } else {
-        alert('今天已经打卡过了！');
-    }
-});
-                
-                document.getElementById('clearButton').addEventListener('click', () => {
-                    this.clearData();
-                });
-                
-                document.getElementById('exportButton').addEventListener('click', () => {
-                    this.exportData();
-                });
-            }
-
-            render() {
-                this.generateCalendar();
-                const today = this.formatDate(new Date());
-                const checkButton = document.getElementById('checkButton');
-                const checkButtonText = document.getElementById('checkButtonText');
-                
-                if (this.checkinData[today]) {
-                    checkButtonText.textContent = `今日已打卡 ${this.checkinData[today]}次`;
-                    checkButton.style.background = 'var(--primary-hover)';
-                } else {
-                    checkButtonText.textContent = '今日打卡';
-                    checkButton.style.background = 'var(--primary-color)';
-                }
-            }
+            statusText.innerText = "转换完成！";
         }
-
-        // Initialize calendar when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new CheckinCalendar();
-        });
     </script>
 </body>
 </html>
