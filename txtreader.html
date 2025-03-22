@@ -1,84 +1,134 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver.js 引导示例</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css">
+    <title>Driver.js 示例</title>
+    <!-- 引入 driver.js 样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.min.css">
     <style>
+        /* 自定义页面样式 */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
-        h1 {
-            color: #333;
-            font-size: 2em;
+        .nav {
+            background-color: #f0f0f0;
+            padding: 15px;
             margin-bottom: 20px;
+            border-radius: 4px;
         }
 
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-       .driver-popover {
-            background-color: #333;
-            color: white;
+        .feature {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-       .driver-popover-title {
-            font-size: 1.2em;
-            margin-bottom: 5px;
+        .buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
         }
 
-       .driver-popover-description {
-            font-size: 1em;
+        /* 自定义driver.js样式 */
+        .driver-popover.driverjs-theme {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .driverjs-theme .driver-popover-footer button {
+            background-color: #3498db;
+            color: white;
         }
     </style>
 </head>
-
 <body>
-    <h1 id="target-element">探索我们的精彩内容</h1>
-    <button id="start-guide">开始引导之旅</button>
-    <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const startGuideButton = document.getElementById('start-guide');
-            const targetElement = document.getElementById('target-element');
+    <nav class="nav">
+        <h1 id="logo">网站LOGO</h1>
+    </nav>
 
-            startGuideButton.addEventListener('click', function () {
-                const driver = new Driver();
-                driver.defineStep('step1', {
-                    element: targetElement,
-                    popover: {
-                        title: '欢迎来到我们的网站',
-                        description: '在这里，您将发现丰富的知识和有趣的故事。',
-                        position: 'right'
-                    }
-                });
-                driver.start();
-            });
+    <div class="buttons">
+        <button id="mainBtn" class="primary-btn">主要功能</button>
+        <button id="secondaryBtn" class="secondary-btn">次要功能</button>
+        <button id="helpBtn" class="help-btn">帮助</button>
+    </div>
+
+    <div id="feature1" class="feature">
+        <h3>特色功能 1</h3>
+        <p>这里是第一个特色功能的描述内容...</p>
+    </div>
+
+    <button onclick="startDriver()" style="position: fixed; bottom: 20px; right: 20px;">
+        开始导览
+    </button>
+
+    <!-- 引入 driver.js -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.min.js"></script>
+    <script>
+        // 初始化 driver.js
+        const driver = new Driver({
+            // 全局配置
+            animate: true,  // 启用动画
+            opacity: 0.5,   // 遮罩层透明度
+            padding: 10     // 元素边距
         });
+
+        function startDriver() {
+            // 定义引导步骤
+            driver.highlight({
+                element: '#logo',
+                popover: {
+                    title: '欢迎使用',
+                    description: '这是我们的网站LOGO',
+                    side: 'bottom'
+                }
+            });
+
+            driver.highlight({
+                element: '#mainBtn',
+                popover: {
+                    title: '主要功能',
+                    description: '点击这里使用我们的核心功能',
+                    side: 'bottom'
+                }
+            });
+
+            driver.highlight({
+                element: '#secondaryBtn',
+                popover: {
+                    title: '附加功能',
+                    description: '这里可以找到其他实用工具',
+                    side: 'bottom'
+                }
+            });
+
+            driver.highlight({
+                element: '#helpBtn',
+                popover: {
+                    title: '帮助支持',
+                    description: '需要帮助？点击这里联系我们',
+                    side: 'bottom'
+                }
+            });
+
+            driver.highlight({
+                element: '#feature1',
+                popover: {
+                    title: '新功能上线',
+                    description: '这是我们最新推出的特色功能',
+                    side: 'top'
+                }
+            });
+
+            // 最后一步显示完成提示
+            driver.onDismiss(() => {
+                alert('导览结束！感谢您浏览我们的网站');
+            });
+        }
     </script>
 </body>
-
 </html>
