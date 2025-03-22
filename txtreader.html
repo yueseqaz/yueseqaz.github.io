@@ -1,726 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TXT 文件阅读器</title>
+    <title>Driver.js 引导示例</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .fullscreen-mode {
-            padding: 0;
-            background-color: rgba(244, 244, 244, 0.9);
-        }
-
-        .chapter-list {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: min(80vw, 300px);
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 2000;
-            overflow-y: auto;
-            padding: 20px 0;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .chapter-list.show {
-            transform: translateX(0);
-        }
-
-        .chapter-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            color: #333;
-            font-size: clamp(14px, 2vw, 16px);
-            border-bottom: 1px solid #eee;
-            word-break: break-all;
-        }
-
-        .chapter-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        .chapter-item.active {
-            background-color: #e6f3ff;
-            border-left: 4px solid #007aff;
-        }
-
-        .controls-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
-            max-width: 90vw;
-            width: 320px;
-        }
-
-        .controls-container.collapsed {
-            transform: translateX(calc(100% - 40px));
-            width: auto;
-        }
-
-        .controls-container.collapsed .controls-content {
-            display: none;
-        }
-
-        .toggle-controls {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #007aff;
-            color: white;
-            border: none;
-            width: 24px;
-            height: 48px;
-            border-radius: 5px 0 0 5px;
-            cursor: pointer;
-            font-size: 16px;
-            z-index: 1;
-        }
-
-        .controls-content {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-left: 24px;
-        }
-
-        .file-input-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .file-input-label {
-            display: inline-block;
-            padding: 10px;
-            background-color: #007aff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            transition: background-color 0.3s;
-        }
-
-        .file-input-label:hover {
-            background-color: #0056b3;
-        }
-
-        .file-input {
-            position: absolute;
-            left: -9999px;
-            opacity: 0;
-        }
-
-        .file-name {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #666;
-            word-break: break-all;
-        }
-
-        .content-container {
-            width: 100%;
-            height: calc(100vh - 80px);
-            padding: clamp(20px, 5vw, 40px);
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.95);
-            white-space: pre-wrap;
-            overflow-y: auto;
-            font-size: clamp(16px, 2.5vw, 18px);
-            line-height: 1.8;
-            color: #333;
-            margin: 0;
-            transition: all 0.3s ease;
-            padding-bottom: 100px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .content-container.fullscreen {
-            padding: 60px max(15%, 20px) 100px max(15%, 20px) !important;
-            font-size: clamp(18px, 3vw, 20px);
-            line-height: 2;
-        }
-
-        .pagination {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px;
-            display: flex;
             justify-content: center;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            min-height: 100vh;
+            margin: 0;
         }
 
-        .btn {
-            padding: 10px 20px;
-            background-color: #007aff;
+        h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
             color: white;
             border: none;
             border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            min-width: 100px;
-            font-size: clamp(14px, 2vw, 16px);
-            text-align: center;
         }
 
-        .btn:hover {
+        button:hover {
             background-color: #0056b3;
         }
 
-        .btn:disabled {
-            background-color: #d3d3d3;
-            cursor: not-allowed;
-        }
-
-        .btn.red {
-            background-color: #ff5b5b;
-        }
-
-        .btn.red:hover {
-            background-color: #e14c4c;
-        }
-
-        .page-info {
-            display: flex;
-            align-items: center;
-            font-size: clamp(14px, 2vw, 16px);
-            color: #666;
-            white-space: nowrap;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .loading {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
+       .driver-popover {
+            background-color: #333;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 3000;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        @media (max-width: 768px) {
-            .controls-container {
-                top: 10px;
-                right: 10px;
-                width: calc(100% - 20px);
-                max-width: none;
-            }
-
-            .btn-group {
-                justify-content: center;
-            }
-
-            .pagination {
-                padding: 10px;
-            }
-
-            .btn {
-                padding: 8px 16px;
-                min-width: 80px;
-            }
+       .driver-popover-title {
+            font-size: 1.2em;
+            margin-bottom: 5px;
         }
 
-        .welcome-text {
-            font-size: clamp(18px, 3vw, 24px);
-            color: #555;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            z-index: 3000;
-            animation: fadeInOut 3s forwards;
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
+       .driver-popover-description {
+            font-size: 1em;
         }
     </style>
 </head>
+
 <body>
-    <div class="chapter-list" id="chapterList">
-        <button id="closeChapters" class="btn" style="width: calc(100% - 40px); margin: 0 20px 20px 20px;">收纳</button>
-    </div>
-
-    <div class="controls-container" id="controls">
-        <button class="toggle-controls" id="toggleControls">⇄</button>
-        <div class="controls-content">
-            <div class="file-input-container">
-                <label for="fileInput" class="file-input-label">选择TXT文件</label>
-                <input type="file" id="fileInput" class="file-input" accept=".txt">
-                <div id="txtFileName" class="file-name"></div>
-            </div>
-
-            <div class="file-input-container">
-                <label for="bgImageInput" class="file-input-label">选择背景图片</label>
-                <input type="file" id="bgImageInput" class="file-input" accept="image/*">
-                <div id="imageFileName" class="file-name"></div>
-            </div>
-
-            <div class="btn-group">
-                <button id="fullscreenBtn" class="btn">退出全屏</button>
-                <button id="generateChapters" class="btn red">更新目录</button>
-                <button id="collapseChapters" class="btn">收纳目录</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="content-container fullscreen" id="fileContent">
-        <p class="welcome-text">这是一个简单的 TXT 文件阅读器</p>
-        <p class="welcome-text">支持全屏模式、翻页、章节目录等功能</p>
-        <p class="welcome-text">欢迎使用!</p>
-        <p class="welcome-text">使用方法：上传TXT文件，以及图片文件，点击"更新目录"按钮即可</p>
-        <p class="welcome-text">快捷键：← → 翻页，F 全屏，H 隐藏控制栏，M 目录</p>
-    </div>
-
-    <div class="pagination">
-        <button id="prevPage" class="btn" disabled>上一页</button>
-        <div class="page-info">
-            第 <span id="currentPageNum">0</span> / <span id="totalPages">0</span> 页
-        </div>
-        <button id="nextPage" class="btn" disabled>下一页</button>
+    <h1 id="target-element">探索我们的精彩内容</h1>
+    <button id="start-guide">开始引导之旅</button>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
     <script>
-        const linesPerPage = Math.floor((window.innerHeight - 200) / 30);
-        let fileContent = '';
-        let currentPage = 0;
-        let fileLines = [];
-        let chapters = [];
-        let isFullscreen = true;
-        let currentChapter = 0;
+        document.addEventListener('DOMContentLoaded', function () {
+            const startGuideButton = document.getElementById('start-guide');
+            const targetElement = document.getElementById('target-element');
 
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        function showLoading() {
-            const loading = document.createElement('div');
-            loading.className = 'loading';
-            loading.textContent = '加载中...';
-            loading.id = 'loadingIndicator';
-            document.body.appendChild(loading);
-        }
-
-        function hideLoading() {
-            const loading = document.getElementById('loadingIndicator');
-            if (loading) loading.remove();
-        }
-        
-        // 从localStorage加载状态
-        function loadSavedState() {
-            try {
-                const savedPage = localStorage.getItem('currentPage');
-                const savedBgImage = localStorage.getItem('backgroundImage');
-                
-                if (savedPage !== null) {
-                    currentPage = parseInt(savedPage, 10);
-                }
-                
-                if (savedBgImage) {
-                    document.body.style.backgroundImage = savedBgImage;
-                }
-            } catch (error) {
-                console.error('Error loading saved state:', error);
-            }
-        }
-
-        // 保存状态
-        function saveCurrentState() {
-            try {
-                localStorage.setItem('currentPage', currentPage);
-                localStorage.setItem('backgroundImage', document.body.style.backgroundImage);
-            } catch (error) {
-                console.error('Error saving state:', error);
-            }
-        }
-
-        // 控制面板
-        document.getElementById('toggleControls').addEventListener('click', function() {
-            const controls = document.getElementById('controls');
-            controls.classList.toggle('collapsed');
-            this.textContent = controls.classList.contains('collapsed') ? '⇢' : '⇄';
-        });
-
-        // 章节目录
-        document.getElementById('closeChapters').addEventListener('click', function() {
-            document.getElementById('chapterList').classList.remove('show');
-        });
-
-        document.getElementById('collapseChapters').addEventListener('click', function() {
-            document.getElementById('chapterList').classList.toggle('show');
-        });
-
-        // 文件上传处理
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
-                showLoading();
-                const fileName = document.getElementById('txtFileName');
-                fileName.textContent = file.name;
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        fileContent = e.target.result;
-                        fileLines = fileContent.split('\n');
-                        chapters = [];
-                        currentPage = 0;
-                        renderPage();
-                        updatePageInfo();
-                        document.getElementById('generateChapters').style.display = 'inline-block';
-                        saveCurrentState();
-                        showNotification('文件加载成功！');
-                    } catch (error) {
-                        showNotification('文件处理出错，请重试');
-                        console.error('Error processing file:', error);
+            startGuideButton.addEventListener('click', function () {
+                const driver = new Driver();
+                driver.defineStep('step1', {
+                    element: targetElement,
+                    popover: {
+                        title: '欢迎来到我们的网站',
+                        description: '在这里，您将发现丰富的知识和有趣的故事。',
+                        position: 'right'
                     }
-                    hideLoading();
-                };
-
-                reader.onerror = function() {
-                    hideLoading();
-                    showNotification('文件读取失败，请重试');
-                };
-
-                reader.readAsText(file, 'UTF-8');
-            } else {
-                showNotification('请上传TXT文件');
-            }
-        });
-
-        // 背景图片上传
-        document.getElementById('bgImageInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            if (file.type.startsWith('image/')) {
-                const fileName = document.getElementById('imageFileName');
-                fileName.textContent = file.name;
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        document.body.style.backgroundImage = `url(${e.target.result})`;
-                        saveCurrentState();
-                        showNotification('背景图片设置成功！');
-                    } catch (error) {
-                        showNotification('图片处理出错，请重试');
-                        console.error('Error processing image:', error);
-                    }
-                };
-
-                reader.onerror = function() {
-                    showNotification('图片读取失败，请重试');
-                };
-
-                reader.readAsDataURL(file);
-            } else {
-                showNotification('请上传有效的图片文件');
-            }
-        });
-
-        // 页码信息更新
-        function updatePageInfo() {
-            const totalPages = Math.ceil(fileLines.length / linesPerPage);
-            document.getElementById('currentPageNum').textContent = currentPage + 1;
-            document.getElementById('totalPages').textContent = totalPages;
-            
-            // 更新按钮状态
-            document.getElementById('prevPage').disabled = currentPage === 0;
-            document.getElementById('nextPage').disabled = currentPage >= totalPages - 1;
-        }
-
-        // 全屏模式切换
-        document.getElementById('fullscreenBtn').addEventListener('click', function() {
-            isFullscreen = !isFullscreen;
-            const contentContainer = document.getElementById('fileContent');
-            
-            if (isFullscreen) {
-                document.body.classList.add('fullscreen-mode');
-                contentContainer.classList.add('fullscreen');
-                this.textContent = '退出全屏';
-            } else {
-                document.body.classList.remove('fullscreen-mode');
-                contentContainer.classList.remove('fullscreen');
-                this.textContent = '全屏阅读';
-            }
-        });
-
-        // 生成章节目录
-        document.getElementById('generateChapters').addEventListener('click', function() {
-            if (fileLines.length === 0) {
-                showNotification('请先上传TXT文件');
-                return;
-            }
-
-            showLoading();
-            setTimeout(() => {
-                try {
-                    chapters = [];
-                    let chapterStart = 0;
-                    
-                    fileLines.forEach((line, index) => {
-                        if (line.trim().match(/^第[零一二三四五六七八九十百千万\d]+章[^《》()]*$/)) {
-                            if (chapterStart < index) {
-                                chapters.push({
-                                    title: fileLines[chapterStart].trim(),
-                                    content: fileLines.slice(chapterStart, index).join('\n'),
-                                    startLine: chapterStart
-                                });
-                            }
-                            chapterStart = index;
-                        }
-                    });
-                    
-                    if (chapterStart < fileLines.length) {
-                        chapters.push({
-                            title: fileLines[chapterStart].trim(),
-                            content: fileLines.slice(chapterStart).join('\n'),
-                            startLine: chapterStart
-                        });
-                    }
-
-                    renderChapterList();
-                    document.getElementById('chapterList').classList.add('show');
-                    
-                    if (chapters.length === 0) {
-                        showNotification('未检测到章节，请检查文件格式');
-                    } else {
-                        showNotification(`已生成 ${chapters.length} 个章节`);
-                    }
-                } catch (error) {
-                    console.error('Error generating chapters:', error);
-                    showNotification('生成目录时出错，请重试');
-                }
-                hideLoading();
-            }, 100);
-        });
-
-        // 渲染章节目录
-        function renderChapterList() {
-            const chapterList = document.getElementById('chapterList');
-            chapterList.innerHTML = `
-                <button id="closeChapters" class="btn" style="width: calc(100% - 40px); margin: 0 20px 20px 20px;">收纳</button>
-                <div style="padding: 0 20px; margin-bottom: 10px;">
-                    <h2>目录 (${chapters.length}章)</h2>
-                </div>
-            `;
-            
-            chapters.forEach((chapter, index) => {
-                const chapterDiv = document.createElement('div');
-                chapterDiv.className = 'chapter-item';
-                chapterDiv.textContent = chapter.title;
-                chapterDiv.addEventListener('click', () => {
-                    currentPage = Math.floor(chapter.startLine / linesPerPage);
-                    renderPage();
-                    updateActiveChapter(index);
-                    document.getElementById('chapterList').classList.remove('show');
                 });
-                chapterList.appendChild(chapterDiv);
+                driver.start();
             });
-
-            // 重新绑定收纳按钮事件
-            document.getElementById('closeChapters').addEventListener('click', function() {
-                document.getElementById('chapterList').classList.remove('show');
-            });
-        }
-
-        // 更新当前章节高亮
-        function updateActiveChapter(index) {
-            const items = document.querySelectorAll('.chapter-item');
-            items.forEach(item => item.classList.remove('active'));
-            if (items[index]) {
-                items[index].classList.add('active');
-                items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
-
-        // 渲染页面内容
-        function renderPage() {
-            if (fileLines.length === 0) return;
-
-            const startLine = currentPage * linesPerPage;
-            const endLine = Math.min(startLine + linesPerPage, fileLines.length);
-            const pageLines = fileLines.slice(startLine, endLine);
-            
-            const contentContainer = document.getElementById('fileContent');
-            contentContainer.textContent = pageLines.join('\n');
-            contentContainer.scrollTop = 0;
-            
-            updatePageInfo();
-            saveCurrentState();
-
-            // 更新当前章节
-            if (chapters.length > 0) {
-                const currentLine = startLine;
-                const currentChapterIndex = chapters.findIndex((chapter, index) => {
-                    const nextChapter = chapters[index + 1];
-                    return chapter.startLine <= currentLine && 
-                           (!nextChapter || nextChapter.startLine > currentLine);
-                });
-                if (currentChapterIndex !== -1) {
-                    updateActiveChapter(currentChapterIndex);
-                }
-            }
-        }
-
-        // 翻页处理
-        document.getElementById('prevPage').addEventListener('click', function() {
-            if (currentPage > 0) {
-                currentPage--;
-                renderPage();
-            }
         });
-
-        document.getElementById('nextPage').addEventListener('click', function() {
-            if ((currentPage + 1) * linesPerPage < fileLines.length) {
-                currentPage++;
-                renderPage();
-            }
-        });
-
-        // 键盘事件处理
-        document.addEventListener('keydown', function(e) {
-            if (e.target.tagName === 'INPUT') return; // 忽略输入框中的键盘事件
-
-            switch(e.key) {
-                case 'ArrowLeft':
-                    document.getElementById('prevPage').click();
-                    break;
-                case 'ArrowRight':
-                    document.getElementById('nextPage').click();
-                    break;
-                case 'f':
-                case 'F':
-                    document.getElementById('fullscreenBtn').click();
-                    break;
-                case 'h':
-                case 'H':
-                    document.getElementById('toggleControls').click();
-                    break;
-                case 'm':
-                case 'M':
-                    document.getElementById('chapterList').classList.toggle('show');
-                    break;
-            }
-        });
-
-        // 触摸事件处理
-        let touchStartX = null;
-        let touchStartY = null;
-
-        document.addEventListener('touchstart', function(e) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        }, false);
-
-        document.addEventListener('touchmove', function(e) {
-            if (!touchStartX || !touchStartY) return;
-
-            const touchEndX = e.touches[0].clientX;
-            const touchEndY = e.touches[0].clientY;
-            
-            const xDiff = touchStartX - touchEndX;
-            const yDiff = touchStartY - touchEndY;
-
-            // 确保横向滑动大于纵向滑动
-            if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                if (Math.abs(xDiff) > 50) { // 添加最小滑动距离阈值
-                    if (xDiff > 0) {
-                        // 向左滑动
-                        document.getElementById('nextPage').click();
-                    } else {
-                        // 向右滑动
-                        document.getElementById('prevPage').click();
-                    }
-                    touchStartX = null;
-                    touchStartY = null;
-                }
-            }
-        }, false);
-
-        document.addEventListener('touchend', function() {
-            touchStartX = null;
-            touchStartY = null;
-        }, false);
-
-        // 窗口大小改变时更新每页行数
-        window.addEventListener('resize', function() {
-            const oldLinesPerPage = linesPerPage;
-            linesPerPage = Math.floor((window.innerHeight - 200) / 30);
-            
-            if (oldLinesPerPage !== linesPerPage && fileLines.length > 0) {
-                currentPage = Math.floor((currentPage * oldLinesPerPage) / linesPerPage);
-                renderPage();
-            }
-        });
-
-        // 初始化
-        loadSavedState();
-        document.getElementById('toggleControls').click(); // 默认折叠控制面板
     </script>
 </body>
+
 </html>
