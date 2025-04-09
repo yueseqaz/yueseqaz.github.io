@@ -1,125 +1,277 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Slider</title>
-  <script src="https://cdn.jsdelivr.net/npm/siema@1.5.1/dist/siema.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sakura-img-download - Effortless Image Downloader</title>
+  <link rel="icon" href="https://emoji.discadia.com/emojis/1b6b2b78-86d1-4c8a-a7e1-25936fc8e8d4.gif" type="image/gif" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Reset and core */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; }
+
+    /* Containers and layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section { padding: 60px 0; }
+    .section-alt { background-color: #fff; }
+
+    /* Typography */
+    h1 { font-size: 2.8rem; color: #1a1a1a; margin-bottom: 1rem; }
+    h2 { font-size: 2rem; text-align: center; color: #2a2a2a; margin-bottom: 40px; }
+    h3 { font-size: 1.4rem; color: #444; margin-bottom: 0.5rem; }
+    p { color: #555; margin-bottom: 1em; }
+
+    /* Hero */
+    .hero {
+      background-color: #e9f0ff;
+      text-align: center;
+      padding: 80px 20px 60px;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      color: #444;
     }
 
-    body {
-      width: 100%;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
+    /* Download button with extract code */
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(to right, #ff6ec4, #7873f5);
+      color: #fff;
+      padding: 14px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .cta-button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right, #e664c6, #5c58e5);
+    }
+
+    .extract-code {
+      margin-top: 15px;
+      font-size: 1rem;
+      color: #ff2e63;
+      font-weight: bold;
+      background-color: #fff3f6;
+      display: inline-block;
+      padding: 8px 16px;
+      border: 1px dashed #ff2e63;
+      border-radius: 8px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* Features & Grid */
+    .features-grid, .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
       text-align: center;
     }
-
-    h1 {
-      font-size: 2rem;
-      color: #4a90e2;
-      margin-bottom: 1rem;
+    .feature-item, .use-case-item {
+      background-color: #f8f9fa;
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+      transition: 0.3s;
+    }
+    .feature-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
-    .slider-container {
-      width: 100%;
-      max-width: 800px;
-      margin: 2rem auto;
-      border-radius: 10px;
-      overflow: hidden;
+    /* Steps */
+    .steps-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      text-align: center;
+    }
+    .step {
+      flex: 1 1 250px;
+    }
+    .step-number {
+      background-color: #7873f5;
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      line-height: 44px;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: inline-block;
     }
 
-    .siema img {
-      width: 100%;
-      height: auto;
-      display: block;
+    /* FAQ */
+    .faq-item details {
+      background: #fff;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #eee;
     }
-
-    .hint {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      color: #4a90e2;
-      opacity: 0.7;
-    }
-    .vertical-section {
-      margin-top: 2rem;
-    }
-
-    .vertical-section button {
-      background: #e94e77;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 25px;
-      color: white;
+    .faq-item summary {
+      padding: 15px;
+      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
+      list-style: none;
+      position: relative;
+    }
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 20px;
+      font-size: 1.5em;
+      color: #007bff;
+    }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details p {
+      padding: 0 15px 15px 15px;
+      margin-left: 15px;
+      border-left: 2px solid #007bff;
     }
 
-    .vertical-section button:hover {
-      background: #d63763;
-      transform: translateY(-2px);
+    /* CTA section */
+    .cta-section {
+      background-color: #7873f5;
+      color: #fff;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .cta-section h2 { color: #fff; }
+    .cta-section .cta-button {
+      background: #fff;
+      color: #7873f5;
     }
 
-    .vertical-section button:active {
-      transform: translateY(0);
+    /* Footer */
+    .footer {
+      background-color: #343a40;
+      color: #ccc;
+      text-align: center;
+      padding: 30px 0;
+      font-size: 0.9rem;
     }
+    .footer a { color: #fff; }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      .slider-container {
-        max-width: 100%;
-      }
-
-    
+      h1 { font-size: 2.2rem; }
+      .steps-container { flex-direction: column; align-items: center; }
+    }
 
     @media (max-width: 480px) {
-      body {
-        padding: 1rem 0.5rem;
-      }
-
-      h1 {
-        font-size: 1.5rem;
-      }
-      .hint {
-        font-size: 1rem;
-      }
+      h1 { font-size: 1.8rem; }
+      .cta-button { font-size: 1rem; padding: 10px 20px; }
     }
   </style>
 </head>
 <body>
-  <h1>Sakura's JK Collection </h1>
-  <div class="hint">
-    <p>Swiping the picture to switch</p>
-  </div>
-  <div class="slider-container">
-    <div class="siema">
-      <img src="https://hv.z.wiki/autoupload/20241223/EWiF/5840X3893/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%88%B6%E6%9C%8D-%E5%B0%91%E5%A5%B3.png" alt="I">
-      <img src="https://hv.z.wiki/autoupload/20241223/EWiF/5840X3893/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%88%B6%E6%9C%8D-%E5%B0%91%E5%A5%B3.png" alt="l">
-         <img src="https://cdn.10086.click/show/2024-12-26/4e317ede-b55c-4d11-a4a6-5799e10eea10.jpg" alt="i">
-      <img src="https://cdn.10086.click/show/2024-12-26/346492a0-c6f1-4052-be62-250fe96f08fe.jpg" alt="k">
-      <img src="https://cdn.10086.click/show/2024-12-26/835505e5-e3f1-4503-8f68-ec740fe8a432.jpg" alt="e">
-      <img src="https://cdn.10086.click/show/2024-12-26/a97a559e-c5d2-404a-9273-11bbb453bf6c.jpg" alt="H">
-      <img src="https://hefollo.com/3440X1440%E5%A3%81%E7%BA%B8/guluhe2l.bmp" alt="i">
-    </div>
-  </div>
 
-  <script>
-    const mySiema = new Siema({
-      duration: 200,
-      easing: 'ease-out',
-      perPage: 1,
-      startIndex: 0,
-      draggable: true,
-      threshold: 20,
-      loop: true,
-    });
-  </script>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>Effortlessly Download Images from Any Webpage</h1>
+      <p class="subtitle">No more right-clicking. Sakura-img-download makes bulk image saving fast and simple.</p>
+      <a href="https://wwfe.lanzoue.com/i4SOZ2t448dg" class="cta-button" target="_blank">立即下载 Sakura-img-download</a>
+      <div class="extract-code">提取码：<strong>du73</strong></div>
+    </div>
+  </header>
+
+  <!-- Problem Section -->
+  <section class="section">
+    <div class="container">
+      <h2>Saving Images Shouldn’t Be Tedious</h2>
+      <p>We’ve all been there—right-clicking and saving one image at a time. When sites disable it, it gets worse.</p>
+      <p><strong>Sakura-img-download</strong> solves this. Detect, preview, and download every image from a webpage, instantly.</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section-alt">
+    <div class="container">
+      <h2>Powerful Features</h2>
+      <div class="features-grid">
+        <div class="feature-item"><h3>One-click Batch Download</h3><p>Download every image at once—save your time and sanity.</p></div>
+        <div class="feature-item"><h3>Preview Before Save</h3><p>See what’s being downloaded before you click.</p></div>
+        <div class="feature-item"><h3>Filter by Type & Size</h3><p>Only grab what you need—filter out the noise.</p></div>
+        <div class="feature-item"><h3>Lightweight & Fast</h3><p>No bloat, just performance. Works instantly.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section">
+    <div class="container">
+      <h2>How It Works</h2>
+      <div class="steps-container">
+        <div class="step"><div class="step-number">1</div><p>Open your target webpage</p></div>
+        <div class="step"><div class="step-number">2</div><p>Launch Sakura-img-download</p></div>
+        <div class="step"><div class="step-number">3</div><p>Preview and download selected images</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-alt">
+    <div class="container">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <details>
+          <summary>Is this tool free?</summary>
+          <p>Yes, Sakura-img-download is completely free.</p>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>Does it work everywhere?</summary>
+          <p>It works on most sites unless heavily protected by scripts.</p>
+        </details>
+      </div>
+      <div class="faq-item">
+        <details>
+          <summary>Is it safe?</summary>
+          <p>Absolutely. It runs locally and doesn’t send any of your data elsewhere.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Start Downloading Smarter</h2>
+      <p>Get Sakura-img-download today and never right-click again.</p>
+      <a href="https://wwfe.lanzoue.com/i4SOZ2t448dg" class="cta-button" target="_blank">免费下载</a>
+      <div class="extract-code">提取码：<strong>du73</strong></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Designed with ❤ by Sakura. Visit <a href="https://sakurablogs.top" target="_blank">sakurablogs.top</a> for more.</p>
+    </div>
+  </footer>
+
 </body>
-</html>`
+</html>
