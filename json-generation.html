@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nav生成 JSON 工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .section {
+      background-color: #fff;
+      padding: 20px;
+      width: 48%;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+
+    .input-group input, .input-group textarea, .input-group select {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .input-group textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .active-category {
+      background-color: #f0f8ff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #b8daff;
+    }
+
+    .active-category h3 {
+      margin: 0 0 5px 0;
+      color: #0056b3;
+    }
+
+    .active-category p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button.secondary {
+      background-color: #6c757d;
+    }
+
+    button.danger {
+      background-color: #dc3545;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #json-output {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      overflow: auto;
+      white-space: pre-wrap;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .json-section {
+      width: 100%;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 15px;
+    }
+
+    .tab {
+      padding: 10px 15px;
+      background-color: #eee;
+      cursor: pointer;
+      border-radius: 5px 5px 0 0;
+      margin-right: 5px;
+    }
+
+    .tab.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .category-stats {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    .category-selector {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .category-selector select {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .section {
+        width: 100%;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>JSON 生成工具</h1>
+  
+  <div class="tabs">
+    <div class="tab active" id="tab-categories-sites">带类别的站点</div>
+    <div class="tab" id="tab-sites-only">仅站点列表</div>
+  </div>
+
+  <div id="categories-sites-view">
+    <div class="container">
+      <!-- 左侧：添加类别 -->
+      <div class="section">
+        <h2>添加类别</h2>
+        <div class="input-group">
+          <label for="category-id">类别 ID</label>
+          <input type="text" id="category-id" placeholder="类别 ID (例如: learning)" />
+        </div>
+        <div class="input-group">
+          <label for="category-name">类别名称</label>
+          <input type="text" id="category-name" placeholder="类别名称 (例如: 学习资源)" />
+        </div>
+        <div class="input-group">
+          <label for="category-description">类别描述</label>
+          <textarea id="category-description" placeholder="类别描述 (例如: 提升技能，保持学习。)"></textarea>
+        </div>
+        <button id="add-category">添加类别</button>
+        
+        <div class="category-stats">
+          已创建类别: <span id="category-count">0</span>
+        </div>
+        
+        <div class="input-group" style="margin-top: 20px;">
+          <label for="category-selector">选择活动类别:</label>
+          <div class="category-selector">
+            <select id="category-selector">
+              <option value="">-- 请选择类别 --</option>
+            </select>
+            <button id="set-active-category" class="secondary">设为活动类别</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧：添加站点 -->
+      <div class="section">
+        <h2>添加站点</h2>
+        
+        <!-- 当前活动类别信息展示 -->
+        <div id="active-category-info" class="active-category" style="display: none;">
+          <h3>当前活动类别: <span id="active-category-name"></span></h3>
+          <p>ID: <span id="active-category-id"></span></p>
+          <p>描述: <span id="active-category-desc"></span></p>
+          <p>已添加站点: <span id="active-category-site-count">0</span></p>
+          <button id="clear-active-category" class="danger" style="margin-top: 10px;">清除活动类别</button>
+        </div>
+        
+        <div id="no-active-category-warning" style="color: #dc3545; margin-bottom: 15px;">
+          请先选择或创建一个活动类别
+        </div>
+        
+        <div id="site-form" style="display: none;">
+          <div class="input-group">
+            <label for="site-name">站点名称</label>
+            <input type="text" id="site-name" placeholder="站点名称 (例如: MDN Web Docs)" />
+          </div>
+          <div class="input-group">
+            <label for="site-url">站点 URL</label>
+            <input type="url" id="site-url" placeholder="站点 URL (例如: https://developer.mozilla.org/)" />
+          </div>
+          <div class="input-group">
+            <label for="site-icon">站点图标 URL</label>
+            <input type="text" id="site-icon" placeholder="站点图标 URL (例如: mdn.png)" />
+          </div>
+          <div class="input-group">
+            <label for="site-description">站点描述</label>
+            <textarea id="site-description" placeholder="站点描述 (例如: Web 技术权威文档，前端开发必备。)"></textarea>
+          </div>
+          <button id="add-site">添加站点到当前类别</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sites-only-view" style="display:none;">
+    <div class="section" style="width:100%;">
+      <h2>添加独立站点</h2>
+      <div class="input-group">
+        <label for="ind-site-name">站点名称</label>
+        <input type="text" id="ind-site-name" placeholder="站点名称 (例如: MDN Web Docs)" />
+      </div>
+      <div class="input-group">
+        <label for="ind-site-url">站点 URL</label>
+        <input type="url" id="ind-site-url" placeholder="站点 URL (例如: https://developer.mozilla.org/)" />
+      </div>
+      <div class="input-group">
+        <label for="ind-site-icon">站点图标 URL</label>
+        <input type="text" id="ind-site-icon" placeholder="站点图标 URL (例如: mdn.png)" />
+      </div>
+      <div class="input-group">
+        <label for="ind-site-description">站点描述</label>
+        <textarea id="ind-site-description" placeholder="站点描述 (例如: Web 技术权威文档，前端开发必备。)"></textarea>
+      </div>
+      <button id="add-ind-site">添加站点</button>
+    </div>
+  </div>
+
+  <!-- 导出 JSON 和 一键复制 -->
+  <div class="json-section">
+    <h2>生成的 JSON</h2>
+    <pre id="json-output"></pre>
+    <div class="button-container">
+      <button id="export-json">导出 JSON</button>
+      <button id="copy-json">一键复制</button>
+      <button id="clear-all" class="danger">清空所有数据</button>
+    </div>
+  </div>
+
+  <script>
+    let categories = [];
+    let sites = [];
+    let currentMode = 'categories'; // 'categories' 或 'sites'
+    let activeCategory = null; // 当前活动类别
+
+    // 初始化：从本地存储加载数据（如果有）
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedData = localStorage.getItem('jsonGeneratorData');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        categories = data.categories || [];
+        sites = data.sites || [];
+        activeCategory = data.activeCategory || null;
+      }
+      
+      updateCategoryCount();
+      updateCategorySelector();
+      updateJSONOutput();
+      updateActiveCategoryDisplay();
+    });
+
+    // 保存数据到本地存储
+    function saveData() {
+      const data = {
+        categories,
+        sites,
+        activeCategory
+      };
+      localStorage.setItem('jsonGeneratorData', JSON.stringify(data));
+    }
+
+    // 切换模式
+    document.getElementById('tab-categories-sites').addEventListener('click', () => {
+      currentMode = 'categories';
+      document.getElementById('categories-sites-view').style.display = 'block';
+      document.getElementById('sites-only-view').style.display = 'none';
+      document.getElementById('tab-categories-sites').classList.add('active');
+      document.getElementById('tab-sites-only').classList.remove('active');
+      updateJSONOutput();
+    });
+
+    document.getElementById('tab-sites-only').addEventListener('click', () => {
+      currentMode = 'sites';
+      document.getElementById('categories-sites-view').style.display = 'none';
+      document.getElementById('sites-only-view').style.display = 'block';
+      document.getElementById('tab-categories-sites').classList.remove('active');
+      document.getElementById('tab-sites-only').classList.add('active');
+      updateJSONOutput();
+    });
+
+    // 添加类别事件
+    document.getElementById('add-category').addEventListener('click', () => {
+      const categoryId = document.getElementById('category-id').value;
+      const categoryName = document.getElementById('category-name').value;
+      const categoryDescription = document.getElementById('category-description').value;
+
+      if (categoryId && categoryName && categoryDescription) {
+        // 检查是否已存在同ID的类别
+        if (categories.some(cat => cat.id === categoryId)) {
+          alert('该类别ID已存在，请使用不同的ID！');
+          return;
+        }
+
+        const category = {
+          id: categoryId,
+          name: categoryName,
+          description: categoryDescription,
+          sites: []  // 初始化为空站点数组
+        };
+
+        categories.push(category);
+        
+        // 自动设置为活动类别
+        setActiveCategory(categoryId);
+        
+        updateCategoryCount();
+        updateCategorySelector();
+        updateJSONOutput();
+        saveData();
+        clearCategoryFields();
+      } else {
+        alert('请输入完整的类别信息');
+      }
+    });
+
+    // 设置活动类别按钮
+    document.getElementById('set-active-category').addEventListener('click', () => {
+      const selectedCategoryId = document.getElementById('category-selector').value;
+      if (!selectedCategoryId) {
+        alert('请先选择一个类别');
+        return;
+      }
+      
+      setActiveCategory(selectedCategoryId);
+    });
+
+    // 清除活动类别
+    document.getElementById('clear-active-category').addEventListener('click', () => {
+      activeCategory = null;
+      updateActiveCategoryDisplay();
+      saveData();
+    });
+
+    // 设置活动类别函数
+    function setActiveCategory(categoryId) {
+      const category = categories.find(cat => cat.id === categoryId);
+      if (category) {
+        activeCategory = category;
+        updateActiveCategoryDisplay();
+        saveData();
+      } else {
+        alert('未找到该类别');
+      }
+    }
+
+    // 更新活动类别显示
+    function updateActiveCategoryDisplay() {
+      const activeCategoryInfo = document.getElementById('active-category-info');
+      const noActiveCategoryWarning = document.getElementById('no-active-category-warning');
+      const siteForm = document.getElementById('site-form');
+      
+      if (activeCategory) {
+        document.getElementById('active-category-name').textContent = activeCategory.name;
+        document.getElementById('active-category-id').textContent = activeCategory.id;
+        document.getElementById('active-category-desc').textContent = activeCategory.description;
+        document.getElementById('active-category-site-count').textContent = activeCategory.sites.length;
+        
+        activeCategoryInfo.style.display = 'block';
+        noActiveCategoryWarning.style.display = 'none';
+        siteForm.style.display = 'block';
+      } else {
+        activeCategoryInfo.style.display = 'none';
+        noActiveCategoryWarning.style.display = 'block';
+        siteForm.style.display = 'none';
+      }
+    }
+
+    // 更新类别数量显示
+    function updateCategoryCount() {
+      document.getElementById('category-count').textContent = categories.length;
+    }
+
+    // 更新类别选择器
+    function updateCategorySelector() {
+      const selector = document.getElementById('category-selector');
+      
+      // 清空现有选项
+      selector.innerHTML = '<option value="">-- 请选择类别 --</option>';
+      
+      // 添加所有类别作为选项
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = `${cat.name} (${cat.id})`;
+        selector.appendChild(option);
+      });
+    }
+
+    // 添加站点事件（带类别）
+    document.getElementById('add-site').addEventListener('click', () => {
+      if (!activeCategory) {
+        alert('请先选择或创建一个活动类别');
+        return;
+      }
+      
+      const siteName = document.getElementById('site-name').value;
+      const siteUrl = document.getElementById('site-url').value;
+      const siteIcon = document.getElementById('site-icon').value;
+      const siteDescription = document.getElementById('site-description').value;
+
+      if (siteName && siteUrl && siteIcon && siteDescription) {
+        const site = {
+          name: siteName,
+          url: siteUrl,
+          icon: siteIcon,
+          description: siteDescription
+        };
+
+        // 添加站点到当前活动类别
+        activeCategory.sites.push(site);
+        
+        // 更新站点计数
+        document.getElementById('active-category-site-count').textContent = activeCategory.sites.length;
+        
+        updateJSONOutput();
+        saveData();
+        clearSiteFields();
+      } else {
+        alert('请输入完整的站点信息');
+      }
+    });
+
+    // 添加独立站点事件
+    document.getElementById('add-ind-site').addEventListener('click', () => {
+      const siteName = document.getElementById('ind-site-name').value;
+      const siteUrl = document.getElementById('ind-site-url').value;
+      const siteIcon = document.getElementById('ind-site-icon').value;
+      const siteDescription = document.getElementById('ind-site-description').value;
+
+      if (siteName && siteUrl && siteIcon && siteDescription) {
+        const site = {
+          name: siteName,
+          url: siteUrl,
+          icon: siteIcon,
+          description: siteDescription
+        };
+
+        sites.push(site);
+        updateJSONOutput();
+        saveData();
+        clearIndSiteFields();
+      } else {
+        alert('请输入完整的站点信息');
+      }
+    });
+
+    // 更新 JSON 输出
+  
+// 更新 JSON 输出 - 修改后的版本
+function updateJSONOutput() {
+  const jsonOutput = document.getElementById('json-output');
+  if (currentMode === 'categories') {
+    // 直接输出类别数组，不包含外层的 "categories" 键
+    jsonOutput.textContent = JSON.stringify(categories, null, 2);
+  } else {
+    // 直接输出站点数组，不包含外层的 "sites" 键
+    jsonOutput.textContent = JSON.stringify(sites, null, 2);
+  }
+}
+
+    // 导出 JSON
+// 导出 JSON - 也需要修改
+document.getElementById('export-json').addEventListener('click', () => {
+  let json;
+  let filename;
+  
+  if (currentMode === 'categories') {
+    json = JSON.stringify(categories, null, 2);
+    filename = 'categories.json';
+  } else {
+    json = JSON.stringify(sites, null, 2);
+    filename = 'sites.json';
+  }
+  
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+    // 一键复制 JSON
+    document.getElementById('copy-json').addEventListener('click', () => {
+  let json;
+  
+  if (currentMode === 'categories') {
+    json = JSON.stringify(categories, null, 2);
+  } else {
+    json = JSON.stringify(sites, null, 2);
+  }
+  
+  navigator.clipboard.writeText(json).then(() => {
+    alert('JSON 已成功复制到剪贴板！');
+  }).catch(err => {
+    alert('复制失败: ' + err);
+  });
+});
+
+    // 清空所有数据
+    document.getElementById('clear-all').addEventListener('click', () => {
+      if (confirm('确定要清空所有数据吗？')) {
+        categories = [];
+        sites = [];
+        activeCategory = null;
+        
+        updateCategoryCount();
+        updateCategorySelector();
+        updateJSONOutput();
+        updateActiveCategoryDisplay();
+        
+        saveData();
+        clearCategoryFields();
+        clearSiteFields();
+        clearIndSiteFields();
+      }
+    });
+
+    // 清空类别输入字段
+    function clearCategoryFields() {
+      document.getElementById('category-id').value = '';
+      document.getElementById('category-name').value = '';
+      document.getElementById('category-description').value = '';
+    }
+
+    // 清空站点输入字段
+    function clearSiteFields() {
+      document.getElementById('site-name').value = '';
+      document.getElementById('site-url').value = '';
+      document.getElementById('site-icon').value = '';
+      document.getElementById('site-description').value = '';
+    }
+
+    // 清空独立站点输入字段
+    function clearIndSiteFields() {
+      document.getElementById('ind-site-name').value = '';
+      document.getElementById('ind-site-url').value = '';
+      document.getElementById('ind-site-icon').value = '';
+      document.getElementById('ind-site-description').value = '';
+    }
+  </script>
+</body>
+</html>
