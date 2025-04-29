@@ -1,0 +1,650 @@
+<div class="footer" style="margin-top: 20px; font-size: 14px; color: #9370db;">
+    🐾 轻松比较不同搜索引擎结果 · 点击链接直接前往搜索 🐾
+  </div><!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>喵喵聚合搜索 🐾</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+  body {
+    background-color: #fff0f5;
+    font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+    color: #4b0082;
+    text-align: center;
+    padding: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff69b4' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .paw {
+    font-size: 32px;
+    margin: 0 10px;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin: 0;
+    background: linear-gradient(45deg, #ff69b4, #9370db);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  }
+
+  input[type="text"] {
+    width: 70%;
+    padding: 12px 15px;
+    border: 2px solid #ff69b4;
+    border-radius: 25px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: all 0.3s;
+    background-color: white;
+  }
+
+  input[type="text"]:focus {
+    border-color: #9370db;
+    box-shadow: 0 0 8px rgba(147, 112, 219, 0.5);
+  }
+
+  .engine-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .engine-label {
+    background-color: #ffe4e1;
+    padding: 10px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    border: 2px solid #ffb6c1;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    user-select: none;
+  }
+
+  .engine-label:hover {
+    background-color: #ffb6c1;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+  }
+
+  .engine-label.selected {
+    background-color: #ff69b4;
+    color: white;
+    border-color: #ff1493;
+  }
+
+  .checkbox-custom {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    display: inline-block;
+    position: relative;
+    background-color: white;
+    border: 2px solid #ff69b4;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff1493;
+    border-radius: 2px;
+  }
+
+  .search-btn {
+    background: linear-gradient(45deg, #ff69b4, #9370db);
+    color: white;
+    font-size: 20px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .search-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(255, 105, 180, 0.5);
+  }
+
+  .search-btn:active {
+    transform: translateY(1px);
+  }
+
+  .cat-emoji {
+    margin-right: 8px;
+    font-size: 24px;
+  }
+
+  .quick-selections {
+    margin-bottom: 15px;
+  }
+
+  .select-btn {
+    background-color: #e6e6fa;
+    color: #4b0082;
+    border: 1px solid #9370db;
+    border-radius: 15px;
+    padding: 6px 12px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+
+  .select-btn:hover {
+    background-color: #d8bfd8;
+  }
+
+  /* Cat-shaped alert modal */
+  .cat-alert {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 25px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    width: 80%;
+    max-width: 450px;
+    text-align: center;
+    border: 3px solid #ff69b4;
+  }
+
+  .cat-alert::before,
+  .cat-alert::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border: 3px solid #ff69b4;
+    border-radius: 50% 50% 0 0;
+    z-index: -1;
+  }
+
+  .cat-alert::before {
+    left: 50px;
+    transform: rotate(-30deg);
+  }
+
+  .cat-alert::after {
+    right: 50px;
+    transform: rotate(30deg);
+  }
+
+  .alert-face {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+
+  .alert-message {
+    color: #4b0082;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .alert-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    gap: 8px;
+  }
+
+  .engine-button {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #ffe4e1;
+    color: #4b0082;
+    text-decoration: none;
+    border-radius: 15px;
+    border: 2px solid #ffb6c1;
+    margin: 3px;
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+
+  .engine-button:hover {
+    background-color: #ffb6c1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+  }
+
+  .alert-close {
+    background: linear-gradient(45deg, #ff69b4, #9370db);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    margin-top: 10px;
+  }
+
+  .alert-close:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(147, 112, 219, 0.3);
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+
+  .footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #9370db;
+  }
+
+  @media (max-width: 600px) {
+    input[type="text"] {
+      width: 90%;
+    }
+    
+    .engine-list {
+      gap: 8px;
+    }
+    
+    .engine-label {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container animate__animated animate__fadeIn">
+  <div class="header">
+    <span class="paw">🐾</span>
+    <h1>喵喵聚合搜索</h1>
+    <span class="paw">🐾</span>
+  </div>
+
+  <input type="text" id="query" placeholder="输入你想喵的内容~" class="animate__animated animate__bounceIn">
+
+  <div class="quick-selections">
+    <button class="select-btn" onclick="selectGroup('popular')">常用搜索</button>
+    <button class="select-btn" onclick="selectGroup('china')">中文引擎</button>
+    <button class="select-btn" onclick="selectGroup('video')">视频平台</button>
+    <button class="select-btn" onclick="selectGroup('all')">全选</button>
+    <button class="select-btn" onclick="selectGroup('none')">清空</button>
+  </div>
+
+  <div class="engine-list">
+    <label class="engine-label" data-group="popular china">
+      <input type="checkbox" value="baidu">
+      <span class="checkbox-custom"></span>
+      百度
+    </label>
+    <label class="engine-label" data-group="popular">
+      <input type="checkbox" value="google">
+      <span class="checkbox-custom"></span>
+      谷歌
+    </label>
+    <label class="engine-label" data-group="popular">
+      <input type="checkbox" value="bing">
+      <span class="checkbox-custom"></span>
+      Bing
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="yandex">
+      <span class="checkbox-custom"></span>
+      Yandex
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="duckduckgo">
+      <span class="checkbox-custom"></span>
+      DuckDuckGo
+    </label>
+    <label class="engine-label" data-group="china">
+      <input type="checkbox" value="sogou">
+      <span class="checkbox-custom"></span>
+      搜狗
+    </label>
+    <label class="engine-label" data-group="china">
+      <input type="checkbox" value="so360">
+      <span class="checkbox-custom"></span>
+      360
+    </label>
+    <label class="engine-label" data-group="video popular">
+      <input type="checkbox" value="youtube">
+      <span class="checkbox-custom"></span>
+      油管
+    </label>
+    <label class="engine-label" data-group="video china">
+      <input type="checkbox" value="bilibili">
+      <span class="checkbox-custom"></span>
+      B站
+    </label>
+    <label class="engine-label" data-group="video china">
+      <input type="checkbox" value="douyin">
+      <span class="checkbox-custom"></span>
+      抖音
+    </label>
+    <label class="engine-label" data-group="popular">
+      <input type="checkbox" value="twitter">
+      <span class="checkbox-custom"></span>
+      推特
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="startpage">
+      <span class="checkbox-custom"></span>
+      StartPage
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="brave">
+      <span class="checkbox-custom"></span>
+      Brave
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="pinterest">
+      <span class="checkbox-custom"></span>
+      Pinterest
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="reddit">
+      <span class="checkbox-custom"></span>
+      Reddit
+    </label>
+    <label class="engine-label" data-group="china">
+      <input type="checkbox" value="zhihu">
+      <span class="checkbox-custom"></span>
+      知乎
+    </label>
+    <label class="engine-label" data-group="">
+      <input type="checkbox" value="github">
+      <span class="checkbox-custom"></span>
+      GitHub
+    </label>
+  </div>
+
+  <button class="search-btn animate__animated animate__pulse animate__infinite" onclick="search()">
+    <span class="cat-emoji">🐱</span>喵~ 搜索！
+  </button>
+
+  <div class="search-results" id="searchResults" style="display: none; margin-top: 20px; background-color: rgba(255, 240, 245, 0.7); padding: 15px; border-radius: 15px; border: 2px dashed #ff69b4;">
+    <h3 style="color: #ff1493; margin-top: 0;">🔍 搜索结果链接</h3>
+    <p style="margin: 10px 0; font-size: 16px;">点击下面的链接直接前往各搜索引擎：</p>
+    <div id="resultLinks" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+      <!-- 搜索链接将在这里动态生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- Custom cat alert modal -->
+<div class="overlay" id="overlay"></div>
+<div class="cat-alert" id="catAlert">
+  <div class="alert-face" id="alertFace">😺</div>
+  <div class="alert-message" id="alertMessage"></div>
+  <div class="alert-links" id="alertLinks"></div>
+  <button class="alert-close" id="alertButton" onclick="closeAlert()">喵~知道了</button>
+</div>
+
+<script>
+  // Search engine URLs
+  function getSearchUrls(query) {
+    const encoded = encodeURIComponent(query);
+    return {
+      google: `https://www.google.com/search?q=${encoded}`,
+      bing: `https://www.bing.com/search?q=${encoded}`,
+      yandex: `https://yandex.com/search/?text=${encoded}`,
+      duckduckgo: `https://duckduckgo.com/?q=${encoded}`,
+      baidu: `https://www.baidu.com/s?wd=${encoded}`,
+      sogou: `https://www.sogou.com/web?query=${encoded}`,
+      so360: `https://www.so.com/s?q=${encoded}`,
+      youtube: `https://www.youtube.com/results?search_query=${encoded}`,
+      bilibili: `https://search.bilibili.com/all?keyword=${encoded}`,
+      douyin: `https://www.douyin.com/search/${encoded}`,
+      twitter: `https://twitter.com/search?q=${encoded}`,
+      startpage: `https://www.startpage.com/do/search?q=${encoded}`,
+      brave: `https://search.brave.com/search?q=${encoded}`,
+      pinterest: `https://www.pinterest.com/search/pins/?q=${encoded}`,
+      reddit: `https://www.reddit.com/search/?q=${encoded}`,
+      zhihu: `https://www.zhihu.com/search?q=${encoded}`,
+      github: `https://github.com/search?q=${encoded}`,
+    };
+  }
+
+  // Search function
+  function search() {
+    const query = document.getElementById('query').value.trim();
+    if (!query) {
+      showCatAlert("😿", "喵喵~ 请先输入搜索内容！", null);
+      return;
+    }
+
+    const checked = Array.from(document.querySelectorAll('input[type=checkbox]:checked'))
+      .map(cb => cb.value);
+    
+    if (checked.length === 0) {
+      showCatAlert("😾", "喵呜~ 至少选一个搜索引擎哦！", null);
+      return;
+    }
+
+    const urls = getSearchUrls(query);
+    
+    // 创建搜索链接
+    const linksHtml = createSearchLinks(checked, urls);
+    
+    // 显示带有链接的弹窗
+    showCatAlert("😺", `喵~已为您准备好 "${query}" 的搜索结果！点击下方链接访问：`, linksHtml);
+    
+    // 隐藏页面上的搜索结果区域
+    document.getElementById('searchResults').style.display = 'none';
+  }
+  
+  // 为搜索结果创建链接HTML
+  function createSearchLinks(engines, urls) {
+    let linksHtml = '';
+    
+    engines.forEach(engine => {
+      if (urls[engine]) {
+        // 为不同引擎添加不同的图标
+        let icon = '🔍';
+        if (engine === 'google') icon = '🌐';
+        else if (engine === 'baidu') icon = '🔍';
+        else if (engine === 'bing') icon = '🔎';
+        else if (engine === 'youtube' || engine === 'bilibili') icon = '📺';
+        else if (engine === 'twitter') icon = '🐦';
+        else if (engine === 'github') icon = '💻';
+        else if (engine === 'zhihu') icon = '❓';
+        else if (engine === 'douyin') icon = '📱';
+        
+        linksHtml += `<a href="${urls[engine]}" class="engine-button" target="_blank">${icon} ${getEngineName(engine)}</a>`;
+      }
+    });
+    
+    return linksHtml;
+  }
+  
+  // 显示自定义猫咪弹窗，可选显示链接
+  function showCatAlert(face, message, linksHtml) {
+    document.getElementById('alertFace').innerText = face;
+    document.getElementById('alertMessage').innerText = message;
+    
+    // 处理链接区域
+    const alertLinks = document.getElementById('alertLinks');
+    if (linksHtml) {
+      alertLinks.innerHTML = linksHtml;
+      alertLinks.style.display = 'flex';
+    } else {
+      alertLinks.style.display = 'none';
+    }
+    
+    // 显示弹窗和遮罩
+    document.getElementById('overlay').style.display = 'block';
+    
+    // 确保弹窗已重置并隐藏，然后再显示，避免闪烁
+    const catAlert = document.getElementById('catAlert');
+    catAlert.style.display = 'none';
+    catAlert.classList.remove('animate__bounceIn', 'animate__bounceOut');
+    
+    // 使用setTimeout确保DOM更新后再添加动画
+    setTimeout(() => {
+      catAlert.style.display = 'block';
+      catAlert.classList.add('animate__animated', 'animate__bounceIn');
+    }, 10);
+    
+    // 设置按钮文本
+    document.getElementById('alertButton').innerText = "喵~知道了";
+  }
+  
+  // 关闭弹窗
+  function closeAlert() {
+    const catAlert = document.getElementById('catAlert');
+    catAlert.classList.remove('animate__bounceIn');
+    catAlert.classList.add('animate__bounceOut');
+    
+    setTimeout(() => {
+      document.getElementById('overlay').style.display = 'none';
+      catAlert.style.display = 'none';
+      catAlert.classList.remove('animate__bounceOut');
+      // 清空链接区域
+      document.getElementById('alertLinks').innerHTML = '';
+    }, 500);
+  }
+  
+  // 获取搜索引擎的中文名称
+  function getEngineName(engineValue) {
+    const engineMap = {
+      'google': '谷歌',
+      'bing': 'Bing',
+      'yandex': 'Yandex',
+      'duckduckgo': 'DuckDuckGo',
+      'baidu': '百度',
+      'sogou': '搜狗',
+      'so360': '360搜索',
+      'youtube': '油管',
+      'bilibili': 'B站',
+      'douyin': '抖音',
+      'twitter': '推特',
+      'startpage': 'StartPage',
+      'brave': 'Brave',
+      'pinterest': 'Pinterest',
+      'reddit': 'Reddit',
+      'zhihu': '知乎',
+      'github': 'GitHub'
+    };
+    
+    return engineMap[engineValue] || engineValue;
+  }
+
+  // 自定义警告函数 - 删除这个未使用的函数
+  function showAlert(face, message, buttonText = "喵~知道了") {
+    // 已被 showCatAlert 替代
+  }
+
+  function closeAlert() {
+    document.getElementById('catAlert').classList.remove('animate__bounceIn');
+    document.getElementById('catAlert').classList.add('animate__bounceOut');
+    
+    setTimeout(() => {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('catAlert').style.display = 'none';
+      document.getElementById('catAlert').classList.remove('animate__bounceOut');
+    }, 500);
+  }
+
+  // Quick selection groups
+  function selectGroup(group) {
+    const checkboxes = document.querySelectorAll('.engine-label input[type=checkbox]');
+    
+    checkboxes.forEach(checkbox => {
+      const label = checkbox.closest('.engine-label');
+      
+      if (group === 'all') {
+        checkbox.checked = true;
+        label.classList.add('selected');
+      } else if (group === 'none') {
+        checkbox.checked = false;
+        label.classList.remove('selected');
+      } else {
+        const groups = label.getAttribute('data-group').split(' ');
+        checkbox.checked = groups.includes(group);
+        if (checkbox.checked) {
+          label.classList.add('selected');
+        } else {
+          label.classList.remove('selected');
+        }
+      }
+    });
+  }
+
+  // Handle key press in the search box
+  document.getElementById('query').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      search();
+    }
+  });
+
+  // Toggle selected class for checkboxes
+  document.querySelectorAll('.engine-label input[type=checkbox]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      const label = this.closest('.engine-label');
+      if (this.checked) {
+        label.classList.add('selected');
+      } else {
+        label.classList.remove('selected');
+      }
+    });
+  });
+
+  // Select "popular" group by default on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    selectGroup('popular');
+  });
+</script>
+</body>
+</html>
