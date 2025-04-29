@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精美图片瀑布流展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #fef6ff;
+            color: #5a3d5c;
+            padding-top: 80px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 1rem 0;
+            background: linear-gradient(135deg, #ffcae5, #c9b6ff);
+            box-shadow: 0 4px 20px rgba(201, 182, 255, 0.4);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            color: #5a3d5c;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.6);
+        }
+        
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .waterfall {
+            column-count: 5;
+            column-gap: 15px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 1400px) {
+            .waterfall {
+                column-count: 4;
+            }
+        }
+        
+        @media (max-width: 1100px) {
+            .waterfall {
+                column-count: 3;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .waterfall {
+                column-count: 2;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .waterfall {
+                column-count: 1;
+            }
+        }
+        
+        .item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transform: scale(0.98);
+            transition: all 0.3s;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+        }
+        
+        .item:hover {
+            transform: scale(1);
+            box-shadow: 0 5px 20px rgba(201, 182, 255, 0.4);
+            z-index: 10;
+        }
+        
+        .item img {
+            width: 100%;
+            display: block;
+            transition: all 0.3s;
+        }
+        
+        .item:hover img {
+            filter: brightness(1.05);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #c9b6ff;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 15px rgba(201, 182, 255, 0.5);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            font-size: 1.5rem;
+            z-index: 100;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: #b59cff;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #947a97;
+        }
+        
+        .loading span {
+            display: inline-block;
+            animation: bounce 1.2s infinite alternate;
+        }
+        
+        .loading span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* 图片编号 */
+        .item-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #5a3d5c;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>✨ 精美图片瀑布流展示 ✨</h1>
+    </header>
+    
+    <div class="container">
+        <div class="waterfall" id="gallery">
+            <!-- 图片将通过JavaScript动态加载 -->
+        </div>
+        
+        <div class="loading" id="loading">
+            <span>加</span>
+            <span>载</span>
+            <span>中</span>
+        </div>
+    </div>
+    
+    <div class="back-to-top" id="backToTop">↑</div>
+    
+    <script>
+        // 图片加载函数
+        function loadImages() {
+            const gallery = document.getElementById('gallery');
+            const loading = document.getElementById('loading');
+            
+            // 图片总数
+            const totalImages = 134;
+            let loadedImages = 0;
+            
+            // 创建图片元素
+            for (let i = 1; i <= totalImages; i++) {
+                // 生成图片编号，确保是三位数格式 (001, 002, ..., 134)
+                const imageNumber = i.toString().padStart(3, '0');
+                const fileName = `_${imageNumber}.webp`;
+                
+                // 创建图片容器
+                const item = document.createElement('div');
+                item.className = 'item';
+                
+                // 创建图片元素
+                const img = document.createElement('img');
+                img.src = fileName; // 假设图片和HTML在同一目录
+                img.alt = `图片 ${imageNumber}`;
+                
+                // 添加加载事件
+                img.onload = function() {
+                    loadedImages++;
+                    if (loadedImages >= totalImages) {
+                        // 所有图片加载完成，隐藏加载提示
+                        loading.style.display = 'none';
+                    }
+                };
+                
+                img.onerror = function() {
+                    // 图片加载错误，替换为错误提示
+                    this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="150" viewBox="0 0 100 100"><rect fill="%23f2f2f2" width="100" height="100"/><text fill="%23999999" x="50%" y="50%" font-family="Arial" font-size="14" text-anchor="middle" dy=".3em">图片加载失败</text></svg>';
+                };
+                
+                // 创建图片编号标签
+                const numberTag = document.createElement('div');
+                numberTag.className = 'item-number';
+                numberTag.textContent = imageNumber;
+                
+                // 将元素添加到容器
+                item.appendChild(img);
+                item.appendChild(numberTag);
+                gallery.appendChild(item);
+            }
+        }
+        
+        // 当页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载图片
+            loadImages();
+            
+            // 返回顶部按钮功能
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 图片点击可以查看大图
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'IMG' && e.target.parentNode.classList.contains('item')) {
+                // 如果是在item内的图片被点击
+                const src = e.target.src;
+                window.open(src, '_blank');
+            }
+        });
+    </script>
+</body>
+</html>
