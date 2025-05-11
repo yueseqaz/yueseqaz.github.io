@@ -1,61 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>词汇配对游戏 Bento 版</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body {
-      -webkit-tap-highlight-color: transparent; /* 移除移动端点击时的蓝色高亮 */
-    }
-    .card {
-      transition-property: background-color, color, transform, box-shadow;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 200ms;
-    }
-  
-    .card:not(.pointer-events-none):hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Upgrades</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+        .bento-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 25px;
+            width: 80%;
+            max-width: 800px;
+        }
+        .bento-item {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .bento-item h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .bento-item p {
+            margin: 0;
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans p-4 md:p-6">
-  <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- 玩家信息区域 -->
-    <div class="rounded-2xl shadow-xl p-5 md:p-6 bg-gradient-to-br from-blue-100 to-blue-300">
-      <h2 class="text-xl lg:text-2xl font-bold mb-3">第九组小游戏</h2>
-      <input id="groupName" type="text" placeholder="请输入组名" class="mt-2 p-3 rounded w-full border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-      <button id="startGameButton" class="mt-4 w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-lg">开始游戏</button>
-      <div id="timer" class="text-right mt-3 text-gray-700 font-medium">⏱️ 用时：0.0 秒</div>
+<body>
+    <div class="bento-container">
+        <div class="bento-item">
+            <h2>AI Prompts Collection</h2>
+            <p>Explore a curated collection of AI prompts to enhance your creativity and productivity.</p>
+        </div>
+        <div class="bento-item">
+            <h2>Personal Photography</h2>
+            <p>Discover a personal collection of photographs capturing moments and memories.</p>
+        </div>
+        <div class="bento-item">
+            <h2>Bookmark Collection</h2>
+            <p>Access a handpicked selection of bookmarks for quick reference and inspiration.</p>
+        </div>
+        <div class="bento-item">
+            <h2>Coming Soon</h2>
+            <p>Stay tuned for more exciting updates and features!</p>
+        </div>
     </div>
-
-    <!-- 配对游戏区 -->
-    <div class="rounded-2xl shadow-xl p-5 md:p-6 bg-gradient-to-br from-green-100 to-green-300">
-      <h2 class="text-xl lg:text-2xl font-bold mb-3">点击配对词汇</h2>
-      <div id="gameGrid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4">
-        <!-- JS 动态插入卡片 -->
-      </div>
-    </div>
-
-    <!-- 排行榜区域 -->
-    <div class="rounded-2xl shadow-xl p-5 md:p-6 bg-gradient-to-br from-purple-100 to-purple-300 col-span-full">
-      <h2 class="text-xl lg:text-2xl font-bold mb-3">🏆 实时排行榜</h2>
-      <ul id="rankingList" class="list-disc pl-5 space-y-1 text-gray-700">
-        <!-- JS 动态插入排名 -->
-      </ul>
-    </div>
-
-  
-  </div>
-
-  <!-- Firebase v8 SDK (兼容版 - namespaced) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <!-- <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> -->
-
-  <script src="app.js"></script>
 </body>
 </html>
