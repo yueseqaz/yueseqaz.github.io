@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蝉鸣舞时 - 舞蹈专场晚会节目单</title> <!-- Added a title for clarity -->
+    <title>蝉鸣舞时 - 舞蹈专场晚会节目单</title>
     <link href="https://fonts.googleapis.com/css2?family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -14,49 +14,47 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        html {
+            scroll-behavior: smooth; /* Optional: for smoother scrolling between sections */
+        }
         
         body {
             font-family: 'Noto Serif SC', serif;
-            background-color: #DCDCDC; /* Light gray background for area around pages */
+            background-color: #f5f5f0; /* Set to page background color */
             color: #333;
             line-height: 1.6;
+            /* margin: 0; Already handled by * reset */
+            /* padding: 0; Already handled by * reset */
         }
         
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto; /* Center the container */
-            padding: 20px; /* Padding around the content sections */
-        }
+        /* Removed .container styles as the div is removed */
         
-        /* 封面部分 & 节目单部分 common styles for "page" appearance */
         .cover, .program-section {
-            height: 1100px; /* Fixed height for desktop to make them "same size" */
-            background-color: #f5f5f0; /* Page background */
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            /* background-color: #f5f5f0; /* This is now on body, but can be here too if sections have different BGs */
             border: 3px double #d3c1a4; 
-            position: relative; /* For pseudo-elements and absolute children */
-            margin-bottom: 30px; /* Space between "pages" on web view */
-            display: flex; /* Use flexbox to manage inner content height */
-            flex-direction: column; /* Stack children vertically */
-            overflow: hidden; /* Crucial: Content exceeding fixed height will be cut */
+            position: relative; 
+            /* margin-bottom: 30px; /* Removed for full-page effect, add back if separation needed when scrolling */
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; /* CRUCIAL: Content exceeding viewport will be cut */
         }
 
-        /* 封面部分 */
         .cover {
             background: linear-gradient(rgba(165, 222, 228, 0.7), rgba(165, 222, 228, 0.5)), 
                         url('https://pomf2.lain.la/f/9a6iduar.jpg') no-repeat center center;
             background-size: cover;
-            padding: 40px; /* Existing padding inside the cover */
-            /* min-height: 400px; /* Removed, using fixed height now */
+            padding: 40px; /* Padding is INSIDE the 100vw/100vh */
         }
 
         .cover-content-wrapper {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            /* height: 100%; /* Flex-grow handles this better */
             position: relative; 
-            flex-grow: 1; /* Allow this wrapper to expand to fill .cover's height */
+            flex-grow: 1; 
         }
         
         .left-section {
@@ -72,14 +70,14 @@
         }
         
         .year {
-            font-size: 24px;
+            font-size: 30px; 
             font-weight: 500;
             color: #333;
             margin-bottom: 10px;
         }
         
         .date {
-            font-size: 60px;
+            font-size: 76px; 
             font-weight: 600;
             line-height: 1;
             color: #333;
@@ -87,23 +85,24 @@
         
         .time {
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 26px; 
             color: #333;
         }
         
         .venue {
             margin-top: 15px;
-            font-size: 14px;
-            max-width: 200px;
+            font-size: 18px; 
+            max-width: 240px; 
             color: #555;
         }
         
         .organizer {
-            font-size: 12px;
+            font-size: 15px; 
             color: #555;
             text-align: left;
             margin-top: 20px;
-            max-width: 280px;
+            max-width: 320px; 
+            line-height: 1.7; 
         }
         
         .title-section {
@@ -123,17 +122,17 @@
         .main-title {
             writing-mode: vertical-rl;
             text-orientation: mixed;
-            font-size: 52px;
+            font-size: 68px; 
             font-weight: 400;
             color: #3a7d7e;
-            height: 240px;
-            letter-spacing: 8px;
-            margin-bottom: 20px;
+            height: 320px; 
+            letter-spacing: 12px; 
+            margin-bottom: 25px; 
             text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
         }
         
         .english-title {
-            font-size: 14px;
+            font-size: 18px; 
             color: #555;
             letter-spacing: 2px;
             text-align: right;
@@ -141,67 +140,66 @@
         }
         
         .subtitle {
-            font-size: 18px;
+            font-size: 24px; 
             color: #3a7d7e;
-            margin-top: 20px;
+            margin-top: 25px; 
         }
 
         .additional-cover-info {
             text-align: left;
-            font-size: 12px;
+            font-size: 15px; 
             color: #555;
-            line-height: 1.5;
+            line-height: 1.7; 
             margin-top: 20px; 
         }
 
         .event-type-cover {
-            font-size: 16px;
+            font-size: 22px; 
             font-weight: 600;
             color: #3a7d7e; 
-            margin-bottom: 10px;
+            margin-bottom: 15px; 
         }
 
         .host-organizer-info p {
-            margin-bottom: 5px;
+            margin-bottom: 8px; 
         }
         .host-organizer-info p:last-child {
             margin-bottom: 0;
         }
         
-        /* 节目单部分 */
         .program-section {
             background: linear-gradient(rgba(165, 222, 228, 0.85), rgba(255, 255, 255, 0.85)), 
                         url('https://pomf2.lain.la/f/x9v37dp8.jpg') no-repeat center center;
             background-size: cover;
-            /* Children define padding effectively, no direct padding on program-section itself */
+             /* No direct padding, children handle it. It is 100vw/100vh box. */
         }
 
         .program-content-wrapper {
             position: relative;
-            flex-grow: 1; /* Allow this wrapper to expand to fill .program-section's height */
-            display: flex; /* Added for managing header and content */
-            flex-direction: column; /* Stack header and content */
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
         }
         
         .program-header {
             text-align: center;
-            padding: 30px 0;
+            padding: 35px 0; 
             background: rgba(165, 222, 228, 0.85); 
             border-bottom: 1px solid #e0e0d5;
-            flex-shrink: 0; /* Prevent header from shrinking */
+            flex-shrink: 0; 
         }
         
         .program-header h2 {
             font-weight: 400;
-            font-size: 24px;
-            letter-spacing: 8px;
+            font-size: 30px; 
+            letter-spacing: 10px; 
             color: #9a8866;
             display: inline-block; 
             position: relative; 
         }
 
         .program-title-text {
-            padding: 0 35px; 
+            padding: 0 40px; 
             position: relative;
             display: inline-block; 
         }
@@ -209,7 +207,7 @@
         .program-title-text::before,
         .program-title-text::after {
             color: #b5a68a; 
-            font-size: 22px; 
+            font-size: 26px; 
             font-family: 'Noto Serif SC', serif; 
             line-height: 1; 
             position: absolute;
@@ -229,14 +227,18 @@
         
         .program-content {
             display: flex;
-            padding: 20px 0; /* Padding for inside the content columns area */
-            flex-grow: 1; /* Allow content area to take remaining space */
-            /* overflow-y: auto; /* Optional: if content might scroll on web. For PDF, must fit. */
+            padding: 25px 0; 
+            flex-grow: 1; 
+            overflow-y: auto; /* If program list is long, allow scroll WITHIN program-content */
+            /* Note: If program-content itself scrolls, ensure its height is constrained 
+               or it might push .watermark (if any) out of view if .watermark is after it.
+               Flex-grow will make it take available space.
+            */
         }
         
         .program-left, .program-right {
             flex: 1;
-            padding: 20px 40px; /* Main content padding for items */
+            padding: 20px 45px; 
             position: relative;
         }
         
@@ -245,78 +247,79 @@
         }
         
         .program-item {
-            margin-bottom: 30px;
+            margin-bottom: 35px; 
             position: relative;
         }
         
         .program-number {
             display: inline-block;
-            margin-right: 10px;
+            margin-right: 12px; 
             color: #3a7d7e;
             font-weight: 500;
         }
         
         .program-title {
-            font-size: 16px;
+            font-size: 20px; 
             font-weight: 500;
-            margin-bottom: 5px;
+            margin-bottom: 8px; 
             color: #333;
         }
         
         .program-creator, .program-performer {
-            font-size: 13px;
+            font-size: 16px; 
             color: #555;
-            margin-bottom: 3px;
+            margin-bottom: 5px; 
+            line-height: 1.5;
         }
         
         .watermark {
             text-align: center;
-            padding: 10px;
+            padding: 15px; 
             opacity: 0.5;
-            font-size: 12px;
+            font-size: 14px; 
             color: #aaa;
-            flex-shrink: 0; /* Prevent watermark from shrinking if it's inside program-content-wrapper */
+            flex-shrink: 0; 
         }
 
         /* DECORATIVE BORDER ELEMENTS */
+        /* Positions are relative to their 100vw/100vh parent or wrapper */
         .cover::before, .cover::after,
         .cover-content-wrapper::before, .cover-content-wrapper::after,
         .program-section::before, .program-section::after,
         .program-content-wrapper::before, .program-content-wrapper::after {
             position: absolute;
-            font-size: 20px; 
+            font-size: 24px; 
             color: #a89a7c; 
             z-index: 1; 
             line-height: 1;
             font-family: 'Noto Serif SC', serif; 
         }
 
-        /* COVER DECORATIONS - relative to .cover's padding box (due to padding: 40px) */
-        .cover::before { content: "❦"; top: 10px; left: 10px; }
-        .cover::after { content: "❧"; bottom: 10px; right: 10px; transform: rotate(180deg); }
-        /* COVER CONTENT WRAPPER DECORATIONS - relative to .cover-content-wrapper edges */
-        /* This wrapper is inside .cover's padding. */
-        .cover-content-wrapper::before { content: "❧"; top: 10px; right: 10px; }
-        .cover-content-wrapper::after { content: "❦"; bottom: 10px; left: 10px; transform: rotate(180deg); }
+        /* Cover decorations will be near edges of viewport now due to .cover padding */
+        .cover::before { content: "❦"; top: 12px; left: 12px; } 
+        .cover::after { content: "❧"; bottom: 12px; right: 12px; transform: rotate(180deg); }
+        /* Cover content wrapper is inside .cover's padding. These are relative to the wrapper. */
+        .cover-content-wrapper::before { content: "❧"; top: 12px; right: 12px; }
+        .cover-content-wrapper::after { content: "❦"; bottom: 12px; left: 12px; transform: rotate(180deg); }
 
-        /* PROGRAM-SECTION DECORATIONS - relative to .program-section edges (it has no direct padding) */
-        .program-section::before { content: "❦"; top: 10px; left: 10px; }
-        .program-section::after { content: "❧"; bottom: 10px; right: 10px; transform: rotate(180deg); }
-        /* PROGRAM CONTENT WRAPPER DECORATIONS - relative to .program-content-wrapper edges */
-        .program-content-wrapper::before { content: "❧"; top: 10px; right: 10px; }
-        .program-content-wrapper::after { content: "❦"; bottom: 10px; left: 10px; transform: rotate(180deg); }
+        /* Program section decorations (no direct padding on .program-section) */
+        .program-section::before { content: "❦"; top: 12px; left: 12px; }
+        .program-section::after { content: "❧"; bottom: 12px; right: 12px; transform: rotate(180deg); }
+        /* Program content wrapper decorations */
+        .program-content-wrapper::before { content: "❧"; top: 12px; right: 12px; }
+        .program-content-wrapper::after { content: "❦"; bottom: 12px; left: 12px; transform: rotate(180deg); }
         
         @media screen and (max-width: 768px) {
             .cover, .program-section {
                 height: auto; /* Revert to auto height on mobile */
+                /* width: 100%; /* Will naturally be 100% of body */
             }
             .cover {
-                /* flex-direction: column; /* Already applied by .cover-content-wrapper change below */
-                min-height: 500px; /* Restore min-height for cover on mobile */
+                min-height: 100vh; /* Cover could still try to be full height if content is short */
                 padding: 25px; 
             }
             .cover-content-wrapper {
-                flex-direction: column; /* Stack content vertically on mobile */
+                flex-direction: column; 
             }
             
             .left-section {
@@ -330,21 +333,37 @@
                 margin-bottom: 40px;
             }
             
-            .main-title {
-                font-size: 40px;
-                height: 180px;
-            }
+            .year { font-size: 24px; }
+            .date { font-size: 60px; }
+            .time { font-size: 20px; }
+            .venue { font-size: 14px; max-width: 200px; }
+            .organizer { font-size: 12px; max-width: 100%; line-height: 1.6; } /* Max-width 100% for mobile */
 
-            .additional-cover-info {
-                text-align: left; 
-                margin-top: 30px; 
+            .main-title {
+                font-size: 40px; 
+                height: 180px; 
+                letter-spacing: 8px; 
+                margin-bottom: 20px;
             }
-            
+            .english-title { font-size: 14px; }
+            .subtitle { font-size: 18px; margin-top: 20px; }
+            .event-type-cover { font-size: 16px; margin-bottom: 10px; }
+            .additional-cover-info { font-size: 12px; line-height: 1.6; }
+            .host-organizer-info p { margin-bottom: 5px; }
+
             .program-section {
-                /* padding: 10px; /* If overall padding for program section on mobile is desired */
+                min-height: 100vh; /* Program section could also try to be full height */
             }
-            .program-content {
-                flex-direction: column;
+            .program-header { padding: 30px 0; }
+            .program-header h2 { font-size: 20px; letter-spacing: 8px; }
+            .program-title-text { padding: 0 25px; }
+            .program-title-text::before,
+            .program-title-text::after { font-size: 18px; }
+            
+            .program-content { 
+                flex-direction: column; 
+                padding: 20px 0;
+                overflow-y: visible; /* Allow natural scrolling of content on mobile */
             }
             
             .program-left {
@@ -354,177 +373,162 @@
             .program-left, .program-right {
                 padding: 20px; 
             }
-            .program-title-text {
-                padding: 0 25px; 
-            }
-            .program-header h2 {
-                font-size: 20px; 
-            }
-            .program-title-text::before,
-            .program-title-text::after {
-                font-size: 18px; 
-            }
+            .program-item { margin-bottom: 30px; }
+            .program-number { margin-right: 10px; }
+            .program-title { font-size: 16px; margin-bottom: 5px; }
+            .program-creator, .program-performer { font-size: 13px; margin-bottom: 3px; line-height: 1.5; }
+            .watermark { font-size: 12px; padding: 10px; }
 
-            /* Adjust decorative border elements for mobile */
             .cover::before, .cover::after,
             .cover-content-wrapper::before, .cover-content-wrapper::after,
             .program-section::before, .program-section::after,
             .program-content-wrapper::before, .program-content-wrapper::after {
-                font-size: 16px; /* Smaller characters */
+                font-size: 18px; 
             }
 
-            /* Mobile positioning for cover decorations (relative to 25px padding of .cover) */
             .cover::before { top: 8px; left: 8px; }
             .cover::after { bottom: 8px; right: 8px; }
-            /* .cover-content-wrapper decorations will also be relative to its edges.
-               Adjust their top/right/bottom/left if needed based on new .cover padding.
-               Current 10px offset inside wrapper should still work visually.
-            */
             .cover-content-wrapper::before { top: 8px; right: 8px; }
             .cover-content-wrapper::after { bottom: 8px; left: 8px; }
 
-
-            /* Mobile positioning for program-section decorations (relative to .program-section edges) */
-            .program-section::before { top: 5px; left: 5px; }
-            .program-section::after { bottom: 5px; right: 5px; }
-            /* Program content wrapper decorations */
-            .program-content-wrapper::before { top: 5px; right: 5px; }
-            .program-content-wrapper::after { bottom: 5px; left: 5px; }
+            .program-section::before { top: 8px; left: 8px; } 
+            .program-section::after { bottom: 8px; right: 8px; }
+            .program-content-wrapper::before { top: 8px; right: 8px; }
+            .program-content-wrapper::after { bottom: 8px; left: 8px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 封面区域 -->
-        <div class="cover">
-            <div class="cover-content-wrapper">
-                <div class="left-section">
-                    <div class="date-section">
-                        <div class="year">2025</div>
-                        <div class="date">05<br>22</div>
-                        <div class="time">19:00</div>
-                        <div class="venue">地点：遵义师范学院<br>大礼堂</div>
-                    </div>
-                    <div class="organizer">
-                        总策划：安华文 刘云松<br>
-                        总导演：魏孙璐 赵楠 陈文君 <br>
-    执行导演：刘馨婷 曹柳青 <br>王继子 朱婉莎 张红飞 周雅欣 <br>
-    舞台总监：丁培杰<br>
-    策划: 冷嘉民  郭亚洲  贾卓衡  董鋆棵
-                    </div>
+    <!-- Container div is removed -->
+    <!-- 封面区域 -->
+    <div class="cover">
+        <div class="cover-content-wrapper">
+            <div class="left-section">
+                <div class="date-section">
+                    <div class="year">2025年</div>
+                    <div class="date">05月<br>22日</div>
+                    <div class="time">19:00</div>
+                    <div class="venue">地点：遵义师范学院<br>大礼堂</div>
                 </div>
-                <div class="title-section">
-                    <div class="title-container">
-                        <div class="main-title" style="font-family: 'Liu Jian Mao Cao', 'Noto Serif SC', serif;">蝉鸣舞时</div>
-                        <div class="english-title">DANCE BEGINNING NO END</div>
-                        <div class="subtitle">音乐与舞蹈学院舞蹈编导舞蹈专场晚会节目单</div>
-                    </div>
-                    <div class="additional-cover-info">
-                        <div class="event-type-cover">舞蹈专场</div>
-                        <div class="host-organizer-info">
-                            <p>主办单位: 遵义师范学院教务处<br>遵义师范学院音乐与舞蹈学院<br>红色经典艺术教育示范基地</p>
-                            <p>承办单位: 音乐与舞蹈学院舞蹈教研室<br>音乐与舞蹈学院实践教学教研室</p>
-                        </div>
-                    </div>
+                <div class="organizer">
+                    总策划：安华文 刘云松<br>
+                    总导演：魏孙璐 赵楠 陈文君 <br>
+执行导演：刘馨婷 曹柳青 <br>王继子 朱婉莎 张红飞 周雅欣 <br>
+舞台总监：丁培杰<br>
+策划: 冷嘉民  郭亚洲  贾卓衡  董鋆棵
                 </div>
             </div>
-        </div>
-        
-        <!-- 节目单区域 -->
-        <div class="program-section">
-            <div class="program-content-wrapper">
-                <div class="program-header">
-                    <h2><span class="program-title-text">节目单</span></h2>
+            <div class="title-section">
+                <div class="title-container">
+                    <div class="main-title" style="font-family: 'Liu Jian Mao Cao', 'Noto Serif SC', serif;">蝉鸣舞时</div>
+                    <div class="english-title">DANCE BEGINNING NO END</div>
+                    <div class="subtitle">音乐与舞蹈学院舞蹈编导舞蹈专场晚会节目单</div>
                 </div>
-                <div class="program-content">
-                    <!-- 左侧节目单 -->
-                    <div class="program-left">
-                         <div class="program-item">
-                            <div class="program-title"><span class="program-number">开场</span>开场舞:《青春DISCO》</div>
-                            <div class="program-creator">编导: 刘羽彤、张金壹、徐川</div>
-                            <div class="program-performer">表演：22级舞编本科班</div>
-                        </div>
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">1.</span>《为了万家灯火》</div>
-                       
-                            <div class="program-performer">表演：22级舞编专升本1班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">2.</span>《觉/moment》</div>
-                           
-                            <div class="program-performer">表演：22级舞编本科班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">3.</span>《守护》</div>
-                            
-                            <div class="program-performer">表演：22 级舞编专升本2班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">4.</span>《蘭叙》</div>
-                            
-                            <div class="program-performer">表演：23级舞编女班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">5.</span>《单人舞串烧《狂草》《悟》》</div>
-                            
-                            <div class="program-performer">表演：24级舞编1班</div>
-                        </div>
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">6.</span>《云莲》</div>
-                            
-                            <div class="program-performer">表演：22级舞编女班</div>
-                        </div>
-                       
-                    </div>
-                    
-                    <!-- 右侧节目单 -->
-                    <div class="program-right">
-                         
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">7.</span>《寂寞舞者》</div>
-                            
-                            <div class="program-performer">表演：24级舞编1班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">8.</span>《狼图腾》</div>
-                            
-                            <div class="program-performer">表演：22 级舞编男班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">9.</span>《水语纱谣》</div>
-                           
-                            <div class="program-performer">表演：23级舞编女班</div>
-                        </div>
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">10.</span>《心中的日月》</div>
-                            
-                            <div class="program-performer">表演：24级舞编2班</div>
-                        </div>
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">11.</span>《走进光里》</div>
-                            
-                            <div class="program-performer">表演：22级舞编本科班</div>
-                        </div>
-                       
-                        
-                        <div class="program-item">
-                            <div class="program-title"><span class="program-number">尾声.</span>《为你而飞》</div>
-                            <div class="program-creator">编导：郭亚洲、贾卓衡、董鋆棵</div>
-                            <div class="program-performer">表演：22 级舞编本科班全体同学</div>
-                        </div>
+                <div class="additional-cover-info">
+                    <div class="event-type-cover">舞蹈专场</div>
+                    <div class="host-organizer-info">
+                        <p>主办单位: 遵义师范学院教务处<br>遵义师范学院音乐与舞蹈学院<br>红色经典艺术教育示范基地</p>
+                        <p>承办单位: 音乐与舞蹈学院舞蹈教研室<br>音乐与舞蹈学院实践教学教研室</p>
                     </div>
                 </div>
-                <!-- Example of watermark if needed, ensure it's within the flow or absolutely positioned carefully -->
-                <!-- <div class="watermark">遵义师范学院音乐与舞蹈学院</div> -->
             </div>
         </div>
     </div>
+    
+    <!-- 节目单区域 -->
+    <div class="program-section">
+        <div class="program-content-wrapper">
+            <div class="program-header">
+                <h2><span class="program-title-text">节目单</span></h2>
+            </div>
+            <div class="program-content">
+                <!-- 左侧节目单 -->
+                <div class="program-left">
+                     <div class="program-item">
+                        <div class="program-title"><span class="program-number">开场</span>开场舞:《青春DISCO》</div>
+                        <div class="program-creator">编导: 刘羽彤、张金壹、徐川</div>
+                        <div class="program-performer">表演：22级舞编本科班</div>
+                    </div>
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">1.</span>《为了万家灯火》</div>
+                   
+                        <div class="program-performer">表演：22级舞编专升本1班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">2.</span>《觉/moment》</div>
+                       
+                        <div class="program-performer">表演：22级舞编本科班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">3.</span>《守护》</div>
+                        
+                        <div class="program-performer">表演：22 级舞编专升本2班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">4.</span>《蘭叙》</div>
+                        
+                        <div class="program-performer">表演：23级舞编女班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">5.</span>《单人舞串烧《狂草》《悟》》</div>
+                        
+                        <div class="program-performer">表演：24级舞编1班</div>
+                    </div>
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">6.</span>《云莲》</div>
+                        
+                        <div class="program-performer">表演：22级舞编女班</div>
+                    </div>
+                   
+                </div>
+                
+                <!-- 右侧节目单 -->
+                <div class="program-right">
+                     
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">7.</span>《寂寞舞者》</div>
+                        
+                        <div class="program-performer">表演：24级舞编1班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">8.</span>《狼图腾》</div>
+                        
+                        <div class="program-performer">表演：22 级舞编男班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">9.</span>《水语纱谣》</div>
+                       
+                        <div class="program-performer">表演：23级舞编女班</div>
+                    </div>
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">10.</span>《心中的日月》</div>
+                        
+                        <div class="program-performer">表演：24级舞编2班</div>
+                    </div>
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">11.</span>《走进光里》</div>
+                        
+                        <div class="program-performer">表演：22级舞编本科班</div>
+                    </div>
+                   
+                    
+                    <div class="program-item">
+                        <div class="program-title"><span class="program-number">尾声.</span>《为你而飞》</div>
+                        <div class="program-creator">编导：郭亚洲、贾卓衡、董鋆棵</div>
+                        <div class="program-performer">表演：22 级舞编本科班全体同学</div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="watermark">遵义师范学院音乐与舞蹈学院</div> -->
+        </div>
+    </div>
+
 </body>
 </html>
