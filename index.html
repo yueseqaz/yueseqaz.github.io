@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>蝉鸣舞时 - 舞蹈专场晚会节目单</title> <!-- Added a title for clarity -->
     <link href="https://fonts.googleapis.com/css2?family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -17,7 +17,7 @@
         
         body {
             font-family: 'Noto Serif SC', serif;
-            background-color: #f5f5f0;
+            background-color: #DCDCDC; /* Light gray background for area around pages */
             color: #333;
             line-height: 1.6;
         }
@@ -25,32 +25,38 @@
         .container {
             width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 0 auto; /* Center the container */
+            padding: 20px; /* Padding around the content sections */
         }
         
+        /* 封面部分 & 节目单部分 common styles for "page" appearance */
+        .cover, .program-section {
+            height: 1100px; /* Fixed height for desktop to make them "same size" */
+            background-color: #f5f5f0; /* Page background */
+            border: 3px double #d3c1a4; 
+            position: relative; /* For pseudo-elements and absolute children */
+            margin-bottom: 30px; /* Space between "pages" on web view */
+            display: flex; /* Use flexbox to manage inner content height */
+            flex-direction: column; /* Stack children vertically */
+            overflow: hidden; /* Crucial: Content exceeding fixed height will be cut */
+        }
+
         /* 封面部分 */
         .cover {
             background: linear-gradient(rgba(165, 222, 228, 0.7), rgba(165, 222, 228, 0.5)), 
-                        url('https://bu.dusays.com/2025/05/18/682a0106dd7d3.jpg') no-repeat center center; /* Ensure path is correct */
+                        url('https://pomf2.lain.la/f/9a6iduar.jpg') no-repeat center center;
             background-size: cover;
-            /* display: flex; /* Moved to wrapper */
-            /* justify-content: space-between; /* Moved to wrapper */
-            padding: 40px; /* Existing padding */
-            border-radius: 5px;
-            margin-bottom: 30px;
-            position: relative; /* For pseudo-elements */
-            min-height: 400px; 
-            border: 3px double #d3c1a4; 
+            padding: 40px; /* Existing padding inside the cover */
+            /* min-height: 400px; /* Removed, using fixed height now */
         }
 
-        /* New wrapper for cover content */
         .cover-content-wrapper {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            height: 100%;
-            position: relative; /* For its own pseudo-elements */
+            /* height: 100%; /* Flex-grow handles this better */
+            position: relative; 
+            flex-grow: 1; /* Allow this wrapper to expand to fill .cover's height */
         }
         
         .left-section {
@@ -165,18 +171,16 @@
         /* 节目单部分 */
         .program-section {
             background: linear-gradient(rgba(165, 222, 228, 0.85), rgba(255, 255, 255, 0.85)), 
-                        url('https://pomf2.lain.la/f/x9v37dp8.jpg') no-repeat center center; /* Ensure path is correct */
+                        url('https://pomf2.lain.la/f/x9v37dp8.jpg') no-repeat center center;
             background-size: cover;
-            border-radius: 5px;
-            margin-bottom: 40px;
-            border: 3px double #d3c1a4; 
-            position: relative; /* For pseudo-elements */
-            /* Children define padding effectively */
+            /* Children define padding effectively, no direct padding on program-section itself */
         }
 
-        /* New wrapper for program content */
         .program-content-wrapper {
-            position: relative; /* For its own pseudo-elements */
+            position: relative;
+            flex-grow: 1; /* Allow this wrapper to expand to fill .program-section's height */
+            display: flex; /* Added for managing header and content */
+            flex-direction: column; /* Stack header and content */
         }
         
         .program-header {
@@ -184,6 +188,7 @@
             padding: 30px 0;
             background: rgba(165, 222, 228, 0.85); 
             border-bottom: 1px solid #e0e0d5;
+            flex-shrink: 0; /* Prevent header from shrinking */
         }
         
         .program-header h2 {
@@ -224,12 +229,14 @@
         
         .program-content {
             display: flex;
-            padding: 20px 0; /* This padding is for inside the content columns */
+            padding: 20px 0; /* Padding for inside the content columns area */
+            flex-grow: 1; /* Allow content area to take remaining space */
+            /* overflow-y: auto; /* Optional: if content might scroll on web. For PDF, must fit. */
         }
         
         .program-left, .program-right {
             flex: 1;
-            padding: 20px 40px; /* This is the main content padding for items */
+            padding: 20px 40px; /* Main content padding for items */
             position: relative;
         }
         
@@ -268,72 +275,48 @@
             opacity: 0.5;
             font-size: 12px;
             color: #aaa;
+            flex-shrink: 0; /* Prevent watermark from shrinking if it's inside program-content-wrapper */
         }
 
-        /* ====== NEW DECORATIVE BORDER ELEMENTS ====== */
+        /* DECORATIVE BORDER ELEMENTS */
         .cover::before, .cover::after,
         .cover-content-wrapper::before, .cover-content-wrapper::after,
         .program-section::before, .program-section::after,
         .program-content-wrapper::before, .program-content-wrapper::after {
             position: absolute;
             font-size: 20px; 
-            color: #a89a7c; /* Slightly darker for better visibility */
-            z-index: 1; /* Above background, potentially below some explicit content */
+            color: #a89a7c; 
+            z-index: 1; 
             line-height: 1;
-            font-family: 'Noto Serif SC', serif; /* Ensure correct font for symbols */
+            font-family: 'Noto Serif SC', serif; 
         }
 
-        /* COVER DECORATIONS */
-        .cover::before { /* Top-left of .cover */
-            content: "❦"; top: 10px; left: 10px;
-        }
-        .cover-content-wrapper::before { /* Top-right, relative to wrapper */
-            content: "❧"; top: 0px; right: 0px; /* Align with wrapper's edge if wrapper fills parent */
-             /* If .cover has 40px padding, wrapper is inside that.
-                So these coords are relative to wrapper which is 40px inset.
-                Let's adjust relative to .cover's padding box for consistency
-             */
-        }
-        .cover-content-wrapper::after { /* Bottom-left, relative to wrapper */
-            content: "❦"; bottom: 0px; left: 0px;
-            transform: rotate(180deg);
-        }
-        .cover::after { /* Bottom-right of .cover */
-            content: "❧"; bottom: 10px; right: 10px;
-            transform: rotate(180deg);
-        }
-        /* Refined cover wrapper decorations to be relative to cover's padding box as well */
-        .cover-content-wrapper::before { top: 10px; right: 10px; content: "❧"; }
-        .cover-content-wrapper::after { bottom: 10px; left: 10px; content: "❦"; transform: rotate(180deg); }
+        /* COVER DECORATIONS - relative to .cover's padding box (due to padding: 40px) */
+        .cover::before { content: "❦"; top: 10px; left: 10px; }
+        .cover::after { content: "❧"; bottom: 10px; right: 10px; transform: rotate(180deg); }
+        /* COVER CONTENT WRAPPER DECORATIONS - relative to .cover-content-wrapper edges */
+        /* This wrapper is inside .cover's padding. */
+        .cover-content-wrapper::before { content: "❧"; top: 10px; right: 10px; }
+        .cover-content-wrapper::after { content: "❦"; bottom: 10px; left: 10px; transform: rotate(180deg); }
 
-
-        /* PROGRAM-SECTION DECORATIONS */
-        /* .program-section itself has no direct padding, content within it does.
-           So these will be near the very edges of program-section. */
-        .program-section::before { /* Top-left */
-            content: "❦"; top: 10px; left: 10px;
-        }
-        .program-content-wrapper::before { /* Top-right */
-            content: "❧"; top: 10px; right: 10px; 
-        }
-        .program-content-wrapper::after { /* Bottom-left */
-            content: "❦"; bottom: 10px; left: 10px; 
-            transform: rotate(180deg);
-        }
-        .program-section::after { /* Bottom-right */
-            content: "❧"; bottom: 10px; right: 10px;
-            transform: rotate(180deg);
-        }
+        /* PROGRAM-SECTION DECORATIONS - relative to .program-section edges (it has no direct padding) */
+        .program-section::before { content: "❦"; top: 10px; left: 10px; }
+        .program-section::after { content: "❧"; bottom: 10px; right: 10px; transform: rotate(180deg); }
+        /* PROGRAM CONTENT WRAPPER DECORATIONS - relative to .program-content-wrapper edges */
+        .program-content-wrapper::before { content: "❧"; top: 10px; right: 10px; }
+        .program-content-wrapper::after { content: "❦"; bottom: 10px; left: 10px; transform: rotate(180deg); }
         
         @media screen and (max-width: 768px) {
-            .cover {
-                flex-direction: column;
-                min-height: 500px;
-                padding: 25px; /* Cover's padding on mobile */
+            .cover, .program-section {
+                height: auto; /* Revert to auto height on mobile */
             }
-            /* Adjust flex direction for cover wrapper content on mobile */
+            .cover {
+                /* flex-direction: column; /* Already applied by .cover-content-wrapper change below */
+                min-height: 500px; /* Restore min-height for cover on mobile */
+                padding: 25px; 
+            }
             .cover-content-wrapper {
-                flex-direction: column;
+                flex-direction: column; /* Stack content vertically on mobile */
             }
             
             .left-section {
@@ -357,6 +340,9 @@
                 margin-top: 30px; 
             }
             
+            .program-section {
+                /* padding: 10px; /* If overall padding for program section on mobile is desired */
+            }
             .program-content {
                 flex-direction: column;
             }
@@ -364,9 +350,6 @@
             .program-left {
                 border-right: none;
                 border-bottom: 1px solid #e0e0d5;
-            }
-            .program-section {
-                padding: 10px; /* Program section overall padding on mobile */
             }
             .program-left, .program-right {
                 padding: 20px; 
@@ -390,17 +373,23 @@
                 font-size: 16px; /* Smaller characters */
             }
 
-            /* Mobile positioning for cover decorations (relative to 25px padding) */
+            /* Mobile positioning for cover decorations (relative to 25px padding of .cover) */
             .cover::before { top: 8px; left: 8px; }
+            .cover::after { bottom: 8px; right: 8px; }
+            /* .cover-content-wrapper decorations will also be relative to its edges.
+               Adjust their top/right/bottom/left if needed based on new .cover padding.
+               Current 10px offset inside wrapper should still work visually.
+            */
             .cover-content-wrapper::before { top: 8px; right: 8px; }
             .cover-content-wrapper::after { bottom: 8px; left: 8px; }
-            .cover::after { bottom: 8px; right: 8px; }
 
-            /* Mobile positioning for program-section decorations (relative to 10px padding) */
+
+            /* Mobile positioning for program-section decorations (relative to .program-section edges) */
             .program-section::before { top: 5px; left: 5px; }
+            .program-section::after { bottom: 5px; right: 5px; }
+            /* Program content wrapper decorations */
             .program-content-wrapper::before { top: 5px; right: 5px; }
             .program-content-wrapper::after { bottom: 5px; left: 5px; }
-            .program-section::after { bottom: 5px; right: 5px; }
         }
     </style>
 </head>
@@ -532,6 +521,8 @@
                         </div>
                     </div>
                 </div>
+                <!-- Example of watermark if needed, ensure it's within the flow or absolutely positioned carefully -->
+                <!-- <div class="watermark">遵义师范学院音乐与舞蹈学院</div> -->
             </div>
         </div>
     </div>
