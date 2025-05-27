@@ -1,215 +1,781 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蝉鸣舞起 - LenonSans 演示</title>
+    <title>Alex Chen - Full Stack Developer</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            background-color: #121212;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: sans-serif;
+            box-sizing: border-box;
         }
 
-        #container {
-            position: relative;
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            z-index: -1;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
         }
 
-        canvas {
-            display: block;
+        .bg-animation::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.3) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
         }
 
-        .controls {
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(30px) rotate(240deg); }
+        }
+
+        /* Navigation */
+        nav {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            color: white;
-        }
-
-        .controls button {
-            background: #4CAF50;
-            border: none;
-            color: white;
-            padding: 8px 15px;
-            margin: 5px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .controls button:hover {
-            background: #45a049;
-        }
-
-        .title {
-            position: fixed;
-            top: 20px;
-            color: white;
-            font-size: 24px;
-            text-align: center;
+            top: 0;
             width: 100%;
-            z-index: 10;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #7877c6, #ff77c6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #7877c6, #ff77c6);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #7877c6, #ff77c6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero .description {
+            font-size: 1.1rem;
+            color: #d0d0d0;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #7877c6, #ff77c6);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(120, 119, 198, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(120, 119, 198, 0.4);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #7877c6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #7877c6, transparent);
+            transition: left 0.5s ease;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #7877c6, #ff77c6);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .project-card .tech-stack {
+            color: #7877c6;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .project-card p {
+            color: #a0a0a0;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            padding: 0.5rem 1rem;
+            background: rgba(120, 119, 198, 0.2);
+            color: #7877c6;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(120, 119, 198, 0.3);
+        }
+
+        .project-link:hover {
+            background: rgba(120, 119, 198, 0.3);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Skills Section */
+        .skills {
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .skills-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-item {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .skill-item .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="title">蝉鸣舞起</div>
-    <div id="container"></div>
-    <div class="controls">
-        <button id="btnWave">波浪效果</button>
-        <button id="btnWeight">粗细变化</button>
-        <button id="btnDraw">绘制动画</button>
-        <button id="btnColor">颜色变化</button>
-        <button id="btnReset">重置</button>
-    </div>
+    <div class="bg-animation"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Alex Chen</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <script src="https://unpkg.com/leonsans"></script>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Full Stack Developer</h1>
+            <p class="subtitle">Crafting Digital Experiences</p>
+            <p class="description">
+                I'm a passionate developer who loves building innovative web applications and solving complex problems. 
+                With expertise in modern technologies, I create seamless user experiences and robust backend solutions.
+            </p>
+            <a href="#projects" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <h2 class="section-title fade-in">Featured Projects</h2>
+        <p class="section-subtitle fade-in">Here are some of my recent works that showcase my skills and creativity</p>
+        
+        <div class="projects-grid">
+            <div class="project-card fade-in" onclick="openProject('ecommerce')">
+                <div class="project-icon">🛒</div>
+                <h3>E-Commerce Platform</h3>
+                <p class="tech-stack">React • Node.js • MongoDB • Stripe</p>
+                <p>A full-featured e-commerce platform with user authentication, payment processing, and admin dashboard. Built with modern React and a robust Node.js backend.</p>
+                <div class="project-links">
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">Live Demo</a>
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in" onclick="openProject('ai-dashboard')">
+                <div class="project-icon">🤖</div>
+                <h3>AI Analytics Dashboard</h3>
+                <p class="tech-stack">Vue.js • Python • TensorFlow • PostgreSQL</p>
+                <p>An intelligent analytics dashboard that uses machine learning to provide insights and predictions. Features real-time data visualization and AI-powered recommendations.</p>
+                <div class="project-links">
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">Live Demo</a>
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in" onclick="openProject('social-app')">
+                <div class="project-icon">💬</div>
+                <h3>Social Media App</h3>
+                <p class="tech-stack">React Native • Firebase • Redux • WebRTC</p>
+                <p>A cross-platform social media application with real-time messaging, video calls, and social features. Built for both iOS and Android using React Native.</p>
+                <div class="project-links">
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">App Store</a>
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in" onclick="openProject('blockchain')">
+                <div class="project-icon">⛓️</div>
+                <h3>DeFi Trading Platform</h3>
+                <p class="tech-stack">Solidity • Web3.js • Next.js • Ethereum</p>
+                <p>A decentralized finance platform for cryptocurrency trading with smart contracts, liquidity pools, and yield farming features.</p>
+                <div class="project-links">
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">Live Demo</a>
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in" onclick="openProject('saas')">
+                <div class="project-icon">📊</div>
+                <h3>SaaS Analytics Tool</h3>
+                <p class="tech-stack">Angular • .NET Core • Azure • Docker</p>
+                <p>A comprehensive SaaS solution for business analytics with multi-tenant architecture, API integrations, and advanced reporting capabilities.</p>
+                <div class="project-links">
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">Live Demo</a>
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in" onclick="openProject('iot')">
+                <div class="project-icon">🏠</div>
+                <h3>Smart Home System</h3>
+                <p class="tech-stack">IoT • Raspberry Pi • MQTT • Flutter</p>
+                <p>An IoT-based smart home automation system with mobile app control, sensor monitoring, and voice integration for managing home devices.</p>
+                <div class="project-links">
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">Live Demo</a>
+                    <a href="#" class="project-link" onclick="event.stopPropagation()">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="skills-container">
+            <h2 class="section-title fade-in">Technical Skills</h2>
+            <p class="section-subtitle fade-in">Technologies and tools I work with</p>
+            
+            <div class="skills-grid fade-in">
+                <div class="skill-item">
+                    <div class="icon">⚛️</div>
+                    <div>React</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">🟢</div>
+                    <div>Node.js</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">🐍</div>
+                    <div>Python</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">🗄️</div>
+                    <div>MongoDB</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">☁️</div>
+                    <div>AWS</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">🐳</div>
+                    <div>Docker</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">📱</div>
+                    <div>React Native</div>
+                </div>
+                <div class="skill-item">
+                    <div class="icon">🔥</div>
+                    <div>Firebase</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="contact-container">
+            <h2 class="section-title fade-in">Let's Work Together</h2>
+            <p class="section-subtitle fade-in">Ready to bring your ideas to life? Let's connect and create something amazing together.</p>
+            
+            <div class="contact-links fade-in">
+                <a href="mailto:alex@example.com" class="contact-link">
+                    <span>📧</span>
+                    <span>Email</span>
+                </a>
+                <a href="https://linkedin.com/in/alexchen" class="contact-link" target="_blank">
+                    <span>💼</span>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/alexchen" class="contact-link" target="_blank">
+                    <span>🐱</span>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://twitter.com/alexchen" class="contact-link" target="_blank">
+                    <span>🐦</span>
+                    <span>Twitter</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 2rem; color: #666; border-top: 1px solid rgba(255,255,255,0.1);">
+        <p>&copy; 2024 Alex Chen. Crafted with ❤️ and lots of ☕</p>
+    </footer>
+
     <script>
-        let leon, canvas, ctx;
-        let sw = window.innerWidth;
-        let sh = window.innerHeight;
-        let pixelRatio = window.devicePixelRatio || 1;
-        let frame = 0;
-        
-        let animationMode = 'idle';
-        const chineseText = '蝉鸣舞起';
-        
-        function init() {
-            canvas = document.createElement('canvas');
-            ctx = canvas.getContext("2d");
-            
-            document.getElementById('container').appendChild(canvas);
-            
-            handleResize();
-            
-            leon = new LeonSans({
-                text: chineseText,
-                color: ['#ffffff'],
-                size: calculateFontSize(),
-                weight: 500,
-                pathGap: 0.5,
-                tracking: 2,
-                isPath: true
-            });
-            
-            requestAnimationFrame(animate);
-            
-            document.getElementById('btnWave').addEventListener('click', () => {
-                animationMode = 'wave';
-                resetLeon();
-            });
-            
-            document.getElementById('btnWeight').addEventListener('click', () => {
-                animationMode = 'weight';
-                resetLeon();
-            });
-            
-            document.getElementById('btnDraw').addEventListener('click', () => {
-                animationMode = 'draw';
-                resetLeon();
-                leon.drawing.duration = 2;
-                leon.drawing.delay = 0.1;
-                leon.drawing.start(() => {
-                    console.log('绘制完成');
-                });
-            });
-            
-            document.getElementById('btnColor').addEventListener('click', () => {
-                animationMode = 'color';
-                resetLeon();
-            });
-            
-            document.getElementById('btnReset').addEventListener('click', () => {
-                animationMode = 'idle';
-                resetLeon();
-            });
-            
-            window.addEventListener('resize', handleResize);
-        }
-        
-        function resetLeon() {
-            frame = 0;
-            leon.weight = 500;
-            leon.color = ['#ffffff'];
-            leon.drawing.reset();
-        }
-        
-        function handleResize() {
-            sw = window.innerWidth;
-            sh = window.innerHeight;
-            
-            canvas.width = sw * pixelRatio;
-            canvas.height = sh * pixelRatio;
-            canvas.style.width = sw + 'px';
-            canvas.style.height = sh + 'px';
-            ctx.scale(pixelRatio, pixelRatio);
-            
-            // 调整字体大小
-            if (leon) {
-                leon.size = calculateFontSize();
-            }
-        }
-        
-        function calculateFontSize() {
-            // 根据屏幕宽度调整字体大小
-            const baseSize = 150;
-            const multiplier = Math.min(sw / 1200, 1);
-            return baseSize * multiplier;
-        }
-        
-        function animate(t) {
-            requestAnimationFrame(animate);
-            
-            ctx.clearRect(0, 0, sw, sh);
-            
-            const cx = sw / 2 - leon.rect.w / 2;
-            const cy = sh / 2 - leon.rect.h / 2;
-            
-            ctx.save();
-            
-            if (animationMode === 'wave') {
-                // 波浪效果
-                for (let i = 0; i < leon.drawing.length; i++) {
-                    leon.drawing[i].offsetY = Math.sin(frame / 15 + i / 3) * 30;
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
-            } else if (animationMode === 'weight') {
-                // 粗细变化效果
-                leon.weight = 100 + Math.abs(Math.sin(frame / 30)) * 900;
-            } else if (animationMode === 'color') {
-                // 颜色变化效果
-                let r = Math.floor(128 + 127 * Math.sin(frame / 30));
-                let g = Math.floor(128 + 127 * Math.sin(frame / 30 + 2));
-                let b = Math.floor(128 + 127 * Math.sin(frame / 30 + 4));
-                leon.color = [`rgb(${r}, ${g}, ${b})`];
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Project card click handlers
+        function openProject(projectId) {
+            const projects = {
+                'ecommerce': 'https://ecommerce-demo.example.com',
+                'ai-dashboard': 'https://ai-dashboard.example.com',
+                'social-app': 'https://social-app.example.com',
+                'blockchain': 'https://defi-platform.example.com',
+                'saas': 'https://analytics-saas.example.com',
+                'iot': 'https://smart-home.example.com'
+            };
+            
+            // In a real implementation, you would navigate to the actual project
+            // For demo purposes, we'll show an alert
+            alert(`Opening ${projectId} project!\n\nIn a real implementation, this would navigate to:\n${projects[projectId]}`);
+            
+            // Uncomment below for actual navigation:
+            // window.open(projects[projectId], '_blank');
+        }
+
+        // Dynamic navigation background
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 10, 10, 0.95)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 10, 0.8)';
+            }
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            const rate = scrolled * -0.5;
+            
+            if (hero) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+
+        // Dynamic typing effect for hero title
+        function typeEffect() {
+            const title = document.querySelector('.hero h1');
+            const text = 'Full Stack Developer';
+            const speed = 100;
+            let i = 0;
+            
+            title.innerHTML = '';
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    title.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
             }
             
-            leon.position(cx, cy);
-            leon.draw(ctx);
-            
-            ctx.restore();
-            
-            frame++;
+            // Start typing effect after page loads
+            setTimeout(typeWriter, 500);
         }
-        
-        window.onload = init;
+
+        // Initialize typing effect
+        window.addEventListener('load', typeEffect);
+
+        // Add hover effects
+        document.querySelectorAll('.project-card, .cta-button, .contact-link').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.transform = el.classList.contains('project-card') ? 'translateY(-10px)' : 'translateY(-5px)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Mobile menu toggle functionality
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Responsive adjustments
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.querySelector('.nav-links').classList.remove('active');
+            }
+        });
+
+        // Loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Cursor trail effect for desktop
+        let mouseX = 0;
+        let mouseY = 0;
+        let trailElements = [];
+
+        function createTrail() {
+            for (let i = 0; i < 10; i++) {
+                const trail = document.createElement('div');
+                trail.style.position = 'fixed';
+                trail.style.width = '4px';
+                trail.style.height = '4px';
+                trail.style.background = `rgba(120, 119, 198, ${0.8 - i * 0.08})`;
+                trail.style.borderRadius = '50%';
+                trail.style.pointerEvents = 'none';
+                trail.style.zIndex = '9999';
+                trail.style.transition = 'all 0.1s ease';
+                document.body.appendChild(trail);
+                trailElements.push(trail);
+            }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            trailElements.forEach((trail, index) => {
+                setTimeout(() => {
+                    trail.style.left = (mouseX - 2) + 'px';
+                    trail.style.top = (mouseY - 2) + 'px';
+                }, index * 20);
+            });
+        });
+
+        // Initialize cursor trail on desktop only
+        if (window.innerWidth > 768) {
+            createTrail();
+        }
+
+        // Intersection Observer for animations
+        const animationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        });
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            animationObserver.observe(card);
+        });
     </script>
 </body>
 </html>
