@@ -1,29 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <title>DeepSeek 聊天</title>
+  <meta charset="UTF-8">
+  <title>DeepSeek 聊天助手</title>
+  <style>
+    body {
+      font-family: "微软雅黑", sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fdf6f8;
+      color: #333;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #ffaad4;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+    }
+    button:hover {
+      background-color: #ff8cc3;
+    }
+    #chat-box {
+      white-space: pre-wrap;
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      min-height: 150px;
+      margin-top: 20px;
+      border: 1px solid #eee;
+    }
+  </style>
 </head>
 <body>
-  <h1>和 AI 聊天 ✨</h1>
-  <textarea id="input" placeholder="你想说什么..."></textarea><br />
+  <h2>🎀 DeepSeek 可爱 AI 聊天助手</h2>
+  <textarea id="user-input" placeholder="请输入你的问题..."></textarea>
   <button onclick="sendMessage()">发送</button>
-  <pre id="result"></pre>
+  <div id="chat-box"></div>
 
   <script>
-    async function sendMessage() {
-      const input = document.getElementById('input').value;
-      const res = await fetch('http://localhost:3000/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message: input })
-      });
+    const API_KEY = 'sk-a9cb889ed67646e0a38c078276490bd2'; // ⚠️ 注意：仅本地用！
 
-      const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content || "无回复";
-      document.getElementById('result').innerText = reply;
+    async function sendMessage() {
+      const input = document.getElementById('user-input').value;
+      const chatBox = document.getElementById('chat-box');
+      chatBox.innerText = "思考中喵喵... 💭";
+
+      try {
+        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + API_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'deepseek-chat',
+            messages: [
+              { role: 'system', content: '你是一个可爱又聪明的AI助手~请用亲切自然的语气回答。' },
+              { role: 'user', content: input }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        const reply = data.choices?.[0]?.message?.content || "（无响应）";
+        chatBox.innerText = "✨ AI 回复：\n" + reply;
+      } catch (e) {
+        console.error(e);
+        chatBox.innerText = "出错啦，请检查网络或 API Key～";
+      }
     }
   </script>
 </body>
