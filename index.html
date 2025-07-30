@@ -1,84 +1,60 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>聊天助手</title>
+  <meta charset="UTF-8" />
+  <title>🎥 WebRTC 屏幕共享</title>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <style>
-    body {
-      font-family: "微软雅黑", sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #fdf6f8;
-      color: #333;
-    }
-    textarea, input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #ffaad4;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      color: white;
-    }
-    button:hover {
-      background-color: #ff8cc3;
-    }
-    #chat-box {
-      white-space: pre-wrap;
-      background: #fff;
-      border-radius: 10px;
-      padding: 15px;
-      min-height: 150px;
-      margin-top: 20px;
-      border: 1px solid #eee;
-    }
+    body { font-family: sans-serif; text-align: center; margin: 2em; }
+    input, button { padding: 0.5em; margin: 0.5em; font-size: 1em; }
+    video { max-width: 90vw; max-height: 60vh; margin-top: 1em; border: 2px solid #aaa; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <h2>🎀 樱花AI 聊天助手</h2>
-  <textarea id="user-input" placeholder="请输入你的问题..."></textarea>
-  <button onclick="sendMessage()">发送</button>
-  <div id="chat-box"></div>
+  <h1>🖥 WebRTC 屏幕共享工具</h1>
+
+  <div id="shareDiv">
+    <button onclick="startShare()">📤 开始共享屏幕</button><br />
+    你的 ID: <input type="text" id="myId" readonly>
+  </div>
+
+  <hr />
+
+  <div id="watchDiv">
+    <input type="text" id="remoteId" placeholder="输入对方 ID">
+    <button onclick="startWatch()">📥 观看屏幕</button>
+  </div>
+
+  <video id="video" autoplay playsinline controls></video>
 
   <script>
-    const API_KEY = 'sk-a9cb889ed67646e0a38c078276490bd2'; // ⚠️ 注意：仅本地用！
+    const peer = new Peer(); // 使用默认的 peerjs cloud server
+    const myIdInput = document.getElementById("myId");
+    const remoteIdInput = document.getElementById("remoteId");
+    const video = document.getElementById("video");
 
-    async function sendMessage() {
-      const input = document.getElementById('user-input').value;
-      const chatBox = document.getElementById('chat-box');
-      chatBox.innerText = "思考中喵喵... 💭";
+    peer.on("open", id => {
+      myIdInput.value = id;
+    });
 
-      try {
-        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + API_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: [
-              { role: 'system', content: '你是一个可爱又聪明的AI助手~请用亲切自然的语气回答。' },
-              { role: 'user', content: input }
-            ]
-          })
-        });
+    function startShare() {
+      navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
+        .then(stream => {
+          video.srcObject = stream;
+          peer.on("call", call => {
+            call.answer(stream); // 响应观看者请求，推送屏幕流
+          });
+        })
+        .catch(err => alert("无法获取屏幕共享权限: " + err));
+    }
 
-        const data = await response.json();
-        const reply = data.choices?.[0]?.message?.content || "（无响应）";
-        chatBox.innerText = "✨ AI 回复：\n" + reply;
-      } catch (e) {
-        console.error(e);
-        chatBox.innerText = "出错啦，请检查网络或 API Key～";
-      }
+    function startWatch() {
+      const id = remoteIdInput.value.trim();
+      if (!id) return alert("请输入分享者的 ID");
+      const call = peer.call(id, null); // 发起请求
+      call.on("stream", stream => {
+        video.srcObject = stream; // 显示远程视频流
+      });
     }
   </script>
 </body>
