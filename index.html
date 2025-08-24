@@ -1,61 +1,121 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <title>🎥 WebRTC 屏幕共享</title>
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <meta charset="UTF-8">
+  <title>我们的照片墙 💕</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin: 2em; }
-    input, button { padding: 0.5em; margin: 0.5em; font-size: 1em; }
-    video { max-width: 90vw; max-height: 60vh; margin-top: 1em; border: 2px solid #aaa; border-radius: 8px; }
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", "微软雅黑", sans-serif;
+      background: url("https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_2731.JPG") no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      text-align: center;
+      color: #fff;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+      padding: 20px;
+      font-size: 2.5em;
+    }
+
+    /* 瀑布流布局 */
+    .gallery {
+      column-count: 3;
+      column-gap: 15px;
+      padding: 20px;
+    }
+
+    .item {
+      break-inside: avoid;
+      margin-bottom: 15px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .item:hover {
+      transform: scale(1.05);
+    }
+
+    .item img, .item video {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+    }
+
+    /* 全屏预览 */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .lightbox img, .lightbox video {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #fff;
+    }
+
+    .lightbox.show {
+      display: flex;
+    }
   </style>
 </head>
 <body>
-  <h1>🖥 WebRTC 屏幕共享工具</h1>
+  <h1>💕 我的小仙女 💕</h1>
 
-  <div id="shareDiv">
-    <button onclick="startShare()">📤 开始共享屏幕</button><br />
-    你的 ID: <input type="text" id="myId" readonly>
+  <div class="gallery">
+    <!-- 照片 -->
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/3bdbdf51c7eb6a67ae2e0b9b9234fd5e.JPG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_8814.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_8815.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9188.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9386.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9387.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9968.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9969.JPEG"></div>
+    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9094.jpg"></div>
+
+    <!-- 视频 -->
+    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_4b3b864a603c981af65d4f020281b603.MP4" controls></video></div>
+    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_7a55628f0f25e79b7dd8f88af8887690.MP4" controls></video></div>
+    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_4008d4dba5afd3c2a343558760765535.MP4" controls></video></div>
+    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_38003d4d15e44b6f19d6f1adc7bbd697.MP4" controls></video></div>
+    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/10755.MP4" controls></video></div>
   </div>
 
-  <hr />
-
-  <div id="watchDiv">
-    <input type="text" id="remoteId" placeholder="输入对方 ID">
-    <button onclick="startWatch()">📥 观看屏幕</button>
+  <!-- 预览 -->
+  <div class="lightbox" id="lightbox">
+    <span id="close"></span>
   </div>
-
-  <video id="video" autoplay playsinline controls></video>
 
   <script>
-    const peer = new Peer(); // 使用默认的 peerjs cloud server
-    const myIdInput = document.getElementById("myId");
-    const remoteIdInput = document.getElementById("remoteId");
-    const video = document.getElementById("video");
+    const lightbox = document.getElementById("lightbox");
 
-    peer.on("open", id => {
-      myIdInput.value = id;
+    document.querySelectorAll(".item img, .item video").forEach(el => {
+      el.addEventListener("click", () => {
+        lightbox.innerHTML = "";
+        const clone = el.cloneNode(true);
+        clone.removeAttribute("controls"); // 视频不默认播放控件
+        clone.setAttribute("autoplay", true);
+        lightbox.appendChild(clone);
+        lightbox.classList.add("show");
+      });
     });
 
-    function startShare() {
-      navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
-        .then(stream => {
-          video.srcObject = stream;
-          peer.on("call", call => {
-            call.answer(stream); // 响应观看者请求，推送屏幕流
-          });
-        })
-        .catch(err => alert("无法获取屏幕共享权限: " + err));
-    }
-
-    function startWatch() {
-      const id = remoteIdInput.value.trim();
-      if (!id) return alert("请输入分享者的 ID");
-      const call = peer.call(id, null); // 发起请求
-      call.on("stream", stream => {
-        video.srcObject = stream; // 显示远程视频流
-      });
-    }
+    lightbox.addEventListener("click", () => {
+      lightbox.classList.remove("show");
+    });
   </script>
 </body>
 </html>
