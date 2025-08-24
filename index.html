@@ -1,121 +1,517 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
+
 <head>
-  <meta charset="UTF-8">
-  <title>我们的照片墙 💕</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Comic Sans MS", "微软雅黑", sans-serif;
-      background: url("https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_2731.JPG") no-repeat center center fixed;
-      background-size: cover;
-      backdrop-filter: blur(5px);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美好时光 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    h1 {
-      text-align: center;
-      color: #fff;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
-      padding: 20px;
-      font-size: 2.5em;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
 
-    /* 瀑布流布局 */
-    .gallery {
-      column-count: 3;
-      column-gap: 15px;
-      padding: 20px;
-    }
+        /* 背景图片覆盖层 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_2731.JPG');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.3;
+            z-index: -2;
+        }
 
-    .item {
-      break-inside: avoid;
-      margin-bottom: 15px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
+        /* 半透明遮罩 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            z-index: -1;
+        }
 
-    .item:hover {
-      transform: scale(1.05);
-    }
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-    .item img, .item video {
-      width: 100%;
-      display: block;
-      border-radius: 16px;
-    }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow 3s ease-in-out infinite alternate;
+        }
 
-    /* 全屏预览 */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+        @keyframes rainbow {
+            0% {
+                filter: hue-rotate(0deg);
+            }
 
-    .lightbox img, .lightbox video {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #fff;
-    }
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
 
-    .lightbox.show {
-      display: flex;
-    }
-  </style>
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .masonry {
+            column-count: 4;
+            column-gap: 20px;
+            column-fill: balance;
+        }
+
+        @media (max-width: 1024px) {
+            .masonry {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .masonry {
+                column-count: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .masonry {
+                column-count: 1;
+            }
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img,
+        .gallery-item video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px 15px 0 0;
+            object-fit: contain;
+            background: #f8f9fa;
+        }
+
+        .media-container {
+            position: relative;
+            width: 100%;
+            background: #f8f9fa;
+            border-radius: 15px 15px 0 0;
+            overflow: hidden;
+        }
+
+        .item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.8), rgba(255, 159, 243, 0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+
+        .overlay-text {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .item-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .item-info .date {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .item-info .description {
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        /* 爱心飘落动画 */
+        .heart {
+            position: fixed;
+            color: #ff6b6b;
+            font-size: 20px;
+            animation: fall 3s linear infinite;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001;
+        }
+
+        .modal-content img,
+        .modal-content video {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .close {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2002;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .close:hover {
+            color: #ff6b6b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <h1>💕 我的小仙女 💕</h1>
+    <div class="header">
+        <h1>美好时光 💕</h1>
+        <p>记录每一个甜蜜瞬间</p>
+    </div>
 
-  <div class="gallery">
-    <!-- 照片 -->
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/3bdbdf51c7eb6a67ae2e0b9b9234fd5e.JPG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_8814.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_8815.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9188.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9386.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9387.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9968.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9969.JPEG"></div>
-    <div class="item"><img src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9094.jpg"></div>
+    <div class="gallery-container">
+        <div class="loading" id="loading">正在加载美好回忆...</div>
+        <div class="masonry" id="gallery"></div>
+    </div>
 
-    <!-- 视频 -->
-    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_4b3b864a603c981af65d4f020281b603.MP4" controls></video></div>
-    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_7a55628f0f25e79b7dd8f88af8887690.MP4" controls></video></div>
-    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_4008d4dba5afd3c2a343558760765535.MP4" controls></video></div>
-    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_38003d4d15e44b6f19d6f1adc7bbd697.MP4" controls></video></div>
-    <div class="item"><video src="https://sakurah.oss-cn-hangzhou.aliyuncs.com/10755.MP4" controls></video></div>
-  </div>
+    <!-- 模态框 -->
+    <div id="modal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content" id="modal-content"></div>
+    </div>
 
-  <!-- 预览 -->
-  <div class="lightbox" id="lightbox">
-    <span id="close"></span>
-  </div>
+    <script>
+        // 媒体数据
+        const mediaData = [
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/3bdbdf51c7eb6a67ae2e0b9b9234fd5e.JPG',
+                description: '美丽的瞬间 ✨'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_8814.JPEG',
+                description: '甜蜜时光 💖'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_8815.JPEG',
+                description: '温柔如水 🌸'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9188.JPEG',
+                description: '阳光女孩 ☀️'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9386.JPEG',
+                description: '笑容如花 🌺'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9387.JPEG',
+                description: '优雅动人 💫'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9968.JPEG',
+                description: '纯真可爱 🎀'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9969.JPEG',
+                description: '迷人眼眸 👀'
+            },
+            {
+                type: 'image',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/IMG_9094.jpg',
+                description: '自然美丽 🍃'
+            },
+            {
+                type: 'video',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_4b3b864a603c981af65d4f020281b603.MP4',
+                description: '动态美好 🎬'
+            },
+            {
+                type: 'video',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_7a55628f0f25e79b7dd8f88af8887690.MP4',
+                description: '生活片段 📹'
+            },
+            {
+                type: 'video',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_4008d4dba5afd3c2a343558760765535.MP4',
+                description: '珍贵回忆 💝'
+            },
+            {
+                type: 'video',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/video_38003d4d15e44b6f19d6f1adc7bbd697.MP4',
+                description: '美好时刻 ⭐'
+            },
+            {
+                type: 'video',
+                url: 'https://sakurah.oss-cn-hangzhou.aliyuncs.com/10755.MP4',
+                description: '难忘瞬间 💕'
+            }
+        ];
 
-  <script>
-    const lightbox = document.getElementById("lightbox");
+        // 创建爱心飘落效果
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💖';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
 
-    document.querySelectorAll(".item img, .item video").forEach(el => {
-      el.addEventListener("click", () => {
-        lightbox.innerHTML = "";
-        const clone = el.cloneNode(true);
-        clone.removeAttribute("controls"); // 视频不默认播放控件
-        clone.setAttribute("autoplay", true);
-        lightbox.appendChild(clone);
-        lightbox.classList.add("show");
-      });
-    });
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
 
-    lightbox.addEventListener("click", () => {
-      lightbox.classList.remove("show");
-    });
-  </script>
+        // 每隔一段时间创建爱心
+        setInterval(createHeart, 2000);
+
+        // 加载媒体内容
+        function loadGallery() {
+            const gallery = document.getElementById('gallery');
+            const loading = document.getElementById('loading');
+
+            // 随机打乱数组
+            const shuffledMedia = mediaData.sort(() => Math.random() - 0.5);
+
+            shuffledMedia.forEach((media, index) => {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.style.position = 'relative';
+
+                    if (media.type === 'image') {
+                        item.innerHTML = `
+                            <div class="media-container">
+                                <img src="${media.url}" alt="${media.description}" loading="lazy">
+                                <div class="item-overlay">
+                                    <div class="overlay-text">点击查看大图</div>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <div class="description">${media.description}</div>
+                            </div>
+                        `;
+                    } else {
+                        item.innerHTML = `
+                            <div class="media-container">
+                                <video src="${media.url}" muted loop preload="metadata" playsinline></video>
+                                <div class="item-overlay">
+                                    <div class="overlay-text">点击播放视频</div>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <div class="description">${media.description}</div>
+                            </div>
+                        `;
+
+                        // 为缩略图视频添加悬停播放效果
+                        const video = item.querySelector('video');
+                        item.addEventListener('mouseenter', () => {
+                            video.play().catch(() => { });
+                        });
+                        item.addEventListener('mouseleave', () => {
+                            video.pause();
+                        });
+                    }
+
+                    // 添加点击事件
+                    item.addEventListener('click', () => openModal(media));
+
+                    gallery.appendChild(item);
+
+                    // 最后一个元素加载完成后隐藏loading
+                    if (index === shuffledMedia.length - 1) {
+                        loading.style.display = 'none';
+                    }
+                }, index * 200); // 延迟加载效果
+            });
+        }
+
+        // 模态框功能
+        function openModal(media) {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+
+            if (media.type === 'image') {
+                modalContent.innerHTML = `<img src="${media.url}" alt="${media.description}">`;
+            } else {
+                modalContent.innerHTML = `<video src="${media.url}" controls autoplay playsinline>`;
+            }
+
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+
+            // 停止所有视频播放
+            const videos = modalContent.querySelectorAll('video');
+            videos.forEach(video => {
+                video.pause();
+                video.currentTime = 0;
+            });
+
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 事件监听
+        document.querySelector('.close').addEventListener('click', closeModal);
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeModal();
+            }
+        });
+
+        // 键盘事件
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 页面加载完成后开始加载图片
+        window.addEventListener('load', loadGallery);
+    </script>
 </body>
+
 </html>
