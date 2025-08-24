@@ -139,6 +139,11 @@
             background: #f8f9fa;
         }
 
+        .gallery-item video {
+            min-height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
         .media-container {
             position: relative;
             width: 100%;
@@ -430,7 +435,7 @@
                     } else {
                         item.innerHTML = `
                             <div class="media-container">
-                                <video src="${media.url}" muted loop preload="metadata" playsinline></video>
+                                <video src="${media.url}" muted loop preload="auto" playsinline></video>
                                 <div class="item-overlay">
                                     <div class="overlay-text">点击播放视频</div>
                                 </div>
@@ -440,13 +445,24 @@
                             </div>
                         `;
 
-                        // 为缩略图视频添加悬停播放效果
+                        // 为缩略图视频添加悬停播放效果和加载处理
                         const video = item.querySelector('video');
+
+                        // 确保视频加载第一帧
+                        video.addEventListener('loadeddata', () => {
+                            video.currentTime = 0.1; // 设置到0.1秒处确保有画面
+                        });
+
+                        video.addEventListener('loadedmetadata', () => {
+                            video.currentTime = 0.1;
+                        });
+
                         item.addEventListener('mouseenter', () => {
                             video.play().catch(() => { });
                         });
                         item.addEventListener('mouseleave', () => {
                             video.pause();
+                            video.currentTime = 0.1; // 回到第一帧
                         });
                     }
 
