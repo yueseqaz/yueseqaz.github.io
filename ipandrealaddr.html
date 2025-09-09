@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>IP定位追踪器</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="实时查看您的公网IP地址、地理位置和网络服务提供商信息"/>
+  <meta name="keywords" content="IP定位,地理位置,网络追踪,IP查询"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #64748b;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --error-color: #ef4444;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+      color: white;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .info-container {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), #60a5fa);
+    }
+
+    .info-card h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--primary-color);
+      word-break: break-all;
+    }
+
+    .info-details {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border-color);
+      border-top: 2px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .status-success { background: var(--success-color); }
+    .status-warning { background: var(--warning-color); }
+    .status-error { background: var(--error-color); }
+
+    #map {
+      flex: 1;
+      min-height: 400px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .map-controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .map-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: all 0.2s ease;
+      font-size: 1rem;
+    }
+
+    .map-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .info-container {
+        padding: 1rem;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .info-card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1><i class="fas fa-globe-americas"></i> 我的网络足迹</h1>
+      <p>实时追踪您的网络位置和物理位置信息</p>
+    </div>
+  </header>
+
+  <div class="info-container">
+    <div class="info-grid">
+      <div class="info-card">
+        <h3><i class="fas fa-network-wired"></i> 公网IP地址</h3>
+        <div class="info-value" id="ip">
+          <div class="loading">
+            <div class="spinner"></div>
+            <span>正在获取IP地址...</span>
+          </div>
+        </div>
+        <div class="info-details" id="ip-details">正在查询网络服务提供商信息...</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-map-marker-alt"></i> IP归属地</h3>
+        <div class="info-value" id="ip-location">
+          <div class="loading">
+            <div class="spinner"></div>
+            <span>正在定位...</span>
+          </div>
+        </div>
+        <div class="info-details" id="ip-location-details">正在查询详细位置信息...</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-crosshairs"></i> 实际物理位置</h3>
+        <div class="info-value" id="geo-location">
+          <div class="loading">
+            <div class="spinner"></div>
+            <span>等待用户授权...</span>
+          </div>
+        </div>
+        <div class="info-details" id="geo-location-details">需要您的授权才能获取精确位置</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="map"></div>
+  
+  <div class="map-controls">
+    <button class="map-btn" id="center-ip" title="居中显示IP位置"><i class="fas fa-crosshairs"></i></button>
+    <button class="map-btn" id="center-geo" title="居中显示实际位置"><i class="fas fa-user"></i></button>
+    <button class="map-btn" id="toggle-view" title="切换地图样式"><i class="fas fa-layer-group"></i></button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const ipElement = document.getElementById('ip');
+    const ipLocationElement = document.getElementById('ip-location');
+    const geoLocationElement = document.getElementById('geo-location');
+    const ipDetailsElement = document.getElementById('ip-details');
+    const ipLocationDetailsElement = document.getElementById('ip-location-details');
+    const geoLocationDetailsElement = document.getElementById('geo-location-details');
+    
+    const map = L.map('map', {
+      zoomControl: true,
+      attributionControl: true
+    }).setView([20, 0], 2);
+
+    // 地图图层配置
+    const mapLayers = {
+      street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+      }),
+      satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '© <a href="https://www.esri.com/">Esri</a>',
+        maxZoom: 19
+      }),
+      terrain: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://opentopomap.org">OpenTopoMap</a>',
+        maxZoom: 17
+      })
+    };
+
+    let currentLayer = 'street';
+    mapLayers[currentLayer].addTo(map);
+
+    let ipMarker, geoMarker;
+    let ipData = null;
+    let geoData = null;
+
+    // 创建自定义图标
+    function createCustomIcon(color, symbol) {
+      return L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="
+          background-color: ${color};
+          border: 3px solid white;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          font-size: 14px;
+          color: white;
+          font-weight: bold;
+        ">${symbol}</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -15]
+      });
+    }
+
+    // 格式化位置信息
+    function formatLocation(data) {
+      const parts = [];
+      if (data.city) parts.push(data.city);
+      if (data.regionName) parts.push(data.regionName);
+      if (data.country) parts.push(data.country);
+      return parts.join(', ');
+    }
+
+    // 更新UI状态
+    function updateStatus(element, status, details = '') {
+      element.innerHTML = status;
+      if (details && element.nextElementSibling) {
+        element.nextElementSibling.textContent = details;
+      }
+    }
+
+    // 显示成功状态
+    function showSuccess(element) {
+      element.classList.add('status-success');
+    }
+
+    // 1. 获取公网IP和归属地信息
+    async function fetchIPInfo() {
+      try {
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const { ip } = await ipResponse.json();
+        
+        updateStatus(ipElement, ip, 'IP地址获取成功');
+        
+        const locationResponse = await fetch(`http://ip-api.com/json/${ip}?lang=zh-CN&fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,org,as,query`);
+        const data = await locationResponse.json();
+        
+        if (data.status === "success") {
+          ipData = data;
+          
+          const locationText = formatLocation(data);
+          const ispInfo = `${data.isp}${data.org && data.org !== data.isp ? ` (${data.org})` : ''}`;
+          
+          updateStatus(ipLocationElement, locationText, ispInfo);
+          
+          const timezone = data.timezone ? `时区: ${data.timezone}` : '';
+          const zipCode = data.zip ? `邮编: ${data.zip}` : '';
+          ipLocationDetailsElement.textContent = [timezone, zipCode].filter(Boolean).join(' | ');
+          
+          // 添加IP位置标记
+          ipMarker = L.marker([data.lat, data.lon], {
+            icon: createCustomIcon('#3b82f6', '📡')
+          }).addTo(map);
+          
+          ipMarker.bindPopup(`
+            <div style="min-width: 200px;">
+              <h4 style="margin: 0 0 8px 0; color: #3b82f6;">📡 IP归属地</h4>
+              <p style="margin: 4px 0;"><strong>IP地址:</strong> ${data.query}</p>
+              <p style="margin: 4px 0;"><strong>位置:</strong> ${locationText}</p>
+              <p style="margin: 4px 0;"><strong>ISP:</strong> ${data.isp}</p>
+              ${data.org !== data.isp ? `<p style="margin: 4px 0;"><strong>组织:</strong> ${data.org}</p>` : ''}
+              <p style="margin: 4px 0;"><strong>坐标:</strong> ${data.lat.toFixed(5)}, ${data.lon.toFixed(5)}</p>
+            </div>
+          `);
+          
+          map.setView([data.lat, data.lon], 10);
+        } else {
+          throw new Error(data.message || '查询失败');
+        }
+      } catch (error) {
+        console.error('IP查询失败:', error);
+        updateStatus(ipElement, '获取失败', '请检查网络连接');
+        updateStatus(ipLocationElement, '查询失败', error.message);
+      }
+    }
+
+    // 2. 获取实际地理位置
+    function fetchGeolocation() {
+      if (!navigator.geolocation) {
+        updateStatus(geoLocationElement, '不支持', '当前浏览器不支持地理定位');
+        updateStatus(geoLocationDetailsElement, '请使用支持地理位置的浏览器');
+        return;
+      }
+
+      updateStatus(geoLocationElement, '等待授权...', '正在请求位置权限');
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude, accuracy, altitude, altitudeAccuracy, heading, speed } = position.coords;
+          geoData = { lat: latitude, lon: longitude, accuracy };
+          
+          const coordText = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          const accuracyText = accuracy ? `精度: ±${accuracy.toFixed(0)}米` : '';
+          
+          updateStatus(geoLocationElement, coordText, accuracyText);
+          
+          const details = [];
+          if (altitude) details.push(`海拔: ${altitude.toFixed(0)}米`);
+          if (altitudeAccuracy) details.push(`海拔精度: ±${altitudeAccuracy.toFixed(0)}米`);
+          if (speed) details.push(`速度: ${(speed * 3.6).toFixed(1)} km/h`);
+          
+          geoLocationDetailsElement.textContent = details.join(' | ');
+          
+          // 添加实际位置标记
+          geoMarker = L.marker([latitude, longitude], {
+            icon: createCustomIcon('#10b981', '👤')
+          }).addTo(map);
+          
+          geoMarker.bindPopup(`
+            <div style="min-width: 200px;">
+              <h4 style="margin: 0 0 8px 0; color: #10b981;">👤 您的实际位置</h4>
+              <p style="margin: 4px 0;"><strong>坐标:</strong> ${coordText}</p>
+              <p style="margin: 4px 0;"><strong>精度:</strong> ±${accuracy.toFixed(0)}米</p>
+              ${altitude ? `<p style="margin: 4px 0;"><strong>海拔:</strong> ${altitude.toFixed(0)}米</p>` : ''}
+              ${speed ? `<p style="margin: 4px 0;"><strong>速度:</strong> ${(speed * 3.6).toFixed(1)} km/h</p>` : ''}
+            </div>
+          `);
+          
+          // 添加精度圆圈
+          L.circle([latitude, longitude], {
+            color: '#10b981',
+            fillColor: '#10b981',
+            fillOpacity: 0.1,
+            radius: accuracy
+          }).addTo(map);
+          
+          // 如果两个位置都有，调整视图显示两个标记
+          if (ipData) {
+            const bounds = L.latLngBounds([
+              [ipData.lat, ipData.lon],
+              [latitude, longitude]
+            ]);
+            map.fitBounds(bounds, { padding: [50, 50] });
+          } else {
+            map.setView([latitude, longitude], 15);
+          }
+        },
+        (error) => {
+          let message = '获取位置失败';
+          let details = '';
+          
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              message = '位置权限被拒绝';
+              details = '请在浏览器设置中允许位置访问';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              message = '位置信息不可用';
+              details = '请检查设备定位服务是否开启';
+              break;
+            case error.TIMEOUT:
+              message = '获取位置超时';
+              details = '请检查网络连接或重试';
+              break;
+            default:
+              message = '未知错误';
+              details = error.message;
+          }
+          
+          updateStatus(geoLocationElement, message, details);
+          updateStatus(geoLocationDetailsElement, '无法获取精确位置信息');
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000
+        }
+      );
+    }
+
+    // 地图控制功能
+    document.getElementById('center-ip').addEventListener('click', () => {
+      if (ipData) {
+        map.setView([ipData.lat, ipData.lon], 12);
+        if (ipMarker) ipMarker.openPopup();
+      }
+    });
+
+    document.getElementById('center-geo').addEventListener('click', () => {
+      if (geoData) {
+        map.setView([geoData.lat, geoData.lon], 15);
+        if (geoMarker) geoMarker.openPopup();
+      }
+    });
+
+    document.getElementById('toggle-view').addEventListener('click', () => {
+      const layers = ['street', 'satellite', 'terrain'];
+      const currentIndex = layers.indexOf(currentLayer);
+      const nextIndex = (currentIndex + 1) % layers.length;
+      const nextLayer = layers[nextIndex];
+      
+      map.removeLayer(mapLayers[currentLayer]);
+      mapLayers[nextLayer].addTo(map);
+      currentLayer = nextLayer;
+      
+      // 更新按钮图标
+      const icons = {
+        street: 'fas fa-map',
+        satellite: 'fas fa-satellite',
+        terrain: 'fas fa-mountain'
+      };
+      document.getElementById('toggle-view').innerHTML = `<i class="${icons[nextLayer]}"></i>`;
+    });
+
+    // 初始化
+    fetchIPInfo();
+    fetchGeolocation();
+
+    // 添加键盘快捷键
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+          case '1':
+            e.preventDefault();
+            document.getElementById('center-ip').click();
+            break;
+          case '2':
+            e.preventDefault();
+            document.getElementById('center-geo').click();
+            break;
+          case 't':
+            e.preventDefault();
+            document.getElementById('toggle-view').click();
+            break;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
