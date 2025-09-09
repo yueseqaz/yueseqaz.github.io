@@ -379,7 +379,7 @@
         
         updateStatus(ipElement, ip, 'IP地址获取成功');
         
-        const locationResponse = await fetch(`http://ip-api.com/json/${ip}?lang=zh-CN&fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,org,as,query`);
+        const locationResponse = await fetch(`https://ip-api.com/json/${ip}?lang=zh-CN&fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,org,as,query`);
         const data = await locationResponse.json();
         
         if (data.status === "success") {
