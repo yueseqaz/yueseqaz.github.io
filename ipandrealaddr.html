@@ -371,48 +371,41 @@
       element.classList.add('status-success');
     }
 
-    // 1. 获取公网IP和归属地信息
+    // 1. 获取公网IP和归属地信息（使用 ipinfo.io 免费 https 接口）
     async function fetchIPInfo() {
       try {
-        const ipResponse = await fetch("https://api.ipify.org?format=json");
-        const { ip } = await ipResponse.json();
-        
+        const ipResponse = await fetch("https://ipinfo.io/json?token="); // 可选 token，免费版可不填
+        const data = await ipResponse.json();
+        const ip = data.ip;
         updateStatus(ipElement, ip, 'IP地址获取成功');
-        
-        const locationResponse = await fetch(`https://ip-api.com/json/${ip}?lang=zh-CN&fields=status,message,country,regionName,city,zip,lat,lon,timezone,isp,org,as,query`);
-        const data = await locationResponse.json();
-        
-        if (data.status === "success") {
-          ipData = data;
-          
-          const locationText = formatLocation(data);
-          const ispInfo = `${data.isp}${data.org && data.org !== data.isp ? ` (${data.org})` : ''}`;
-          
-          updateStatus(ipLocationElement, locationText, ispInfo);
-          
-          const timezone = data.timezone ? `时区: ${data.timezone}` : '';
-          const zipCode = data.zip ? `邮编: ${data.zip}` : '';
-          ipLocationDetailsElement.textContent = [timezone, zipCode].filter(Boolean).join(' | ');
-          
-          // 添加IP位置标记
-          ipMarker = L.marker([data.lat, data.lon], {
-            icon: createCustomIcon('#3b82f6', '📡')
-          }).addTo(map);
-          
-          ipMarker.bindPopup(`
-            <div style="min-width: 200px;">
-              <h4 style="margin: 0 0 8px 0; color: #3b82f6;">📡 IP归属地</h4>
-              <p style="margin: 4px 0;"><strong>IP地址:</strong> ${data.query}</p>
-              <p style="margin: 4px 0;"><strong>位置:</strong> ${locationText}</p>
-              <p style="margin: 4px 0;"><strong>ISP:</strong> ${data.isp}</p>
-              ${data.org !== data.isp ? `<p style="margin: 4px 0;"><strong>组织:</strong> ${data.org}</p>` : ''}
-              <p style="margin: 4px 0;"><strong>坐标:</strong> ${data.lat.toFixed(5)}, ${data.lon.toFixed(5)}</p>
-            </div>
-          `);
-          
-          map.setView([data.lat, data.lon], 10);
-        } else {
-          throw new Error(data.message || '查询失败');
+
+        ipData = data;
+        const locationText = [data.city, data.region, data.country].filter(Boolean).join(', ');
+        const ispInfo = data.org || '';
+        updateStatus(ipLocationElement, locationText, ispInfo);
+        ipLocationDetailsElement.textContent = data.timezone ? `时区: ${data.timezone}` : '';
+
+        // 经纬度处理
+        let lat = 0, lon = 0;
+        if (data.loc) {
+          [lat, lon] = data.loc.split(',').map(Number);
+        }
+
+        // 添加IP位置标记
+        ipMarker = L.marker([lat, lon], {
+          icon: createCustomIcon('#3b82f6', '📡')
+        }).addTo(map);
+        ipMarker.bindPopup(`
+          <div style="min-width: 200px;">
+            <h4 style="margin: 0 0 8px 0; color: #3b82f6;">📡 IP归属地</h4>
+            <p style="margin: 4px 0;"><strong>IP地址:</strong> ${ip}</p>
+            <p style="margin: 4px 0;"><strong>位置:</strong> ${locationText}</p>
+            <p style="margin: 4px 0;"><strong>ISP:</strong> ${ispInfo}</p>
+            <p style="margin: 4px 0;"><strong>坐标:</strong> ${lat.toFixed(5)}, ${lon.toFixed(5)}</p>
+          </div>
+        `);
+        if (lat && lon) {
+          map.setView([lat, lon], 10);
         }
       } catch (error) {
         console.error('IP查询失败:', error);
